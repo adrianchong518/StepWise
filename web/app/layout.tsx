@@ -1,5 +1,6 @@
 import { Roboto, Roboto_Mono } from "next/font/google";
 
+import "@xyflow/react/dist/style.css";
 import "@/app/global.css";
 import { Providers } from "./providers";
 import Navigation from "./components/Navigation";
@@ -25,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`text-foreground bg-background ${roboto.variable} ${roboto_mono.variable}`}
+        className={`text-foreground bg-background font-sans ${roboto.variable} ${roboto_mono.variable}`}
       >
         <Providers>
           <Navigation />
