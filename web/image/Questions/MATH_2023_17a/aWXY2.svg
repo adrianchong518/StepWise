@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">
+<desc>Created with Fabric.js 3.6.6</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 150 315.5)"  >
+<path style="stroke: rgb(0,33,255); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(29,0,255); fill-opacity: 0; fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-149.5, -315)" d="M 143 299 L 152 303 Q 156 311 156 312 L 156 322 L 152 331" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0 0 1 174.52 311.63)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="25" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-10.02" y="7.85" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">51.5</tspan><tspan x="40.02" y="7.85"  dy="-8.75" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 15px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); baseline-shift: 8.75; ">o</tspan></text>
+</g>
+</svg>

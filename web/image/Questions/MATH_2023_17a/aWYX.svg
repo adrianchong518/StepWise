@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">
+<desc>Created with Fabric.js 3.6.6</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 523 378.83)"  >
+<path style="stroke: rgb(0,255,20); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-opacity: 0; fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-522, -376.5)" d="M 534 362 L 527 363 Q 519 368 519 368 Q 513 376 513 376 Q 511 383 511 383 Q 510 391 510 391" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0.02 -0.02 1 517.8 358.29)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-40" y="7.85" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 25px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">70</tspan><tspan x="-11.41" y="7.85"  dy="-8.75" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 15px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); baseline-shift: 8.75; ">o</tspan></text>
+</g>
+</svg>

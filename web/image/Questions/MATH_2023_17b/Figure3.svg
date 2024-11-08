@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">
+<desc>Created with Fabric.js 3.6.6</desc>
+<defs>
+</defs>
+<g transform="matrix(1 0 0 1 292.2 224.2)"  >
+<path style="stroke: rgb(0,0,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"  transform=" translate(-307.2, -228.53)" d="M 181.86665852864581 319.19999186197913 L 363.19999186197913 77.86665852864583 L 432.5333251953125 379.19999186197913 L 181.86665852864581 319.19999186197913" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0 0 1 420.2 224.2)"  >
+<path style="stroke: rgb(0,0,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"  transform=" translate(-435.2, -228.53)" d="M 364.5333251953125 75.19999186197916 L 505.8666585286458 245.86665852864581 L 432.5333251953125 381.8666585286458" stroke-linecap="round" />
+</g>
+<g transform="matrix(1.01 0 0 0.99 328.61 278.5)"  >
+<path style="stroke: rgb(0,0,0); stroke-width: 2; stroke-dasharray: 15 15; stroke-linecap: square; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"  transform=" translate(-345.2, -283.2)" d="M 185.86665852864581 319.19999186197913 L 504.5333251953125 247.19999186197916" stroke-linecap="round" />
+</g>
+<g transform="matrix(1 0 0 1 352.56 52.65)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-10.2" y="9.42" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 30px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Z</tspan></text>
+</g>
+<g transform="matrix(1 0 0 1 156.03 314.78)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-10.2" y="9.42" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 30px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Y</tspan></text>
+</g>
+<g transform="matrix(1 0 0 1 508.03 237.45)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-10.2" y="9.42" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 30px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">X</tspan></text>
+</g>
+<g transform="matrix(1 0 0 1 426.35 392.12)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-13.85" y="9.42" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 30px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">W</tspan></text>
+</g>
+<g transform="matrix(1 0 0 1 358.67 438.39)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="18" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-51.5" y="8.17" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-size: 26px; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">Figure 3</tspan></text>
+</g>
+</svg>
