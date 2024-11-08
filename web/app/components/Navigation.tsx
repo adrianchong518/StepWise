@@ -1,15 +1,23 @@
 import Icon from "@/app/icon.svg";
 import { Link } from "@nextui-org/link";
+import { Button } from "@nextui-org/button";
 import { Navbar, NavbarBrand } from "@nextui-org/navbar";
 
 export default function Navigation() {
   return (
-    <Navbar maxWidth="lg" isBordered className="bg-primary-100">
+    <Navbar isBordered className="bg-primary-50">
       <NavbarBrand>
-        <Link href="/" color="foreground" className="gap-2">
-          <Icon width="48" height="48" />
+        <Button
+          as={Link}
+          href="/"
+          color="default"
+          variant="light"
+          disableRipple
+          disableAnimation
+          startContent={<Icon width="48" height="48" />}
+        >
           <p className="font-bold text-2xl text-inherit">StepWise</p>
-        </Link>
+        </Button>
       </NavbarBrand>
     </Navbar>
   );

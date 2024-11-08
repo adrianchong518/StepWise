@@ -15,7 +15,7 @@ import {
   type Node,
   type OnConnect,
 } from "@xyflow/react";
-import { Card, CardHeader, CardFooter } from "@nextui-org/card";
+import { Card, CardHeader } from "@nextui-org/card";
 import { Avatar } from "@nextui-org/avatar";
 
 type Data = {
@@ -89,16 +89,16 @@ const initEdges: Edge[] = [
 ];
 
 export default function Demo() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initNodes);
+  const [nodes, , onNodesChange] = useNodesState(initNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
 
   const onConnect: OnConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
-    [],
+    [setEdges],
   );
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-full w-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}

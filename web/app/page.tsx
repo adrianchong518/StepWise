@@ -16,6 +16,7 @@ export default function Page() {
           <Button
             size="lg"
             color="primary"
+            disableRipple
             endContent={<ArrowRightIcon className="w-5 md:w-6" />}
             as={Link}
             href="/demo"

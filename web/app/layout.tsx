@@ -4,6 +4,7 @@ import "@xyflow/react/dist/style.css";
 import "@/app/global.css";
 import { Providers } from "./providers";
 import Navigation from "./components/Navigation";
+import { type Metadata } from "next";
 
 const roboto = Roboto({
   weight: ["100", "400", "500", "700"],
@@ -18,6 +19,10 @@ const roboto_mono = Roboto_Mono({
   variable: "--font-roboto-mono",
 });
 
+export const metadata: Metadata = {
+  title: "StepWise",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -29,8 +34,10 @@ export default function RootLayout({
         className={`text-foreground bg-background font-sans ${roboto.variable} ${roboto_mono.variable}`}
       >
         <Providers>
-          <Navigation />
-          {children}
+          <div className="flex flex-col h-screen w-screen">
+            <Navigation />
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
