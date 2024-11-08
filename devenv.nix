@@ -10,6 +10,8 @@
     nodePackages.vercel
     emmet-language-server
     tailwindcss-language-server
+    vscode-langservers-extracted
+    prettierd
   ];
 
   # https://devenv.sh/languages/
