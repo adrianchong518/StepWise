@@ -1,15 +1,17 @@
-import "@/app/global.css";
 import { Roboto, Roboto_Mono } from "next/font/google";
 
+import "@/app/global.css";
+import { Providers } from "./providers";
+import Navigation from "./components/Navigation";
+
 const roboto = Roboto({
-  weight: ["100", "300", "400"],
+  weight: ["100", "400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-roboto",
 });
 
 const roboto_mono = Roboto_Mono({
-  weight: ["100", "300", "400"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-roboto-mono",
@@ -21,8 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${roboto.variable} ${roboto_mono.variable}`}>
-      <body>{children}</body>
+    <html lang="en">
+      <body
+        className={`text-foreground bg-background ${roboto.variable} ${roboto_mono.variable}`}
+      >
+        <Providers>
+          <Navigation />
+          {children}
+        </Providers>
+      </body>
     </html>
   );
 }
