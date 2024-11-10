@@ -1,11 +1,11 @@
 import Icon from "@/app/icon.svg";
-import { Link } from "@nextui-org/link";
 import { Button } from "@nextui-org/button";
+import { Link } from "@nextui-org/link";
 import { Navbar, NavbarBrand } from "@nextui-org/navbar";
 
 export default function Navigation() {
   return (
-    <Navbar isBordered className="bg-primary-50">
+    <Navbar isBordered maxWidth="full" className="h-10 bg-primary-50">
       <NavbarBrand>
         <Button
           as={Link}
@@ -16,7 +16,7 @@ export default function Navigation() {
           disableAnimation
           startContent={<Icon width="48" height="48" />}
         >
-          <p className="font-bold text-2xl text-inherit">StepWise</p>
+          <p className="font-bold text-xl text-inherit">StepWise</p>
         </Button>
       </NavbarBrand>
     </Navbar>

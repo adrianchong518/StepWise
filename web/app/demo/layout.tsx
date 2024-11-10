@@ -1,5 +1,7 @@
-export const metadata = {
-  title: "StepWise | Demo",
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Demo | StepWise",
 };
 
 export default function RootLayout({

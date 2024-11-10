@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Button } from "@nextui-org/button";
-import { Card, CardHeader, CardFooter } from "@nextui-org/card";
+import { Card, CardFooter, CardHeader } from "@nextui-org/card";
 import { Link } from "@nextui-org/link";
 
 export default function Page() {
