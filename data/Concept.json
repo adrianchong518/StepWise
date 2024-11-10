@@ -1,0 +1,11 @@
+{
+    "MATH": {
+        "concept": {
+            "1": {
+                "Skill set": "Sine Formula",
+                "Desc": "\\[\n\\begin{align*}\n\\text{Sine Law:} \\\\\n\\frac{a}{sin{A}}&=\\frac{b}{sin{B}}=\\frac{c}{sin{C}} \\text{ or } \\\\\n\\frac{sin{A}}{a}&=\\frac{sin{B}}{b}=\\frac{sin{C}}{c} \\\\\n\\end{align*}\n\\]\n<p style=\"text-align: center;\">\nThis is commonly used when you have to find <b>specific lines/angles</b> in a triangle, when you find some\n<b>pairs</b>.\n</p>",
+                "Photo": null
+            }
+        }
+    }
+}

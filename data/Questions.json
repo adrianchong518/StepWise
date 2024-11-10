@@ -1,0 +1,134 @@
+{
+    "Math_2023_17_a": {
+        "Subject": "Math",
+        "Content": "It is given that \\( WXY \\) is a triangle, where \\( WX = 6 cm \\), \\( XY = 5 cm \\) and \\( \\angle WYX = 70^\\circ \\). Find \\( \\angle XWY \\).",
+        "Photo": null,
+        "var": {
+            "WXY": {
+                "Given": 1,
+                "Value": "Triangle",
+                "Photo1": "image\\Questions\\MATH_2023_17a\\aWXY1.svg",
+                "Photo2": null
+            },
+            "WX": {
+                "Given": 1,
+                "Value": 6,
+                "Photo1": "image\\Questions\\MATH_2023_17a\\WX.svg",
+                "Photo2": null
+            },
+            "XY": {
+                "Given": 1,
+                "Value": 5,
+                "Photo1": "image\\Questions\\MATH_2023_17a\\XY.svg",
+                "Photo2": null
+            },
+            "\\angle WYX": {
+                "Given": 1,
+                "Value": "70^\\circ",
+                "Photo1": "image\\Questions\\MATH_2023_17a\\aWYX.svg",
+                "Photo2": null
+            },
+            "\\angle WXY": {
+                "Given": 0,
+                "Value": "51.5^\\circ",
+                "Photo1": "image\\Questions\\MATH_2023_17a\\aWXY.svg",
+                "Photo2": "image\\Questions\\MATH_2023_17a\\aWXY2.svg"
+            },
+            "\\angle XWY": {
+                "Given": 0,
+                "Value": "Unknown",
+                "Photo1": "image\\Questions\\MATH_2023_17a\\aXWY.svg",
+                "Photo2": null
+            }
+        },
+        "steps": {
+            "0": {
+                "Questions": "From the questions, we've obtain the following variables",
+                "Variables": [
+                    "WXY",
+                    "WX",
+                    "XY",
+                    "\\angle WYX",
+                    "\\angle XWY"
+                ],
+                "Choices": [
+                    [
+                        "OK",
+                        1
+                    ]
+                ],
+                "Sample Questions": -1
+            },
+            "1": {
+                "Questions": "What method should we use to find \\( \\angle XWY \\)?",
+                "Variables": [
+                    "WXY",
+                    "\\angle XWY"
+                ],
+                "Choices": [
+                    [
+                        "sine law",
+                        2
+                    ],
+                    [
+                        "cosine law",
+                        -1
+                    ],
+                    [
+                        "Herons Formula",
+                        -1
+                    ]
+                ],
+                "Sample Questions": 1
+            },
+            "2": {
+                "Questions": "How can we apply sin law?",
+                "Variables": [
+                    "WXY",
+                    "WX",
+                    "XY",
+                    "\\angle WYX",
+                    "\\angle XWY",
+                    "\\angleWYX"
+                ],
+                "Choices": [
+                    [
+                        "WX",
+                        "XY",
+                        "\\angleWYX",
+                        "\\angleWXY"
+                    ],
+                    [
+                        "WX",
+                        "XY",
+                        "\\angleWYX"
+                    ],
+                    3
+                ],
+                "Sample Questions": 1
+            },
+            "3": {
+                "Questions": "Apply sin law, what is the answer? (correct to 3 sig fig)",
+                "Variables": [
+                    "WXY",
+                    "WX",
+                    "XY",
+                    "\\angle WYX",
+                    "\\angle XWY"
+                ],
+                "Choices": [
+                    [
+                        51.5,
+                        -1
+                    ]
+                ],
+                "Sample Questions": 1
+            }
+        }
+    },
+    "Math_2023_17_b": {
+        "Subject": "Math",
+        "Content": "Figure 3 shows the pyramid \\( WXYZ \\), where \\( WZ=XZ=YZ \\). The base of this pyramid is the triangle \\( WXY \\) described in (a). It is given that the angle between \\( WZ \\) and the triangle \\( WXY \\) is \\( 30^\\circ \\). Does the angle between the triangles \\( WXY \\) and \\( XYZ \\) exceed \\( 45^\\circ \\)? Explain your answer.",
+        "Photo": "image/MATH_2023_17b_Figure3.svg"
+    }
+}
