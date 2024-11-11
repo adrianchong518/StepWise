@@ -4,10 +4,10 @@
 <desc>Created with Fabric.js 3.6.6</desc>
 <defs>
 </defs>
-<g transform="matrix(-0.5 0.86 -0.86 -0.5 461 86.5)"  >
-<path style="stroke: rgb(255,0,0); stroke-width: 2; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(11,0,255); fill-opacity: 0; fill-rule: nonzero; opacity: 1;"  transform=" translate(-149.5, -315)" d="M 143 299 L 152 303 Q 156 311 156 312 L 156 322 L 152 331" stroke-linecap="round" />
+<g transform="matrix(1 0 0 1 458.5 97.35)"  >
+<path style="stroke: rgb(255,0,0); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-457.5, -96.35)" d="M 436 86.39999389648438 Q 458 111.39999389648438 479 94.39999389648438" stroke-linecap="round" />
 </g>
-<g transform="matrix(1 0 0 1 453.52 111.63)" style=""  >
-		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="25" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-10.03" y="7.85" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">?</tspan></text>
+<g transform="matrix(1 0 0 1 479.5 114.02)" style=""  >
+		<text xml:space="preserve" font-family="'Open Sans', sans-serif" font-size="25" font-style="normal" font-weight="normal" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-40" y="7.85" style="stroke-width: 1; font-family: 'Open Sans', sans-serif; font-style: normal; font-weight: normal; fill: rgb(0,0,0); ">?</tspan></text>
 </g>
 </svg>
