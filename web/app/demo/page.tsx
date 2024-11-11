@@ -6,61 +6,90 @@ import {
   MiniMap,
   Panel,
   ReactFlow,
-  ReactFlowProvider,
-  addEdge,
-  useEdgesState,
-  useNodesState,
-  type Edge,
-  type OnConnect,
+  useReactFlow,
+  type NodeMouseHandler,
 } from "@xyflow/react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import useSWR from "swr";
+import { useShallow } from "zustand/shallow";
 
-import Question from "./components/Question";
+import { type Question } from "@/app/api/question";
+import QuestionCard from "./components/QuestionCard";
 import { StepNode } from "./components/StepNode";
+import useStore from "./store";
+import { DemoNode } from "./store/graph";
 
 import "@xyflow/react/dist/style.css";
+import { fitViewToNode, getStepNodeId } from "./lib";
 
 const nodeTypes = {
   step: StepNode,
 };
 
-const initNodes: StepNode[] = [];
-
-const initEdges: Edge[] = [];
-
 const questionId = "Math_2023_17_a";
 
 export default function Demo() {
-  const [nodes, , onNodesChange] = useNodesState(initNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, setQuestion } =
+    useStore(
+      useShallow((s) => ({
+        nodes: s.nodes,
+        edges: s.edges,
+        onNodesChange: s.onNodesChange,
+        onEdgesChange: s.onEdgesChange,
+        onConnect: s.onConnect,
+        setNodes: s.setNodes,
+        question: s.question,
+        setQuestion: s.setQuestion,
+      })),
+    );
 
-  const onConnect: OnConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
+  const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
+  const { fitView } = useReactFlow();
+
+  const focusNode = useCallback<NodeMouseHandler<DemoNode>>(
+    (_, node) => {
+      fitView(fitViewToNode(node));
+    },
+    [fitView],
   );
 
-  return (
-    <ReactFlowProvider>
-      <div className="h-full w-full">
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          nodeTypes={nodeTypes}
-          fitView
-          onlyRenderVisibleElements
-        >
-          <Panel position="top-center">
-            <Question questionId={questionId} />
-          </Panel>
+  useEffect(() => {
+    if (question) {
+      setQuestion(question);
+      setTimeout(() =>
+        fitView(fitViewToNode({ id: getStepNodeId(question.id, 0) })),
+      );
+    }
+  }, [question, fitView]);
 
-          <Background />
-          <Controls />
-          <MiniMap />
-        </ReactFlow>
+  if (question === undefined) {
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="text-4xl">Loading...</div>
       </div>
-    </ReactFlowProvider>
+    );
+  }
+
+  return (
+    <div className="h-full w-full">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        onNodeClick={focusNode}
+        // onlyRenderVisibleElements
+      >
+        <Panel position="top-left">
+          <QuestionCard question={question.details} />
+        </Panel>
+
+        <Background />
+        <Controls />
+        <MiniMap pannable zoomable onNodeClick={focusNode} />
+      </ReactFlow>
+    </div>
   );
 }

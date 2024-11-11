@@ -1,4 +1,7 @@
+import { ReactFlowProvider } from "@xyflow/react";
 import { type Metadata } from "next";
+
+import { DemoStoreProvider } from "./store";
 
 export const metadata: Metadata = {
   title: "Demo | StepWise",
@@ -9,5 +12,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <ReactFlowProvider>
+      <DemoStoreProvider>{children}</DemoStoreProvider>
+    </ReactFlowProvider>
+  );
 }

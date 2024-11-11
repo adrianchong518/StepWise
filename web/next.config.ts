@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find(
-      (rule: any) => rule.test?.test?.(".svg"),
+    const fileLoaderRule = config.module.rules.find((rule: any) =>
+      rule.test?.test?.(".svg"),
     );
 
     config.module.rules.push(
@@ -28,6 +28,15 @@ const nextConfig: NextConfig = {
     fileLoaderRule.exclude = /\.svg$/i;
 
     return config;
+  },
+
+  images: {
+    localPatterns: [
+      {
+        pathname: "/images/**",
+        search: "",
+      },
+    ],
   },
 };
 

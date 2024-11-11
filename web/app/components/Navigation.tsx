@@ -12,7 +12,6 @@ export default function Navigation() {
           href="/"
           color="default"
           variant="light"
-          disableRipple
           disableAnimation
           startContent={<Icon width="48" height="48" />}
         >

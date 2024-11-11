@@ -47,42 +47,64 @@ export const questionData = {
     },
     steps: {
       "0": {
-        Questions: "From the questions, we've obtain the following variables",
+        Questions: "From the question, we have these variables:",
         Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
-        Choices: [["OK", 1]],
+        // Choices: [["OK", 1]],
+        Choices: {
+          type: "option",
+          options: [{ value: "OK", nextStep: 1 }],
+        },
         "Sample Questions": -1,
       },
       "1": {
-        Questions: "What method should we use to find \\( \\angle XWY \\)?",
+        Questions: "What method should be used to find \\( \\angle XWY \\)?",
         Variables: ["WXY", "\\angle XWY"],
-        Choices: [
-          ["sine law", 2],
-          ["cosine law", -1],
-          ["Herons Formula", -1],
-        ],
+        // Choices: [
+        //   ["sine law", 2],
+        //   ["cosine law", -1],
+        //   ["Herons Formula", -1],
+        // ],
+        Choices: {
+          type: "option",
+          options: [
+            { value: "Sine Law", nextStep: 2 },
+            { value: "Cosine Law" },
+            { value: "Heron's Formula" },
+          ],
+        },
         "Sample Questions": 1,
       },
       "2": {
-        Questions: "How can we apply sin law?",
-        Variables: [
-          "WXY",
-          "WX",
-          "XY",
-          "\\angle WYX",
-          "\\angle XWY",
-          "\\angleWYX",
-        ],
-        Choices: [
-          ["WX", "XY", "\\angleWYX", "\\angleWXY"],
-          ["WX", "XY", "\\angleWYX"],
-          3,
-        ],
+        Questions: "How can we apply Sine Law?",
+        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
+        // Choices: [
+        //   ["WX", "XY", "\\angleWYX", "\\angleWXY"],
+        //   ["WX", "XY", "\\angleWYX"],
+        //   3,
+        // ],
+        Choices: {
+          type: "multioption",
+          options: ["WX", "XY", "\\angleWYX", "\\angleWXY"],
+          correctOptions: ["WX", "XY", "\\angleWYX"],
+          nextStep: 3,
+        },
         "Sample Questions": 1,
       },
       "3": {
         Questions: "Apply sin law, what is the answer? (correct to 3 sig fig)",
         Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
-        Choices: [[51.5, -1]],
+        // Choices: [[51.5, -1]],
+        Choices: {
+          type: "number",
+          value: 51.5,
+          nextStep: 4,
+        },
+        "Sample Questions": 1,
+      },
+      "4": {
+        Questions: "",
+        Variables: [],
+        Choices: { type: "end" },
         "Sample Questions": 1,
       },
     },
