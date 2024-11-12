@@ -11,7 +11,6 @@ import {
 } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
 import useSWR from "swr";
-import { useShallow } from "zustand/shallow";
 
 import { type Question } from "@/app/api/question";
 import QuestionCard from "./components/QuestionCard";
@@ -30,18 +29,16 @@ const questionId = "Math_2023_17_a";
 
 export default function Demo() {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect, setQuestion } =
-    useStore(
-      useShallow((s) => ({
-        nodes: s.nodes,
-        edges: s.edges,
-        onNodesChange: s.onNodesChange,
-        onEdgesChange: s.onEdgesChange,
-        onConnect: s.onConnect,
-        setNodes: s.setNodes,
-        question: s.question,
-        setQuestion: s.setQuestion,
-      })),
-    );
+    useStore((s) => ({
+      nodes: s.nodes,
+      edges: s.edges,
+      onNodesChange: s.onNodesChange,
+      onEdgesChange: s.onEdgesChange,
+      onConnect: s.onConnect,
+      setNodes: s.setNodes,
+      question: s.question,
+      setQuestion: s.setQuestion,
+    }));
 
   const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
   const { fitView } = useReactFlow();
@@ -80,7 +77,11 @@ export default function Demo() {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         onNodeClick={focusNode}
-        // onlyRenderVisibleElements
+        onlyRenderVisibleElements
+        minZoom={0}
+        maxZoom={2}
+        deleteKeyCode={null}
+        proOptions={{ hideAttribution: true }}
       >
         <Panel position="top-left">
           <QuestionCard question={question.details} />

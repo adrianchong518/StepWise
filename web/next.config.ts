@@ -29,14 +29,8 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-
   images: {
-    localPatterns: [
-      {
-        pathname: "/images/**",
-        search: "",
-      },
-    ],
+    dangerouslyAllowSVG: true,
   },
 };
 

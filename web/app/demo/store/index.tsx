@@ -1,10 +1,13 @@
 "use client";
 
+import { getNodesBounds } from "@xyflow/react";
 import { createContext, useContext, useRef, type ReactNode } from "react";
 import { useStore } from "zustand";
+import { useShallow } from "zustand/shallow";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
 import type { Question, StepId } from "@/app/api/question";
+import { StepNode } from "../components/StepNode";
 import { getStepNodeId } from "../lib";
 import { createGraphStore, GraphStore } from "./graph";
 
@@ -32,15 +35,6 @@ const createDemoStore = () =>
               position: { x: 0, y: 0 },
             },
           ],
-          edges: [
-            {
-              id: "ahh",
-              source: getStepNodeId(question.id, 0),
-              sourceHandle: "next-step",
-              target: getStepNodeId(question.id, 1),
-              targetHandle: "prev-step",
-            },
-          ],
           displayedSteps: [question.steps[0].id],
         }),
 
@@ -49,19 +43,33 @@ const createDemoStore = () =>
         const question = get().question;
         if (question === undefined) return;
         if (!(step in question.steps)) return;
+        const source = getStepNodeId(
+          question.id,
+          get().displayedSteps[get().displayedSteps.length - 1],
+        );
+        const target = getStepNodeId(question.id, step);
+        const newNode: StepNode = {
+          id: target,
+          type: "step",
+          data: {
+            questionId: question.id,
+            stepNumber: get().displayedSteps.length,
+            stepId: step,
+          },
+          position: { x: 0, y: 700 * get().displayedSteps.length },
+        };
+        console.log(getNodesBounds([newNode]));
         set({
           displayedSteps: [...get().displayedSteps, step],
-          nodes: [
-            ...get().nodes,
+          nodes: [...get().nodes, newNode],
+          edges: [
+            ...get().edges,
             {
-              id: getStepNodeId(question.id, step),
-              type: "step",
-              data: {
-                questionId: question.id,
-                stepNumber: get().displayedSteps.length,
-                stepId: step,
-              },
-              position: { x: 0, y: 1000 * get().displayedSteps.length },
+              id: `${source}->${target}`,
+              source,
+              sourceHandle: "next-step",
+              target,
+              targetHandle: "prev-step",
             },
           ],
         });
@@ -93,6 +101,6 @@ const useDemoStore = <T,>(selector: (store: DemoStore) => T): T => {
     throw new Error(`useDemoStore must be used within DemoStoreProvider`);
   }
 
-  return useStore(appStoreContext, selector);
+  return useStore(appStoreContext, useShallow(selector));
 };
 export default useDemoStore;

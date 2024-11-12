@@ -21,7 +21,7 @@ export default function QuestionCard({
     <Card className="min-w-md max-w-lg">
       <CardHeader className="bg-primary-500 text-gray-100">
         <div className="flex flex-row items-center font-bold w-full justify-between">
-          <div className="text-xl">
+          <div className="text-2xl">
             {question.source.kind} {question.source.year} {question.subject}
           </div>
           <div className="text-lg">

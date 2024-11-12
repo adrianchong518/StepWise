@@ -7,6 +7,7 @@ export const getStepNodeId = (questionId: QuestionId, stepId: StepId) =>
 
 export const fitViewToNode = (node: Node | { id: string }): FitViewOptions => ({
   nodes: [node],
+  padding: 0.75,
   maxZoom: 1.5,
-  duration: 150,
+  duration: 350,
 });
