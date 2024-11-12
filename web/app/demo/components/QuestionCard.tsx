@@ -1,4 +1,6 @@
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -9,32 +11,57 @@ import { useState } from "react";
 
 import { type QuestionDetails } from "@/app/api/question/index";
 import KatexSpan from "@/app/components/KatexSpan";
+import useStore from "../store";
 
 export default function QuestionCard({
   question,
 }: {
   question: QuestionDetails;
 }) {
-  const [] = useState(false);
+  const { expanded, setExpanded } = useStore((s) => ({
+    expanded: s.questionExpanded,
+    setExpanded: s.setQuestionExpanded,
+  }));
 
   return (
-    <Card className="min-w-md max-w-lg">
+    <Card className="max-w-[40em]">
       <CardHeader className="bg-primary-500 text-gray-100">
-        <div className="flex flex-row items-center font-bold w-full justify-between">
-          <div className="text-2xl">
-            {question.source.kind} {question.source.year} {question.subject}
+        <Button
+          className="justify-self-end"
+          color="primary"
+          disableAnimation
+          size="lg"
+          startContent={
+            expanded ? (
+              <ChevronDownIcon className="h-5/6" />
+            ) : (
+              <ChevronRightIcon className="h-5/6" />
+            )
+          }
+          onPress={() => {
+            setExpanded(!expanded);
+          }}
+        >
+          <div className="flex flex-col justify-center items-start">
+            <div className="text-2xl">
+              {question.source.kind} {question.source.year} {question.subject}
+            </div>
+            <div className="text-lg">
+              Question {question.number}({question.part})
+            </div>
           </div>
-          <div className="text-lg">
-            Question {question.number}({question.part})
-          </div>
-        </div>
+        </Button>
       </CardHeader>
-      <Divider />
-      <CardBody className="text-md">
-        <KatexSpan>{question.content}</KatexSpan>
-      </CardBody>
-      <Divider />
-      <CardFooter className="text-md"></CardFooter>
+      {expanded && (
+        <>
+          <Divider />
+          <CardBody className="text-md">
+            <KatexSpan>{question.content}</KatexSpan>
+          </CardBody>
+          <Divider />
+          <CardFooter className="text-md"></CardFooter>
+        </>
+      )}
     </Card>
   );
 }

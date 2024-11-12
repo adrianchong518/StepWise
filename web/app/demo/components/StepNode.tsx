@@ -27,6 +27,7 @@ import { ReactNode, useCallback, useState } from "react";
 
 import type { OptionResponse, QuestionId, StepId } from "@/app/api/question";
 import KatexSpan from "@/app/components/KatexSpan";
+import { nextTick } from "@/app/utils";
 import { fitViewToNode, getStepNodeId } from "../lib";
 import useStore from "../store";
 
@@ -51,36 +52,32 @@ const NewNodeButton = ({
   >("active");
 
   const newNode = useCallback(() => {
-    if (nextStep) {
-      setStatus("correct");
-      addStep(nextStep);
-      setTimeout(
-        () =>
-          fitView(
-            fitViewToNode({
-              id: getStepNodeId(questionId, nextStep),
-            }),
-          ),
-        250,
-      );
-    }
+    (async () => {
+      if (nextStep) {
+        setStatus("correct");
+        addStep(nextStep);
+        await nextTick(2);
+        fitView(
+          fitViewToNode({
+            id: getStepNodeId(questionId, nextStep),
+          }),
+        );
+      }
+    })();
   }, [fitView, setStatus]);
 
   return (
     <Button
-      className={`${
-        status === "active"
-          ? "bg-primary-200 text-gray-800"
-          : status === "correct"
-            ? "bg-success-600 text-gray-100"
-            : status === "inactive"
-              ? "bg-default-400 text-gray-200"
-              : status === "wrong"
-                ? "bg-danger-600 text-gray-100"
-                : ""
-      } font-medium transition-colors ${className}`}
+      className={`font-medium transition-colors ${className}`}
+      color={
+        status == "correct"
+          ? "success"
+          : status == "wrong"
+            ? "danger"
+            : "primary"
+      }
       onPress={newNode}
-      disabled={status == "inactive" || status == "wrong"}
+      isDisabled={status == "inactive" || status == "wrong"}
     >
       {children}
     </Button>
@@ -101,12 +98,12 @@ const OptionResponseInput = ({
       key={`${questionId}_${stepId}_${optRes.type}`}
       questionId={questionId}
       nextStep={optRes.options[0].nextStep}
-      className="place-self-center w-[10em]"
+      className="w-[10em]"
     >
       {optRes.options[0].value}
     </NewNodeButton>
   ) : (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-5/6">
+    <div className="grid grid-cols-2 gap-x-6 gap-y-4">
       {optRes.options.map(({ value, nextStep }) => (
         <NewNodeButton
           key={`${questionId}_${stepId}_${optRes.type}_${value}`}
@@ -179,6 +176,8 @@ const EndStepNode = ({
             <Button
               size="lg"
               startContent={<HomeIcon className="w-5 md:w-6" />}
+              color="primary"
+              className="bg-primary-700 text-gray-100"
               as={Link}
               href="/"
             >
@@ -199,6 +198,7 @@ const EndStepNode = ({
           </div>
           <div className="place-self-stretch">
             <Button
+              color="primary"
               startContent={<ArrowsPointingOutIcon className="w-5 md:w-6" />}
               className="h-full"
               onPress={() => {
@@ -241,7 +241,6 @@ export function StepNode({
     return;
   }
 
-  const hasPrevStep = stepNumber > 0;
   const hasNextStep = stepNumber < displayedSteps.length - 1;
 
   if (step.response.type === "end") {
@@ -257,10 +256,7 @@ export function StepNode({
             {stepNumber != 0 && (
               <Button
                 isIconOnly
-                color={hasPrevStep ? "primary" : "default"}
-                className={hasPrevStep ? "" : "text-gray-500"}
-                disabled={!hasPrevStep}
-                disableAnimation={!hasPrevStep}
+                color="primary"
                 onPress={(_) =>
                   fitView(
                     fitViewToNode({
@@ -277,10 +273,8 @@ export function StepNode({
             )}
             <Button
               isIconOnly
-              color={hasNextStep ? "primary" : "default"}
-              className={hasNextStep ? "" : "text-gray-500"}
-              disabled={!hasNextStep}
-              disableAnimation={!hasNextStep}
+              color="primary"
+              isDisabled={!hasNextStep}
               onPress={(_) =>
                 fitView(
                   fitViewToNode({
@@ -301,18 +295,25 @@ export function StepNode({
       <CardBody>
         <div className="flex flex-row justify-between w-full text-md">
           <div className="w-1/2 self-center flex flex-col justify-center gap-6">
-            <KatexSpan>{step.prompt}</KatexSpan>
-            {step.response.type === "option" ? (
-              <OptionResponseInput
-                optRes={step.response}
-                questionId={question.id}
-                stepId={step.id}
-              />
-            ) : (
-              <NewNodeButton questionId={question.id} nextStep={stepNumber + 1}>
-                Next Step
-              </NewNodeButton>
-            )}
+            <div className="w-fit place-self-center">
+              <KatexSpan>{step.prompt}</KatexSpan>
+            </div>
+            <div className="w-fit place-self-center">
+              {step.response.type === "option" ? (
+                <OptionResponseInput
+                  optRes={step.response}
+                  questionId={question.id}
+                  stepId={step.id}
+                />
+              ) : (
+                <NewNodeButton
+                  questionId={question.id}
+                  nextStep={stepNumber + 1}
+                >
+                  Next Step
+                </NewNodeButton>
+              )}
+            </div>
           </div>
           <div className="w-1/2 aspect-square relative">
             {step.variables.map((v) => (

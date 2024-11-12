@@ -13,6 +13,7 @@ import { useCallback, useEffect } from "react";
 import useSWR from "swr";
 
 import { type Question } from "@/app/api/question";
+import { nextTick } from "@/app/utils";
 import QuestionCard from "./components/QuestionCard";
 import { StepNode } from "./components/StepNode";
 import useStore from "./store";
@@ -28,17 +29,25 @@ const nodeTypes = {
 const questionId = "Math_2023_17_a";
 
 export default function Demo() {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, setQuestion } =
-    useStore((s) => ({
-      nodes: s.nodes,
-      edges: s.edges,
-      onNodesChange: s.onNodesChange,
-      onEdgesChange: s.onEdgesChange,
-      onConnect: s.onConnect,
-      setNodes: s.setNodes,
-      question: s.question,
-      setQuestion: s.setQuestion,
-    }));
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    setQuestion,
+    setQuestionExpanded,
+  } = useStore((s) => ({
+    nodes: s.nodes,
+    edges: s.edges,
+    onNodesChange: s.onNodesChange,
+    onEdgesChange: s.onEdgesChange,
+    onConnect: s.onConnect,
+    setNodes: s.setNodes,
+    question: s.question,
+    setQuestion: s.setQuestion,
+    setQuestionExpanded: s.setQuestionExpanded,
+  }));
 
   const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
   const { fitView } = useReactFlow();
@@ -51,12 +60,13 @@ export default function Demo() {
   );
 
   useEffect(() => {
-    if (question) {
-      setQuestion(question);
-      setTimeout(() =>
-        fitView(fitViewToNode({ id: getStepNodeId(question.id, 0) })),
-      );
-    }
+    (async () => {
+      if (question) {
+        setQuestion(question);
+        await nextTick(2);
+        fitView(fitViewToNode({ id: getStepNodeId(question.id, 0) }));
+      }
+    })();
   }, [question, fitView]);
 
   if (question === undefined) {
@@ -77,18 +87,19 @@ export default function Demo() {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         onNodeClick={focusNode}
-        onlyRenderVisibleElements
+        onMove={() => setQuestionExpanded(false)}
         minZoom={0}
         maxZoom={2}
         deleteKeyCode={null}
         proOptions={{ hideAttribution: true }}
+        onlyRenderVisibleElements
       >
         <Panel position="top-left">
           <QuestionCard question={question.details} />
         </Panel>
 
         <Background />
-        <Controls />
+        <Controls fitViewOptions={{ duration: 750 }} />
         <MiniMap pannable zoomable onNodeClick={focusNode} />
       </ReactFlow>
     </div>
