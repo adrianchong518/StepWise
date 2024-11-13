@@ -1,3 +1,6 @@
+import type { SampleId } from "../sample";
+import type { Figure } from "../type";
+
 export type QuestionId = string;
 
 export type Question = {
@@ -40,7 +43,7 @@ export type Step = {
   prompt: string;
   variables: string[];
   response: StepResponse;
-  sampleQuestion: SampleQuestionId;
+  sampleId: SampleId;
 };
 
 export type StepId = number;
@@ -75,20 +78,3 @@ export type NumberResponse = {
 export type EndResponse = {
   type: "end";
 };
-
-export type SampleQuestionId = number;
-
-export type SampleQuestion = {
-  id: SampleQuestionId;
-  subject: "Mathematics";
-  name: string;
-  question: string;
-  figure?: Figure;
-  concept: ConceptId;
-};
-
-export type ConceptId = number;
-
-export type Concept = {};
-
-export type Figure = string;

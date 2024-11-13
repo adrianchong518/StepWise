@@ -7,9 +7,11 @@ import { useShallow } from "zustand/shallow";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
 import type { Question, StepId } from "@/app/api/question";
-import { StepNode } from "../components/StepNode";
-import { createEdge, createNode, getStepNodeId } from "../lib";
-import { createGraphStore, GraphStore } from "./graph";
+import type { Sample, SampleId } from "@/app/api/sample";
+import type { SampleNode, SampleQuestionNode } from "../components/SampleNode";
+import type { StepNode } from "../components/StepNode";
+import { createEdge, createNode, getSampleNodeId, getStepNodeId } from "../lib";
+import { createGraphStore, type DemoNode, type GraphStore } from "./graph";
 
 export type DemoStore = GraphStore & {
   question?: Question;
@@ -19,7 +21,12 @@ export type DemoStore = GraphStore & {
   setQuestionExpanded: (expanded: boolean) => void;
 
   displayedSteps: StepId[];
-  addStep: (step: StepId) => void;
+  addStep: (step: StepId) => { nodeId: string; edgeId: string } | undefined;
+  addSampleBase: (
+    step: StepId,
+    sampleId: SampleId,
+  ) => { nodeId: string; edgeId: string } | undefined;
+  addSample: (baseNodeId: string, sample: Sample) => void;
 };
 
 const createDemoStore = () =>
@@ -47,8 +54,6 @@ const createDemoStore = () =>
         }),
 
       addStep: (step) => {
-        if (step in get().displayedSteps) return;
-
         const question = get().question;
         if (question === undefined) return;
         if (!(step in question.steps)) return;
@@ -58,6 +63,9 @@ const createDemoStore = () =>
           get().displayedSteps[get().displayedSteps.length - 1],
         );
         const target = getStepNodeId(question.id, step);
+
+        if (step in get().displayedSteps)
+          return { nodeId: target, edgeId: `${source}->${target}` };
 
         const newNode = createNode<StepNode>({
           id: target,
@@ -89,6 +97,74 @@ const createDemoStore = () =>
           displayedSteps: [...get().displayedSteps, step],
           nodes: [...get().nodes, newNode],
           edges: [...get().edges, nextStepEdge],
+        });
+
+        return { nodeId: newNode.id, edgeId: nextStepEdge.id };
+      },
+
+      addSampleBase: (stepId, sampleId) => {
+        const question = get().question;
+        if (question === undefined) return;
+        if (!(stepId in get().displayedSteps)) return;
+
+        const stepNodeId = getStepNodeId(question.id, stepId);
+        const stepNode = get().nodes.find(
+          (n) => n.id === stepNodeId,
+        ) as StepNode;
+        const sampleNodeId = getSampleNodeId(question.id, sampleId);
+
+        if (get().nodes.find((n) => n.id === sampleNodeId) === undefined) {
+          const sampleNode = createNode<SampleNode>({
+            id: sampleNodeId,
+            type: "sample",
+            data: { sampleId },
+            position: {
+              x: stepNode.position.x + 1000,
+              y: stepNode.position.y,
+            },
+            style: {
+              width: 750,
+              height: 1000,
+            },
+          });
+          set({ nodes: [...get().nodes, sampleNode] });
+        }
+
+        const sampleEdgeId = `${stepNodeId}->${sampleNodeId}`;
+        if (get().edges.find((e) => e.id === sampleEdgeId) === undefined) {
+          const sampleEdge = createEdge({
+            id: sampleEdgeId,
+            source: stepNodeId,
+            sourceHandle: "explain",
+            target: sampleNodeId,
+            style: { strokeWidth: 4 },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20,
+            },
+            animated: true,
+          });
+          set({ edges: [...get().edges, sampleEdge] });
+        }
+
+        return { nodeId: sampleNodeId, edgeId: sampleEdgeId };
+      },
+
+      addSample: (baseNodeId, sample) => {
+        const questionNode = createNode<SampleQuestionNode>(
+          {
+            id: `${baseNodeId}_question`,
+            type: "sample-question",
+            data: { sample },
+            parentId: baseNodeId,
+            position: { x: 0, y: 0 },
+          },
+          false,
+        );
+
+        set({
+          nodes: [...get().nodes, questionNode],
         });
       },
     };

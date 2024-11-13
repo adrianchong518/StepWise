@@ -8,3 +8,5 @@ export const nextTick = async (frames = 1) => {
     await _nextTick(i);
   }
 };
+
+export const timeout = (ms: number) => new Promise((r) => setTimeout(r, ms));

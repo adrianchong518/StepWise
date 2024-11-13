@@ -25,25 +25,31 @@ import {
 import Image from "next/image";
 import { ReactNode, useCallback, useState } from "react";
 
-import type { OptionResponse, QuestionId, StepId } from "@/app/api/question";
+import type {
+  OptionResponse,
+  QuestionId,
+  SampleId,
+  StepId,
+} from "@/app/api/question";
 import KatexSpan from "@/app/components/KatexSpan";
-import { nextTick } from "@/app/utils";
+import { nextTick, timeout } from "@/app/utils";
 import { fitViewToNode, getStepNodeId } from "../lib";
 import useStore from "../store";
 
 const NewNodeButton = ({
   children,
-  questionId,
-  nextStep,
+  stepId,
+  next,
   className,
 }: {
   children: ReactNode;
-  questionId: QuestionId;
-  nextStep?: number;
+  stepId: StepId;
+  next: { stepId: StepId } | { sampleId: SampleId };
   className?: string;
 }) => {
-  const { addStep } = useStore((s) => ({
+  const { addStep, addSample } = useStore((s) => ({
     addStep: s.addStep,
+    addSample: s.addSampleBase,
   }));
   const { fitView } = useReactFlow();
 
@@ -53,15 +59,18 @@ const NewNodeButton = ({
 
   const newNode = useCallback(() => {
     (async () => {
-      if (nextStep) {
+      let newNodeId;
+      if ("stepId" in next) {
         setStatus("correct");
-        addStep(nextStep);
+        newNodeId = addStep(next.stepId)?.nodeId;
+      } else if ("sampleId" in next) {
+        setStatus("wrong");
+        newNodeId = addSample(stepId, next.sampleId)?.nodeId;
+      }
+      if (newNodeId) {
         await nextTick(2);
-        fitView(
-          fitViewToNode({
-            id: getStepNodeId(questionId, nextStep),
-          }),
-        );
+        await timeout(300);
+        fitView(fitViewToNode({ id: newNodeId }));
       }
     })();
   }, [fitView, setStatus]);
@@ -88,16 +97,22 @@ const OptionResponseInput = ({
   optRes,
   questionId,
   stepId,
+  sampleId,
 }: {
   optRes: OptionResponse;
   questionId: QuestionId;
   stepId: StepId;
+  sampleId: SampleId;
 }) =>
   optRes.options.length === 1 ? (
     <NewNodeButton
       key={`${questionId}_${stepId}_${optRes.type}`}
-      questionId={questionId}
-      nextStep={optRes.options[0].nextStep}
+      stepId={stepId}
+      next={
+        optRes.options[0].nextStep
+          ? { stepId: optRes.options[0].nextStep }
+          : { sampleId }
+      }
       className="w-[10em]"
     >
       {optRes.options[0].value}
@@ -107,8 +122,8 @@ const OptionResponseInput = ({
       {optRes.options.map(({ value, nextStep }) => (
         <NewNodeButton
           key={`${questionId}_${stepId}_${optRes.type}_${value}`}
-          questionId={questionId}
-          nextStep={nextStep}
+          stepId={stepId}
+          next={nextStep ? { stepId: nextStep } : { sampleId }}
         >
           {value}
         </NewNodeButton>
@@ -304,12 +319,10 @@ export function StepNode({
                   optRes={step.response}
                   questionId={question.id}
                   stepId={step.id}
+                  sampleId={step.sampleId}
                 />
               ) : (
-                <NewNodeButton
-                  questionId={question.id}
-                  nextStep={stepNumber + 1}
-                >
+                <NewNodeButton stepId={step.id} next={{ stepId: step.id + 1 }}>
                   Next Step
                 </NewNodeButton>
               )}
@@ -321,7 +334,7 @@ export function StepNode({
                 key={`${nodeId}_${v} `}
                 src={`/${question.variables[v].figure1} `}
                 alt=""
-                layout="fill"
+                fill
               />
             ))}
           </div>
@@ -338,6 +351,12 @@ export function StepNode({
         type="source"
         position={Position.Bottom}
         id="next-step"
+        className="invisible"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="explain"
         className="invisible"
       />
     </Card>

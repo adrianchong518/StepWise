@@ -9,9 +9,13 @@ import {
 } from "@xyflow/react";
 import { type StateCreator } from "zustand";
 
-import { StepNode } from "@/app/demo/components/StepNode";
+import type {
+  SampleNode,
+  SampleQuestionNode,
+} from "@/app/demo/components/SampleNode";
+import type { StepNode } from "@/app/demo/components/StepNode";
 
-export type DemoNode = StepNode;
+export type DemoNode = StepNode | SampleNode | SampleQuestionNode;
 
 export type GraphStore = {
   nodes: DemoNode[];

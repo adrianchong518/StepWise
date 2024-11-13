@@ -15,6 +15,7 @@ import useSWR from "swr";
 import { type Question } from "@/app/api/question";
 import { nextTick } from "@/app/utils";
 import QuestionCard from "./components/QuestionCard";
+import { SampleNode, SampleQuestionNode } from "./components/SampleNode";
 import { StepNode } from "./components/StepNode";
 import useStore from "./store";
 import { DemoNode } from "./store/graph";
@@ -24,6 +25,8 @@ import { fitViewToNode, getStepNodeId } from "./lib";
 
 const nodeTypes = {
   step: StepNode,
+  sample: SampleNode,
+  "sample-question": SampleQuestionNode,
 };
 
 const questionId = "Math_2023_17_a";
@@ -93,6 +96,7 @@ export default function Demo() {
         deleteKeyCode={null}
         proOptions={{ hideAttribution: true }}
         onlyRenderVisibleElements
+        zoomOnDoubleClick={false}
       >
         <Panel position="top-left">
           <QuestionCard question={question.details} />
@@ -100,7 +104,7 @@ export default function Demo() {
 
         <Background />
         <Controls fitViewOptions={{ duration: 750 }} />
-        <MiniMap pannable zoomable onNodeClick={focusNode} />
+        <MiniMap pannable zoomable zoomStep={2} onNodeClick={focusNode} />
       </ReactFlow>
     </div>
   );

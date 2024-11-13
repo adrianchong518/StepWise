@@ -1,5 +1,5 @@
 import { questionData } from "@/app/api/data";
-import { type Question, type StepResponse } from "@/app/api/question/index";
+import type { Question, StepResponse } from "..";
 
 export async function GET(
   _request: Request,
@@ -38,7 +38,7 @@ export async function GET(
           prompt: v.Questions,
           variables: v.Variables,
           response: v.Choices as StepResponse,
-          sampleQuestion: v["Sample Questions"],
+          sampleId: v["Sample Questions"],
         };
       }),
     };
