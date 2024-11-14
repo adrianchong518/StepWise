@@ -25,12 +25,8 @@ import {
 import Image from "next/image";
 import { ReactNode, useCallback, useState } from "react";
 
-import type {
-  OptionResponse,
-  QuestionId,
-  SampleId,
-  StepId,
-} from "@/app/api/question";
+import type { OptionResponse, QuestionId, StepId } from "@/app/api/question";
+import type { SampleId } from "@/app/api/sample";
 import KatexSpan from "@/app/components/KatexSpan";
 import { nextTick, timeout } from "@/app/utils";
 import { fitViewToNode, getStepNodeId } from "../lib";
@@ -59,18 +55,15 @@ const NewNodeButton = ({
 
   const newNode = useCallback(() => {
     (async () => {
-      let newNodeId;
       if ("stepId" in next) {
         setStatus("correct");
-        newNodeId = addStep(next.stepId)?.nodeId;
-      } else if ("sampleId" in next) {
-        setStatus("wrong");
-        newNodeId = addSample(stepId, next.sampleId)?.nodeId;
-      }
-      if (newNodeId) {
+        const id = addStep(next.stepId)?.nodeId;
         await nextTick(2);
         await timeout(300);
-        fitView(fitViewToNode({ id: newNodeId }));
+        id && fitView(fitViewToNode({ id }));
+      } else if ("sampleId" in next) {
+        setStatus("wrong");
+        addSample(stepId, next.sampleId)?.nodeId;
       }
     })();
   }, [fitView, setStatus]);

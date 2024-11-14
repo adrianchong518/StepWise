@@ -12,10 +12,15 @@ import { type StateCreator } from "zustand";
 import type {
   SampleNode,
   SampleQuestionNode,
+  SampleStepNode,
 } from "@/app/demo/components/SampleNode";
 import type { StepNode } from "@/app/demo/components/StepNode";
 
-export type DemoNode = StepNode | SampleNode | SampleQuestionNode;
+export type DemoNode =
+  | StepNode
+  | SampleNode
+  | SampleQuestionNode
+  | SampleStepNode;
 
 export type GraphStore = {
   nodes: DemoNode[];

@@ -1,4 +1,9 @@
-import { type Edge, type FitViewOptions, type Node } from "@xyflow/react";
+import {
+  type Edge,
+  type FitViewOptions,
+  type Node,
+  MarkerType,
+} from "@xyflow/react";
 
 import type { QuestionId, StepId } from "@/app/api/question";
 import type { SampleId } from "@/app/api/sample";
@@ -31,5 +36,12 @@ export const createEdge = <E extends Edge>(edge: E): E => ({
   type: "smoothstep",
   selectable: false,
   deletable: false,
+  style: { strokeWidth: 4 },
+  markerEnd: {
+    type: MarkerType.ArrowClosed,
+    width: 20,
+    height: 20,
+  },
+  animated: true,
   ...edge,
 });

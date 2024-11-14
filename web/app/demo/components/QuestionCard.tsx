@@ -33,9 +33,9 @@ export default function QuestionCard({
           size="lg"
           startContent={
             expanded ? (
-              <ChevronDownIcon className="h-5/6" />
+              <ChevronDownIcon className="size-5/6" />
             ) : (
-              <ChevronRightIcon className="h-5/6" />
+              <ChevronRightIcon className="size-5/6" />
             )
           }
           onPress={() => {

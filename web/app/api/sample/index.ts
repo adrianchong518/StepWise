@@ -12,10 +12,13 @@ export type Sample = {
   steps: SampleStep[];
 };
 
+export type SampleStepId = number;
+
 export type SampleStep = {
+  id: SampleStepId;
   text: string;
   figure?: Figure;
-  links: number[];
+  links: SampleStepId[];
 };
 
 export type ConceptId = number;

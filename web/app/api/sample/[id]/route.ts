@@ -16,7 +16,8 @@ export async function GET(
       name: data["Skill set"],
       question: data.Questions,
       concept: data.Concept,
-      steps: Object.values(data.steps).map((s) => ({
+      steps: Object.values(data.steps).map((s, id) => ({
+        id,
         text: s.step,
         figure: s.Photo ?? undefined,
         links: s.Links,

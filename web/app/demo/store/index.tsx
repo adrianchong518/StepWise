@@ -7,11 +7,17 @@ import { useShallow } from "zustand/shallow";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
 import type { Question, StepId } from "@/app/api/question";
-import type { Sample, SampleId } from "@/app/api/sample";
-import type { SampleNode, SampleQuestionNode } from "../components/SampleNode";
+import type { Sample, SampleId, SampleStepId } from "@/app/api/sample";
+import { nextTick } from "@/app/utils";
+import { layoutELK } from "@/app/utils/auto-layout";
+import type {
+  SampleNode,
+  SampleQuestionNode,
+  SampleStepNode,
+} from "../components/SampleNode";
 import type { StepNode } from "../components/StepNode";
 import { createEdge, createNode, getSampleNodeId, getStepNodeId } from "../lib";
-import { createGraphStore, type DemoNode, type GraphStore } from "./graph";
+import { createGraphStore, type GraphStore } from "./graph";
 
 export type DemoStore = GraphStore & {
   question?: Question;
@@ -22,6 +28,8 @@ export type DemoStore = GraphStore & {
 
   displayedSteps: StepId[];
   addStep: (step: StepId) => { nodeId: string; edgeId: string } | undefined;
+
+  displayedSamples: SampleId[];
   addSampleBase: (
     step: StepId,
     sampleId: SampleId,
@@ -38,7 +46,6 @@ const createDemoStore = () =>
       setQuestionExpanded: (expanded) => {
         set({ questionExpanded: expanded });
       },
-      displayedSteps: [],
       setQuestion: (question) =>
         set({
           question,
@@ -53,6 +60,7 @@ const createDemoStore = () =>
           displayedSteps: [question.steps[0].id],
         }),
 
+      displayedSteps: [],
       addStep: (step) => {
         const question = get().question;
         if (question === undefined) return;
@@ -84,13 +92,6 @@ const createDemoStore = () =>
           sourceHandle: "next-step",
           target,
           targetHandle: "prev-step",
-          style: { strokeWidth: 4 },
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            width: 20,
-            height: 20,
-          },
-          animated: true,
         });
 
         set({
@@ -102,6 +103,7 @@ const createDemoStore = () =>
         return { nodeId: newNode.id, edgeId: nextStepEdge.id };
       },
 
+      displayedSamples: [],
       addSampleBase: (stepId, sampleId) => {
         const question = get().question;
         if (question === undefined) return;
@@ -119,9 +121,10 @@ const createDemoStore = () =>
             type: "sample",
             data: { sampleId },
             position: {
-              x: stepNode.position.x + 1000,
+              x: stepNode.position.x + 750,
               y: stepNode.position.y,
             },
+            origin: [0, 0.5],
             style: {
               width: 750,
               height: 1000,
@@ -137,13 +140,6 @@ const createDemoStore = () =>
             source: stepNodeId,
             sourceHandle: "explain",
             target: sampleNodeId,
-            style: { strokeWidth: 4 },
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-              width: 20,
-              height: 20,
-            },
-            animated: true,
           });
           set({ edges: [...get().edges, sampleEdge] });
         }
@@ -152,20 +148,88 @@ const createDemoStore = () =>
       },
 
       addSample: (baseNodeId, sample) => {
-        const questionNode = createNode<SampleQuestionNode>(
-          {
-            id: `${baseNodeId}_question`,
-            type: "sample-question",
-            data: { sample },
-            parentId: baseNodeId,
-            position: { x: 0, y: 0 },
-          },
-          false,
-        );
+        (async () => {
+          if (get().displayedSamples.includes(sample.id)) return;
+          const questionNodeId = `${baseNodeId}_question`;
+          const stepNodeId = (id: SampleStepId) => `${baseNodeId}_step_${id}`;
 
-        set({
-          nodes: [...get().nodes, questionNode],
-        });
+          const newEdges = [
+            createEdge({
+              id: `${questionNodeId}->${stepNodeId(0)}`,
+              source: questionNodeId,
+              target: stepNodeId(0),
+              zIndex: 1,
+            }),
+            ...sample.steps.flatMap((step) =>
+              step.links.map((next) =>
+                createEdge({
+                  id: `${stepNodeId(step.id)}->${stepNodeId(next)}`,
+                  source: stepNodeId(step.id),
+                  target: stepNodeId(next),
+                  zIndex: 1,
+                }),
+              ),
+            ),
+          ];
+
+          set({
+            displayedSamples: [...get().displayedSamples, sample.id],
+            nodes: [
+              ...get().nodes,
+              createNode<SampleQuestionNode>(
+                {
+                  id: questionNodeId,
+                  type: "sample-question",
+                  data: { sample },
+                  parentId: baseNodeId,
+                  position: { x: 0, y: 0 },
+                },
+                false,
+              ),
+              ...sample.steps.map((step) =>
+                createNode<SampleStepNode>(
+                  {
+                    id: stepNodeId(step.id),
+                    type: "sample-step",
+                    data: { step },
+                    parentId: baseNodeId,
+                    position: { x: 0, y: 0 },
+                    style: { visibility: "hidden" },
+                  },
+                  false,
+                ),
+              ),
+            ],
+          });
+
+          await nextTick(10);
+          const newNodes = get().nodes.filter(
+            (n) => n.id.startsWith(baseNodeId) && n.id !== baseNodeId,
+          );
+          const layout = await layoutELK({ nodes: newNodes, edges: newEdges });
+          if (!layout) return;
+          const { width, height, positions } = layout;
+          set({
+            nodes: get().nodes.map((n) => {
+              if (n.id.startsWith(baseNodeId)) {
+                if (n.id === baseNodeId) {
+                  return {
+                    ...n,
+                    style: { width: width + 150 / 2, height: height + 150 / 2 },
+                  };
+                } else {
+                  return {
+                    ...n,
+                    position: positions[n.id],
+                    style: { visibility: "visible" },
+                  };
+                }
+              }
+              return n;
+            }),
+            edges: [...get().edges, ...newEdges],
+          });
+        })();
       },
     };
   });

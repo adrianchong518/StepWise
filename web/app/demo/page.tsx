@@ -15,7 +15,11 @@ import useSWR from "swr";
 import { type Question } from "@/app/api/question";
 import { nextTick } from "@/app/utils";
 import QuestionCard from "./components/QuestionCard";
-import { SampleNode, SampleQuestionNode } from "./components/SampleNode";
+import {
+  SampleNode,
+  SampleQuestionNode,
+  SampleStepNode,
+} from "./components/SampleNode";
 import { StepNode } from "./components/StepNode";
 import useStore from "./store";
 import { DemoNode } from "./store/graph";
@@ -27,6 +31,7 @@ const nodeTypes = {
   step: StepNode,
   sample: SampleNode,
   "sample-question": SampleQuestionNode,
+  "sample-step": SampleStepNode,
 };
 
 const questionId = "Math_2023_17_a";
@@ -95,7 +100,6 @@ export default function Demo() {
         maxZoom={2}
         deleteKeyCode={null}
         proOptions={{ hideAttribution: true }}
-        onlyRenderVisibleElements
         zoomOnDoubleClick={false}
       >
         <Panel position="top-left">
