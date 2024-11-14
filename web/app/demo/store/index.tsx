@@ -33,7 +33,7 @@ export type DemoStore = GraphStore & {
   addSampleBase: (
     step: StepId,
     sampleId: SampleId,
-  ) => { nodeId: string; edgeId: string } | undefined;
+  ) => { nodeId: string; edgeId: string; exists: boolean } | undefined;
   addSample: (baseNodeId: string, sample: Sample) => void;
 };
 
@@ -115,7 +115,9 @@ const createDemoStore = () =>
         ) as StepNode;
         const sampleNodeId = getSampleNodeId(question.id, sampleId);
 
+        let exists = true;
         if (get().nodes.find((n) => n.id === sampleNodeId) === undefined) {
+          exists = false;
           const sampleNode = createNode<SampleNode>({
             id: sampleNodeId,
             type: "sample",
@@ -144,7 +146,7 @@ const createDemoStore = () =>
           set({ edges: [...get().edges, sampleEdge] });
         }
 
-        return { nodeId: sampleNodeId, edgeId: sampleEdgeId };
+        return { nodeId: sampleNodeId, edgeId: sampleEdgeId, exists };
       },
 
       addSample: (baseNodeId, sample) => {

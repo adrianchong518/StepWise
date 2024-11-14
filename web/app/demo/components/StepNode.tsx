@@ -43,9 +43,9 @@ const NewNodeButton = ({
   next: { stepId: StepId } | { sampleId: SampleId };
   className?: string;
 }) => {
-  const { addStep, addSample } = useStore((s) => ({
+  const { addStep, addSampleBase } = useStore((s) => ({
     addStep: s.addStep,
-    addSample: s.addSampleBase,
+    addSampleBase: s.addSampleBase,
   }));
   const { fitView } = useReactFlow();
 
@@ -63,7 +63,11 @@ const NewNodeButton = ({
         id && fitView(fitViewToNode({ id }));
       } else if ("sampleId" in next) {
         setStatus("wrong");
-        addSample(stepId, next.sampleId)?.nodeId;
+        const ret = addSampleBase(stepId, next.sampleId);
+        if (ret && ret.exists) {
+          await timeout(300);
+          fitView(fitViewToNode({ id: ret.nodeId }));
+        }
       }
     })();
   }, [fitView, setStatus]);
