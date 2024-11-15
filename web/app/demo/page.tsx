@@ -25,6 +25,7 @@ import useStore from "./store";
 import { DemoNode } from "./store/graph";
 
 import "@xyflow/react/dist/style.css";
+import tailwind from "../utils/tailwind";
 import { fitViewToNode, getStepNodeId } from "./lib";
 
 const nodeTypes = {
@@ -108,7 +109,25 @@ export default function Demo() {
 
         <Background />
         <Controls fitViewOptions={{ duration: 750 }} />
-        <MiniMap pannable zoomable zoomStep={2} onNodeClick={focusNode} />
+        <MiniMap
+          pannable
+          zoomable
+          zoomStep={2}
+          onNodeClick={focusNode}
+          nodeColor={(node) => {
+            switch (node.type) {
+              case "step":
+                return tailwind.colors.blue[200];
+              case "sample":
+                return tailwind.colors.purple[100];
+              case "sample-question":
+              case "sample-step":
+                return tailwind.colors.purple[300];
+              default:
+                return tailwind.colors.gray[300];
+            }
+          }}
+        />
       </ReactFlow>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Checkbox,
   Divider,
   Link,
 } from "@nextui-org/react";
@@ -22,10 +23,14 @@ import {
   type Node,
   type NodeProps,
 } from "@xyflow/react";
-import Image from "next/image";
 import { ReactNode, useCallback, useState } from "react";
 
-import type { OptionResponse, QuestionId, StepId } from "@/app/api/question";
+import type {
+  MultiOptionResponse,
+  OptionResponse,
+  QuestionId,
+  StepId,
+} from "@/app/api/question";
 import type { SampleId } from "@/app/api/sample";
 import KatexSpan from "@/app/components/KatexSpan";
 import { nextTick, timeout } from "@/app/utils";
@@ -76,14 +81,14 @@ const NewNodeButton = ({
     <Button
       className={`font-medium transition-colors ${className}`}
       color={
-        status == "correct"
+        status === "correct"
           ? "success"
-          : status == "wrong"
+          : status === "wrong"
             ? "danger"
             : "primary"
       }
       onPress={newNode}
-      isDisabled={status == "inactive" || status == "wrong"}
+      isDisabled={status === "inactive" || status === "wrong"}
     >
       {children}
     </Button>
@@ -127,6 +132,94 @@ const OptionResponseInput = ({
       ))}
     </div>
   );
+
+const MultiOptionResponseInput = ({
+  multiOptRes,
+  questionId,
+  stepId,
+  sampleId,
+}: {
+  multiOptRes: MultiOptionResponse;
+  questionId: QuestionId;
+  stepId: StepId;
+  sampleId: SampleId;
+}) => {
+  const { addStep, addSampleBase } = useStore((s) => ({
+    addStep: s.addStep,
+    addSampleBase: s.addSampleBase,
+  }));
+  const { fitView } = useReactFlow();
+
+  const [checkbox, setCheckbox] = useState(
+    Object.fromEntries(multiOptRes.options.map((value) => [value, false])),
+  );
+  const [status, setStatus] = useState<"default" | "correct" | "wrong">(
+    "default",
+  );
+
+  const updateCheckbox = useCallback(
+    (value: (typeof multiOptRes.options)[number], selected: boolean) => {
+      const newCheckbox = { ...checkbox };
+      newCheckbox[value] = selected;
+      setCheckbox(newCheckbox);
+      setStatus("default");
+    },
+    [checkbox, setCheckbox, setStatus],
+  );
+
+  const validateInput = useCallback(() => {
+    (async () => {
+      const correct = Object.entries(checkbox).reduce(
+        (correct: boolean, [value, checked]) =>
+          correct && checked === multiOptRes.correctOptions.includes(value),
+        true,
+      );
+      if (correct) {
+        setStatus("correct");
+        const id = addStep(multiOptRes.nextStep)?.nodeId;
+        await nextTick(2);
+        await timeout(300);
+        id && fitView(fitViewToNode({ id }));
+      } else {
+        setStatus("wrong");
+        const ret = addSampleBase(stepId, sampleId);
+        if (ret && ret.exists) {
+          await timeout(300);
+          fitView(fitViewToNode({ id: ret.nodeId }));
+        }
+      }
+    })();
+  }, [checkbox, addStep, addSampleBase, fitView]);
+
+  return (
+    <div className="grid grid-cols-2 gap-6">
+      {multiOptRes.options.map((value) => (
+        <Checkbox
+          key={`${questionId}_${stepId}_${value}`}
+          className={`${checkbox[value] ? "bg-primary-100" : "bg-default-100"} rounded-xl`}
+          isSelected={checkbox[value]}
+          onValueChange={(selected) => updateCheckbox(value, selected)}
+        >
+          <KatexSpan>{value}</KatexSpan>
+        </Checkbox>
+      ))}
+      <Button
+        className="col-span-2 place-self-center w-[10em]"
+        color={
+          status === "correct"
+            ? "success"
+            : status === "wrong"
+              ? "danger"
+              : "primary"
+        }
+        isDisabled={status === "wrong"}
+        onPress={validateInput}
+      >
+        Done
+      </Button>
+    </div>
+  );
+};
 
 export type StepNode = Node<
   {
@@ -314,6 +407,13 @@ export function StepNode({
               {step.response.type === "option" ? (
                 <OptionResponseInput
                   optRes={step.response}
+                  questionId={question.id}
+                  stepId={step.id}
+                  sampleId={step.sampleId}
+                />
+              ) : step.response.type === "multioption" ? (
+                <MultiOptionResponseInput
+                  multiOptRes={step.response}
                   questionId={question.id}
                   stepId={step.id}
                   sampleId={step.sampleId}

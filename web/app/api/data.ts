@@ -14,10 +14,10 @@ export const questionData = {
         Photo1: "image/Questions/MATH_2023_17a/WXY.svg",
         Photo2: null,
       },
-      WX: {
+      WY: {
         Given: 1,
         Value: 6,
-        Photo1: "image/Questions/MATH_2023_17a/WX.svg",
+        Photo1: "image/Questions/MATH_2023_17a/WY.svg",
         Photo2: null,
       },
       XY: {
@@ -48,7 +48,7 @@ export const questionData = {
     steps: {
       "0": {
         Questions: "From the question, we have these variables:",
-        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
+        Variables: ["WXY", "WY", "XY", "\\angle WYX", "\\angle XWY"],
         // Choices: [["OK", 1]],
         Choices: {
           type: "option",
@@ -76,7 +76,7 @@ export const questionData = {
       },
       "2": {
         Questions: "How can we apply Sine Law?",
-        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
+        Variables: ["WXY", "WY", "XY", "\\angle WYX", "\\angle XWY"],
         // Choices: [
         //   ["WX", "XY", "\\angleWYX", "\\angleWXY"],
         //   ["WX", "XY", "\\angleWYX"],
@@ -84,15 +84,20 @@ export const questionData = {
         // ],
         Choices: {
           type: "multioption",
-          options: ["WX", "XY", "\\angleWYX", "\\angleWXY"],
-          correctOptions: ["WX", "XY", "\\angleWYX"],
+          options: [
+            "\\(WY\\)",
+            "\\(XY\\)",
+            "\\(\\angle WYX\\)",
+            "\\(\\angle WXY\\)",
+          ],
+          correctOptions: ["\\(WY\\)", "\\(XY\\)", "\\(\\angle WXY\\)"],
           nextStep: 3,
         },
         "Sample Questions": 1,
       },
       "3": {
         Questions: "Apply sin law, what is the answer? (correct to 3 sig fig)",
-        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
+        Variables: ["WXY", "WY", "XY", "\\angle WYX", "\\angle XWY"],
         // Choices: [[51.5, -1]],
         Choices: {
           type: "number",
