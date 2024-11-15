@@ -368,11 +368,12 @@ const EndStepNode = ({
             <Button
               startContent={<ChevronDoubleUpIcon className="w-5 md:w-6" />}
               onPress={() => {
-                fitView(
-                  fitViewToNode({
+                fitView({
+                  ...fitViewToNode({
                     id: getStepNodeId(questionId, displayedSteps[0]),
                   }),
-                );
+                  duration: 1000,
+                });
               }}
             >
               Go to start

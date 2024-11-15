@@ -216,6 +216,25 @@ const createDemoStore = () =>
               if (n.id === baseNodeId) {
                 return {
                   ...n,
+                  position: {
+                    ...n.position,
+                    y: Math.max(
+                      n.position.y,
+                      get().displayedSamples.reduce((maxY, id) => {
+                        const node = get().nodes.find(
+                          (n) =>
+                            n.id ===
+                              getSampleNodeId(get().question?.id ?? "", id) &&
+                            n.id !== baseNodeId,
+                        );
+                        if (!node) return maxY;
+                        return Math.max(
+                          maxY,
+                          node.position.y + (node.measured?.height ?? 0),
+                        );
+                      }, 0),
+                    ),
+                  },
                   style: { width: width + 150 / 2, height: height + 150 / 2 },
                 };
               } else {
