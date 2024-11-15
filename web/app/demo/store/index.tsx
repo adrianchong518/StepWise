@@ -34,7 +34,7 @@ export type DemoStore = GraphStore & {
     step: StepId,
     sampleId: SampleId,
   ) => { nodeId: string; edgeId: string; exists: boolean } | undefined;
-  addSample: (baseNodeId: string, sample: Sample) => void;
+  addSample: (baseNodeId: string, sample: Sample) => Promise<void>;
 };
 
 const createDemoStore = () =>
@@ -149,89 +149,87 @@ const createDemoStore = () =>
         return { nodeId: sampleNodeId, edgeId: sampleEdgeId, exists };
       },
 
-      addSample: (baseNodeId, sample) => {
-        (async () => {
-          if (get().displayedSamples.includes(sample.id)) return;
-          const questionNodeId = `${baseNodeId}_question`;
-          const stepNodeId = (id: SampleStepId) => `${baseNodeId}_step_${id}`;
+      addSample: async (baseNodeId, sample) => {
+        if (get().displayedSamples.includes(sample.id)) return;
+        const questionNodeId = `${baseNodeId}_question`;
+        const stepNodeId = (id: SampleStepId) => `${baseNodeId}_step_${id}`;
 
-          const newEdges = [
-            createEdge({
-              id: `${questionNodeId}->${stepNodeId(0)}`,
-              source: questionNodeId,
-              target: stepNodeId(0),
-              zIndex: 1,
-            }),
-            ...sample.steps.flatMap((step) =>
-              step.links.map((next) =>
-                createEdge({
-                  id: `${stepNodeId(step.id)}->${stepNodeId(next)}`,
-                  source: stepNodeId(step.id),
-                  target: stepNodeId(next),
-                  zIndex: 1,
-                }),
-              ),
+        const newEdges = [
+          createEdge({
+            id: `${questionNodeId}->${stepNodeId(0)}`,
+            source: questionNodeId,
+            target: stepNodeId(0),
+            zIndex: 1,
+          }),
+          ...sample.steps.flatMap((step) =>
+            step.links.map((next) =>
+              createEdge({
+                id: `${stepNodeId(step.id)}->${stepNodeId(next)}`,
+                source: stepNodeId(step.id),
+                target: stepNodeId(next),
+                zIndex: 1,
+              }),
             ),
-          ];
+          ),
+        ];
 
-          set({
-            displayedSamples: [...get().displayedSamples, sample.id],
-            nodes: [
-              ...get().nodes,
-              createNode<SampleQuestionNode>(
+        set({
+          displayedSamples: [...get().displayedSamples, sample.id],
+          nodes: [
+            ...get().nodes,
+            createNode<SampleQuestionNode>(
+              {
+                id: questionNodeId,
+                type: "sample-question",
+                data: { sample },
+                parentId: baseNodeId,
+                position: { x: 0, y: 0 },
+              },
+              false,
+            ),
+            ...sample.steps.map((step) =>
+              createNode<SampleStepNode>(
                 {
-                  id: questionNodeId,
-                  type: "sample-question",
-                  data: { sample },
+                  id: stepNodeId(step.id),
+                  type: "sample-step",
+                  data: { step },
                   parentId: baseNodeId,
                   position: { x: 0, y: 0 },
+                  style: { visibility: "hidden" },
                 },
                 false,
               ),
-              ...sample.steps.map((step) =>
-                createNode<SampleStepNode>(
-                  {
-                    id: stepNodeId(step.id),
-                    type: "sample-step",
-                    data: { step },
-                    parentId: baseNodeId,
-                    position: { x: 0, y: 0 },
-                    style: { visibility: "hidden" },
-                  },
-                  false,
-                ),
-              ),
-            ],
-          });
+            ),
+          ],
+        });
 
-          await nextTick(10);
-          const newNodes = get().nodes.filter(
-            (n) => n.id.startsWith(baseNodeId) && n.id !== baseNodeId,
-          );
-          const layout = await layoutELK({ nodes: newNodes, edges: newEdges });
-          if (!layout) return;
-          const { width, height, positions } = layout;
-          set({
-            nodes: get().nodes.map((n) => {
-              if (n.id.startsWith(baseNodeId)) {
-                if (n.id === baseNodeId) {
-                  return {
-                    ...n,
-                    style: { width: width + 150 / 2, height: height + 150 / 2 },
-                  };
-                } else {
-                  return {
-                    ...n,
-                    position: positions[n.id],
-                    style: { visibility: "visible" },
-                  };
-                }
+        await nextTick(10);
+        const newNodes = get().nodes.filter(
+          (n) => n.id.startsWith(baseNodeId) && n.id !== baseNodeId,
+        );
+        const layout = await layoutELK({ nodes: newNodes, edges: newEdges });
+        if (!layout) return;
+        const { width, height, positions } = layout;
+        set({
+          nodes: get().nodes.map((n) => {
+            if (n.id.startsWith(baseNodeId)) {
+              if (n.id === baseNodeId) {
+                return {
+                  ...n,
+                  style: { width: width + 150 / 2, height: height + 150 / 2 },
+                };
+              } else {
+                return {
+                  ...n,
+                  position: positions[n.id],
+                  style: { visibility: "visible" },
+                };
               }
-              return n;
-            }),
-            edges: [...get().edges, ...newEdges],
-          });
-        })();
+            }
+            return n;
+          }),
+          edges: [...get().edges, ...newEdges],
+        });
       },
     };
   });

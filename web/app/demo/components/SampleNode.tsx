@@ -66,11 +66,12 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
   const baseNodeId = useNodeId() ?? "";
 
   useEffect(() => {
-    if (!sample) return;
-    addSample(baseNodeId, sample);
-    setTimeout(() => {
+    (async () => {
+      if (!sample) return;
+      await addSample(baseNodeId, sample);
+      await nextTick(2);
       fitView(fitViewToNode({ id: baseNodeId }));
-    }, 300);
+    })();
   }, [sample, baseNodeId]);
 
   return (

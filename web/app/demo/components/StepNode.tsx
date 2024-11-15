@@ -327,11 +327,11 @@ export function StepNode({
           </div>
           <div className="w-1/2 aspect-square relative">
             {step.variables.map((v) => (
-              <Image
+              <img
                 key={`${nodeId}_${v} `}
                 src={`/${question.variables[v].figure1} `}
                 alt=""
-                fill
+                className="w-full h-full absolute"
               />
             ))}
           </div>
