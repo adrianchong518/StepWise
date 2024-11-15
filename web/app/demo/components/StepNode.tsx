@@ -14,6 +14,7 @@ import {
   CardHeader,
   Checkbox,
   Divider,
+  Input,
   Link,
 } from "@nextui-org/react";
 import {
@@ -27,6 +28,7 @@ import { ReactNode, useCallback, useState } from "react";
 
 import type {
   MultiOptionResponse,
+  NumberResponse,
   OptionResponse,
   QuestionId,
   StepId,
@@ -79,7 +81,7 @@ const NewNodeButton = ({
 
   return (
     <Button
-      className={`font-medium transition-colors ${className}`}
+      className={`font-medium transition-colors ${status === "correct" && "text-gray-100"} ${className}`}
       color={
         status === "correct"
           ? "success"
@@ -204,7 +206,7 @@ const MultiOptionResponseInput = ({
         </Checkbox>
       ))}
       <Button
-        className="col-span-2 place-self-center w-[10em]"
+        className={`col-span-2 place-self-center w-[10em] ${status === "correct" && "text-gray-100"}`}
         color={
           status === "correct"
             ? "success"
@@ -216,6 +218,81 @@ const MultiOptionResponseInput = ({
         onPress={validateInput}
       >
         Done
+      </Button>
+    </div>
+  );
+};
+
+const NumberResponse = ({
+  numberRes,
+  questionId,
+  stepId,
+  sampleId,
+}: {
+  numberRes: NumberResponse;
+  questionId: QuestionId;
+  stepId: StepId;
+  sampleId: SampleId;
+}) => {
+  const { addStep, addSampleBase } = useStore((s) => ({
+    addStep: s.addStep,
+    addSampleBase: s.addSampleBase,
+  }));
+  const { fitView } = useReactFlow();
+
+  const [status, setStatus] = useState<"default" | "correct" | "wrong">(
+    "default",
+  );
+  const [value, setValue] = useState("");
+
+  const checkInput = useCallback(() => {
+    (async () => {
+      const num = +value;
+      if (value.length <= 0 || isNaN(num)) return;
+
+      if (num === numberRes.value) {
+        setStatus("correct");
+        const id = addStep(numberRes.nextStep)?.nodeId;
+        await nextTick(2);
+        await timeout(300);
+        id && fitView(fitViewToNode({ id }));
+      } else {
+        setStatus("wrong");
+        const ret = addSampleBase(stepId, sampleId);
+        if (ret && ret.exists) {
+          await timeout(300);
+          fitView(fitViewToNode({ id: ret.nodeId }));
+        }
+      }
+    })();
+  }, [value, addStep, addSampleBase, fitView]);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Input
+        label="Your answer..."
+        size="lg"
+        radius="lg"
+        classNames={{ input: "border-none" }}
+        validate={(v) => (isNaN(+v) ? "Please input a number." : true)}
+        onValueChange={(v) => {
+          setValue(v);
+          setStatus("default");
+        }}
+      />
+      <Button
+        className={`${status === "correct" && "text-gray-100"}`}
+        color={
+          status === "correct"
+            ? "success"
+            : status === "wrong"
+              ? "danger"
+              : "primary"
+        }
+        isDisabled={status === "wrong"}
+        onPress={checkInput}
+      >
+        Submit
       </Button>
     </div>
   );
@@ -414,6 +491,13 @@ export function StepNode({
               ) : step.response.type === "multioption" ? (
                 <MultiOptionResponseInput
                   multiOptRes={step.response}
+                  questionId={question.id}
+                  stepId={step.id}
+                  sampleId={step.sampleId}
+                />
+              ) : step.response.type === "number" ? (
+                <NumberResponse
+                  numberRes={step.response}
                   questionId={question.id}
                   stepId={step.id}
                   sampleId={step.sampleId}
