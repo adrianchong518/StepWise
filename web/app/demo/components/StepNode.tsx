@@ -4,6 +4,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   HomeIcon,
+  QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import {
   Button,
@@ -39,6 +40,42 @@ import { nextTick, timeout } from "@/app/utils";
 import { fitViewToNode, getStepNodeId } from "../lib";
 import useStore from "../store";
 
+const useShowStep = () => {
+  const { addStep, setCurrentStep } = useStore((s) => ({
+    addStep: s.addStep,
+    setCurrentStep: s.setCurrentStep,
+  }));
+  const { fitView } = useReactFlow();
+
+  return useCallback((stepId: StepId) => {
+    (async () => {
+      const id = addStep(stepId)?.nodeId;
+      await nextTick(2);
+      await timeout(300);
+      setCurrentStep(stepId);
+      id && fitView(fitViewToNode({ id }));
+    })();
+  }, []);
+};
+
+const useShowSample = () => {
+  const { addSampleBase } = useStore((s) => ({
+    addSampleBase: s.addSampleBase,
+  }));
+  const { fitView } = useReactFlow();
+
+  return useCallback((stepId: StepId, sampleId?: SampleId) => {
+    if (!sampleId) return;
+    (async () => {
+      const ret = addSampleBase(stepId, sampleId);
+      if (ret && ret.exists) {
+        await timeout(300);
+        fitView(fitViewToNode({ id: ret.nodeId }));
+      }
+    })();
+  }, []);
+};
+
 const NewNodeButton = ({
   children,
   stepId,
@@ -50,11 +87,8 @@ const NewNodeButton = ({
   next: { stepId: StepId } | { sampleId: SampleId };
   className?: string;
 }) => {
-  const { addStep, addSampleBase } = useStore((s) => ({
-    addStep: s.addStep,
-    addSampleBase: s.addSampleBase,
-  }));
-  const { fitView } = useReactFlow();
+  const showSample = useShowSample();
+  const showStep = useShowStep();
 
   const [status, setStatus] = useState<
     "active" | "correct" | "wrong" | "inactive"
@@ -64,20 +98,13 @@ const NewNodeButton = ({
     (async () => {
       if ("stepId" in next) {
         setStatus("correct");
-        const id = addStep(next.stepId)?.nodeId;
-        await nextTick(2);
-        await timeout(300);
-        id && fitView(fitViewToNode({ id }));
+        showStep(next.stepId);
       } else if ("sampleId" in next) {
         setStatus("wrong");
-        const ret = addSampleBase(stepId, next.sampleId);
-        if (ret && ret.exists) {
-          await timeout(300);
-          fitView(fitViewToNode({ id: ret.nodeId }));
-        }
+        showSample(stepId, next.sampleId);
       }
     })();
-  }, [fitView, setStatus]);
+  }, [setStatus, showSample, showStep]);
 
   return (
     <Button
@@ -146,11 +173,8 @@ const MultiOptionResponseInput = ({
   stepId: StepId;
   sampleId: SampleId;
 }) => {
-  const { addStep, addSampleBase } = useStore((s) => ({
-    addStep: s.addStep,
-    addSampleBase: s.addSampleBase,
-  }));
-  const { fitView } = useReactFlow();
+  const showSample = useShowSample();
+  const showStep = useShowStep();
 
   const [checkbox, setCheckbox] = useState(
     Object.fromEntries(multiOptRes.options.map((value) => [value, false])),
@@ -178,20 +202,13 @@ const MultiOptionResponseInput = ({
       );
       if (correct) {
         setStatus("correct");
-        const id = addStep(multiOptRes.nextStep)?.nodeId;
-        await nextTick(2);
-        await timeout(300);
-        id && fitView(fitViewToNode({ id }));
+        showStep(multiOptRes.nextStep);
       } else {
         setStatus("wrong");
-        const ret = addSampleBase(stepId, sampleId);
-        if (ret && ret.exists) {
-          await timeout(300);
-          fitView(fitViewToNode({ id: ret.nodeId }));
-        }
+        showSample(stepId, sampleId);
       }
     })();
-  }, [checkbox, addStep, addSampleBase, fitView]);
+  }, [checkbox, showStep, showSample]);
 
   return (
     <div className="grid grid-cols-2 gap-6">
@@ -225,7 +242,6 @@ const MultiOptionResponseInput = ({
 
 const NumberResponse = ({
   numberRes,
-  questionId,
   stepId,
   sampleId,
 }: {
@@ -234,11 +250,8 @@ const NumberResponse = ({
   stepId: StepId;
   sampleId: SampleId;
 }) => {
-  const { addStep, addSampleBase } = useStore((s) => ({
-    addStep: s.addStep,
-    addSampleBase: s.addSampleBase,
-  }));
-  const { fitView } = useReactFlow();
+  const showSample = useShowSample();
+  const showStep = useShowStep();
 
   const [status, setStatus] = useState<"default" | "correct" | "wrong">(
     "default",
@@ -252,20 +265,13 @@ const NumberResponse = ({
 
       if (num === numberRes.value) {
         setStatus("correct");
-        const id = addStep(numberRes.nextStep)?.nodeId;
-        await nextTick(2);
-        await timeout(300);
-        id && fitView(fitViewToNode({ id }));
+        showStep(numberRes.nextStep);
       } else {
         setStatus("wrong");
-        const ret = addSampleBase(stepId, sampleId);
-        if (ret && ret.exists) {
-          await timeout(300);
-          fitView(fitViewToNode({ id: ret.nodeId }));
-        }
+        showSample(stepId, sampleId);
       }
     })();
-  }, [value, addStep, addSampleBase, fitView]);
+  }, [value, showSample, showStep]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -314,9 +320,10 @@ const EndStepNode = ({
   stepNumber: number;
   questionId: QuestionId;
 }) => {
-  const { displayedSteps, nodes } = useStore((s) => ({
+  const { displayedSteps, nodes, setCurrentStep } = useStore((s) => ({
     displayedSteps: s.displayedSteps,
     nodes: s.nodes,
+    setCurrentStep: s.setCurrentStep,
   }));
   const { fitView } = useReactFlow();
 
@@ -368,6 +375,7 @@ const EndStepNode = ({
             <Button
               startContent={<ChevronDoubleUpIcon className="w-5 md:w-6" />}
               onPress={() => {
+                setCurrentStep(displayedSteps[0]);
                 fitView({
                   ...fitViewToNode({
                     id: getStepNodeId(questionId, displayedSteps[0]),
@@ -408,12 +416,13 @@ export function StepNode({
   id: nodeId,
   data: { stepNumber, stepId },
 }: NodeProps<StepNode>) {
-  const { question, displayedSteps } = useStore((s) => ({
+  const { question, displayedSteps, setCurrentStep } = useStore((s) => ({
     question: s.question,
     displayedSteps: s.displayedSteps,
+    setCurrentStep: s.setCurrentStep,
   }));
-
   const { fitView } = useReactFlow();
+  const showSample = useShowSample();
 
   if (question === undefined) {
     return;
@@ -440,7 +449,8 @@ export function StepNode({
               <Button
                 isIconOnly
                 color="primary"
-                onPress={(_) =>
+                onPress={(_) => {
+                  setCurrentStep(displayedSteps[0]);
                   fitView(
                     fitViewToNode({
                       id: getStepNodeId(
@@ -448,8 +458,8 @@ export function StepNode({
                         displayedSteps[stepNumber - 1],
                       ),
                     }),
-                  )
-                }
+                  );
+                }}
               >
                 <ChevronUpIcon />
               </Button>
@@ -458,7 +468,8 @@ export function StepNode({
               isIconOnly
               color="primary"
               isDisabled={!hasNextStep}
-              onPress={(_) =>
+              onPress={(_) => {
+                setCurrentStep(displayedSteps[0]);
                 fitView(
                   fitViewToNode({
                     id: getStepNodeId(
@@ -466,8 +477,8 @@ export function StepNode({
                       displayedSteps[stepNumber + 1],
                     ),
                   }),
-                )
-              }
+                );
+              }}
             >
               <ChevronDownIcon />
             </Button>
@@ -522,6 +533,21 @@ export function StepNode({
           </div>
         </div>
       </CardBody>
+
+      {step.sampleId && (
+        <CardFooter>
+          <div className="flex flex-row justify-end w-full">
+            <Button
+              startContent={<QuestionMarkCircleIcon className="size-5" />}
+              onPress={() => {
+                showSample(step.id, step.sampleId);
+              }}
+            >
+              Show Sample
+            </Button>
+          </div>
+        </CardFooter>
+      )}
 
       <Handle
         type="target"

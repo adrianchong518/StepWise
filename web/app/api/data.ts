@@ -14,10 +14,10 @@ export const questionData = {
         Photo1: "image/Questions/MATH_2023_17a/WXY.svg",
         Photo2: null,
       },
-      WY: {
+      WX: {
         Given: 1,
         Value: 6,
-        Photo1: "image/Questions/MATH_2023_17a/WY.svg",
+        Photo1: "image/Questions/MATH_2023_17a/WX.svg",
         Photo2: null,
       },
       XY: {
@@ -48,7 +48,7 @@ export const questionData = {
     steps: {
       "0": {
         Questions: "From the question, we have these variables:",
-        Variables: ["WXY", "WY", "XY", "\\angle WYX", "\\angle XWY"],
+        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
         // Choices: [["OK", 1]],
         Choices: {
           type: "option",
@@ -76,7 +76,7 @@ export const questionData = {
       },
       "2": {
         Questions: "How can we apply Sine Law?",
-        Variables: ["WXY", "WY", "XY", "\\angle WYX", "\\angle XWY"],
+        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
         // Choices: [
         //   ["WX", "XY", "\\angleWYX", "\\angleWXY"],
         //   ["WX", "XY", "\\angleWYX"],
@@ -85,19 +85,19 @@ export const questionData = {
         Choices: {
           type: "multioption",
           options: [
-            "\\(WY\\)",
+            "\\(WX\\)",
             "\\(XY\\)",
             "\\(\\angle WYX\\)",
             "\\(\\angle WXY\\)",
           ],
-          correctOptions: ["\\(WY\\)", "\\(XY\\)", "\\(\\angle WXY\\)"],
+          correctOptions: ["\\(WX\\)", "\\(XY\\)", "\\(\\angle WXY\\)"],
           nextStep: 3,
         },
         "Sample Questions": 1,
       },
       "3": {
         Questions: "Apply sin law, what is the answer? (correct to 3 sig fig)",
-        Variables: ["WXY", "WY", "XY", "\\angle WYX", "\\angle XWY"],
+        Variables: ["WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
         // Choices: [[51.5, -1]],
         Choices: {
           type: "number",
@@ -158,6 +158,18 @@ export const sampleData = {
             Links: [],
           },
         },
+      },
+    },
+  },
+};
+
+export const conceptData = {
+  MATH: {
+    concept: {
+      "1": {
+        "Skill set": "Sine Formula",
+        Desc: '\\[\n\\begin{align*}\n\\text{Sine Law:} \\\\\n\\frac{a}{sin{A}}&=\\frac{b}{sin{B}}=\\frac{c}{sin{C}} \\text{ or } \\\\\n\\frac{sin{A}}{a}&=\\frac{sin{B}}{b}=\\frac{sin{C}}{c} \\\\\n\\end{align*}\n\\]\n<p style="text-align: center;">\nThis is commonly used when you have to find <b>specific lines/angles</b> in a triangle, when you find some\n<b>pairs</b>.\n</p>',
+        Photo: null,
       },
     },
   },

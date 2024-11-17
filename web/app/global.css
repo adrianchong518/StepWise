@@ -18,17 +18,21 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .katex {
-  font-size: 1.1em;
+  font-size: 1.1em !important;
+}
+
+.katex .text {
+  font-family: var(--font-roboto) !important;
 }
 
 .katex-display > .katex {
-  white-space: normal;
+  white-space: normal !important;
 }
 
 .katex-display > .base {
-  margin: 0.25em 0;
+  margin: 0.25em 0 !important;
 }
 
 .katex-display {
-  margin: 0.5em 0;
+  margin: 0.5em 0 !important;
 }

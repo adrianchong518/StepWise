@@ -43,7 +43,7 @@ export type Step = {
   prompt: string;
   variables: string[];
   response: StepResponse;
-  sampleId: SampleId;
+  sampleId?: SampleId;
 };
 
 export type StepId = number;

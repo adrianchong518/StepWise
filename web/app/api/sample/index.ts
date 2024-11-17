@@ -23,4 +23,8 @@ export type SampleStep = {
 
 export type ConceptId = number;
 
-export type Concept = {};
+export type Concept = {
+  id: ConceptId;
+  text: string;
+  figure?: Figure;
+};

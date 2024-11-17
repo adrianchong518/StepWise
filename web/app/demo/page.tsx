@@ -46,6 +46,7 @@ export default function Demo() {
     onConnect,
     setQuestion,
     setQuestionExpanded,
+    setCurrentStep,
   } = useStore((s) => ({
     nodes: s.nodes,
     edges: s.edges,
@@ -56,6 +57,7 @@ export default function Demo() {
     question: s.question,
     setQuestion: s.setQuestion,
     setQuestionExpanded: s.setQuestionExpanded,
+    setCurrentStep: s.setCurrentStep,
   }));
 
   const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
@@ -63,6 +65,9 @@ export default function Demo() {
 
   const focusNode = useCallback<NodeMouseHandler<DemoNode>>(
     (_, node) => {
+      if (node.type === "step") {
+        setCurrentStep(node.data.stepId);
+      }
       fitView(fitViewToNode(node));
     },
     [fitView],

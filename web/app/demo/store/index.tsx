@@ -28,6 +28,8 @@ export type DemoStore = GraphStore & {
 
   displayedSteps: StepId[];
   addStep: (step: StepId) => { nodeId: string; edgeId: string } | undefined;
+  currentStep: StepId;
+  setCurrentStep: (step: StepId) => void;
 
   displayedSamples: SampleId[];
   addSampleBase: (
@@ -101,6 +103,13 @@ const createDemoStore = () =>
         });
 
         return { nodeId: newNode.id, edgeId: nextStepEdge.id };
+      },
+
+      currentStep: 0,
+      setCurrentStep: (step) => {
+        if (get().displayedSteps.includes(step)) {
+          set({ currentStep: step });
+        }
       },
 
       displayedSamples: [],
@@ -192,7 +201,7 @@ const createDemoStore = () =>
                 {
                   id: stepNodeId(step.id),
                   type: "sample-step",
-                  data: { step },
+                  data: { baseNodeId, step, numSteps: sample.steps.length },
                   parentId: baseNodeId,
                   position: { x: 0, y: 0 },
                   style: { visibility: "hidden" },

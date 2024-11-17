@@ -38,7 +38,8 @@ export async function GET(
           prompt: v.Questions,
           variables: v.Variables,
           response: v.Choices as StepResponse,
-          sampleId: v["Sample Questions"],
+          sampleId:
+            v["Sample Questions"] === -1 ? undefined : v["Sample Questions"],
         };
       }),
     };
