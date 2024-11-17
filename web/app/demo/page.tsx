@@ -1,104 +1,93 @@
 "use client";
 
-import { useCallback } from "react";
 import {
-  ReactFlow,
-  Handle,
-  Position,
   Background,
-  MiniMap,
   Controls,
-  addEdge,
-  useEdgesState,
-  useNodesState,
-  type Edge,
-  type Node,
-  type OnConnect,
+  MiniMap,
+  Panel,
+  ReactFlow,
+  useReactFlow,
+  type NodeMouseHandler,
 } from "@xyflow/react";
-import { Card, CardHeader, CardFooter } from "@nextui-org/card";
-import { Avatar } from "@nextui-org/avatar";
+import { useCallback, useEffect } from "react";
+import useSWR from "swr";
 
-type Data = {
-  name: string;
-  job: string;
-  emoji: string;
-};
+import { type Question } from "@/app/api/question";
+import { nextTick } from "@/app/utils";
+import QuestionCard from "./components/QuestionCard";
+import {
+  SampleNode,
+  SampleQuestionNode,
+  SampleStepNode,
+} from "./components/SampleNode";
+import { StepNode } from "./components/StepNode";
+import useStore from "./store";
+import { DemoNode } from "./store/graph";
 
-function CustomNode({ data }: { data: Data }) {
-  return (
-    <div>
-      <Card>
-        <CardHeader>
-          <div className="flex flex-row items-center gap-4">
-            <Avatar name={data.emoji} size="sm" className="text-lg" />
-            <h4>{data.name}</h4>
-          </div>
-        </CardHeader>
-      </Card>
-      <Handle
-        type="target"
-        position={Position.Top}
-        className="w-16 !bg-teal-500"
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        className="w-16 !bg-teal-500"
-      />
-    </div>
-  );
-}
+import "@xyflow/react/dist/style.css";
+import tailwind from "../utils/tailwind";
+import { fitViewToNode, getStepNodeId } from "./lib";
 
 const nodeTypes = {
-  custom: CustomNode,
+  step: StepNode,
+  sample: SampleNode,
+  "sample-question": SampleQuestionNode,
+  "sample-step": SampleStepNode,
 };
 
-const initNodes: Node[] = [
-  {
-    id: "1",
-    type: "custom",
-    data: { name: "Jane Doe", job: "CEO", emoji: "😎" },
-    position: { x: 0, y: 50 },
-  },
-  {
-    id: "2",
-    type: "custom",
-    data: { name: "Tyler Weary", job: "Designer", emoji: "🤓" },
-
-    position: { x: -200, y: 200 },
-  },
-  {
-    id: "3",
-    type: "custom",
-    data: { name: "Kristi Price", job: "Developer", emoji: "🤩" },
-    position: { x: 200, y: 200 },
-  },
-];
-
-const initEdges: Edge[] = [
-  {
-    id: "e1-2",
-    source: "1",
-    target: "2",
-  },
-  {
-    id: "e1-3",
-    source: "1",
-    target: "3",
-  },
-];
+const questionId = "Math_2023_17_a";
 
 export default function Demo() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initEdges);
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    setQuestion,
+    setQuestionExpanded,
+  } = useStore((s) => ({
+    nodes: s.nodes,
+    edges: s.edges,
+    onNodesChange: s.onNodesChange,
+    onEdgesChange: s.onEdgesChange,
+    onConnect: s.onConnect,
+    setNodes: s.setNodes,
+    question: s.question,
+    setQuestion: s.setQuestion,
+    setQuestionExpanded: s.setQuestionExpanded,
+  }));
 
-  const onConnect: OnConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [],
+  const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
+  const { fitView } = useReactFlow();
+
+  const focusNode = useCallback<NodeMouseHandler<DemoNode>>(
+    (_, node) => {
+      fitView(fitViewToNode(node));
+    },
+    [fitView],
   );
 
+  useEffect(() => {
+    (async () => {
+      if (question) {
+        setQuestion(question);
+        await nextTick(2);
+        fitView(fitViewToNode({ id: getStepNodeId(question.id, 0) }));
+      }
+    })();
+  }, [question, fitView]);
+
+  if (question === undefined) {
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <div className="text-4xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-screen w-screen">
+    <div className="h-full w-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -106,11 +95,39 @@ export default function Demo() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
-        fitView
+        onNodeClick={focusNode}
+        onMove={() => setQuestionExpanded(false)}
+        minZoom={0}
+        maxZoom={2}
+        deleteKeyCode={null}
+        proOptions={{ hideAttribution: true }}
+        zoomOnDoubleClick={false}
       >
+        <Panel position="top-left">
+          <QuestionCard question={question.details} />
+        </Panel>
+
         <Background />
-        <Controls />
-        <MiniMap />
+        <Controls fitViewOptions={{ duration: 750 }} />
+        <MiniMap
+          pannable
+          zoomable
+          zoomStep={2}
+          onNodeClick={focusNode}
+          nodeColor={(node) => {
+            switch (node.type) {
+              case "step":
+                return tailwind.colors.blue[200];
+              case "sample":
+                return tailwind.colors.purple[100];
+              case "sample-question":
+              case "sample-step":
+                return tailwind.colors.purple[300];
+              default:
+                return tailwind.colors.gray[300];
+            }
+          }}
+        />
       </ReactFlow>
     </div>
   );

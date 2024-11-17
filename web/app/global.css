@@ -2,17 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
 
-input[type='number']::-webkit-inner-spin-button {
+input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type='number']::-webkit-outer-spin-button {
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.katex {
+  font-size: 1.1em;
+}
+
+.katex-display > .katex {
+  white-space: normal;
+}
+
+.katex-display > .base {
+  margin: 0.25em 0;
+}
+
+.katex-display {
+  margin: 0.5em 0;
 }
