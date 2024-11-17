@@ -27,8 +27,8 @@ import useSWR from "swr";
 
 import type { Sample, SampleId, SampleStep } from "@/app/api/sample";
 import KatexSpan from "@/app/components/KatexSpan";
-import { nextTick } from "@/app/utils";
-import { fitViewToNode, getSampleNodeId, getStepNodeId } from "../lib";
+import { nextTick, timeout } from "@/app/utils";
+import { fitViewToNode, getStepNodeId } from "../lib";
 import useStore from "../store";
 
 export type SampleQuestionNode = Node<{ sample: Sample }, "sample-question">;
@@ -37,7 +37,7 @@ export function SampleQuestionNode({
 }: NodeProps<SampleQuestionNode>) {
   // TODO: figure
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-[30em]">
       <CardHeader className="bg-secondary-200">
         <div className="flex flex-row justify-between w-full">
           <h3 className="text-2xl font-medium">Sample Question</h3>
@@ -55,25 +55,33 @@ export function SampleQuestionNode({
 }
 
 export type SampleStepNode = Node<
-  { baseNodeId: string; step: SampleStep; numSteps: number },
+  {
+    baseNodeId: string;
+    sampleId: SampleId;
+    step: SampleStep;
+    numSteps: number;
+  },
   "sample-step"
 >;
 export function SampleStepNode({
-  data: { baseNodeId, step, numSteps },
+  data: { baseNodeId, sampleId, step, numSteps },
 }: NodeProps<SampleStepNode>) {
+  const { setCurrentSample } = useStore((s) => ({
+    setCurrentSample: s.setCurrentSample,
+  }));
   const { fitView } = useReactFlow();
 
   return (
-    <Card className="w-full">
+    <Card className="w-full max-w-[30em]">
       <CardHeader className="bg-secondary-200">
-        <div className="flex flex-row justify-between w-full">
+        <div className="flex flex-row justify-between items-center w-full">
           <h4 className="text-xl">Step {step.id}</h4>
           <ButtonGroup className="justify-self-end transition-colors" size="sm">
             {step.id != 0 && (
               <Button
                 isIconOnly
                 color="secondary"
-                onPress={(_) => {
+                onPress={() => {
                   fitView(
                     fitViewToNode({ id: `${baseNodeId}_step_${step.id - 1}` }),
                   );
@@ -99,6 +107,7 @@ export function SampleStepNode({
               isIconOnly
               color="secondary"
               onPress={(_) => {
+                setCurrentSample(sampleId);
                 fitView(fitViewToNode({ id: `${baseNodeId}` }));
               }}
             >
@@ -120,10 +129,11 @@ export function SampleStepNode({
 
 export type SampleNode = Node<{ sampleId: SampleId }, "sample">;
 export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
-  const { addSample, question, currentStep } = useStore((s) => ({
+  const { addSample, question, currentStep, addConcept } = useStore((s) => ({
     addSample: s.addSample,
     question: s.question,
     currentStep: s.currentStep,
+    addConcept: s.addConcept,
   }));
   const { fitView } = useReactFlow();
   const { zoom } = useViewport();
@@ -138,6 +148,16 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
       fitView(fitViewToNode({ id: baseNodeId }));
     })();
   }, [sample, baseNodeId]);
+
+  const showConcept = () => {
+    (async () => {
+      if (!sample) return;
+      const nodeId = addConcept(sampleId, sample.concept)?.nodeId ?? "";
+      await nextTick(2);
+      await timeout(100);
+      fitView(fitViewToNode({ id: nodeId }));
+    })();
+  };
 
   return (
     <>
@@ -163,6 +183,7 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
           <Button
             className="bg-secondary-100"
             endContent={<SquaresPlusIcon className="size-5" />}
+            onPress={showConcept}
           >
             Show Concept
           </Button>
@@ -171,6 +192,7 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
 
       <div className="w-full h-full bg-secondary-50 rounded-3xl">
         <Handle type="target" position={Position.Left} className="invisible" />
+        <Handle type="source" position={Position.Left} className="invisible" />
       </div>
     </>
   );

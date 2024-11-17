@@ -26,6 +26,7 @@ import { DemoNode } from "./store/graph";
 
 import "@xyflow/react/dist/style.css";
 import tailwind from "../utils/tailwind";
+import { ConceptNode } from "./components/ConceptNode";
 import { fitViewToNode, getStepNodeId } from "./lib";
 
 const nodeTypes = {
@@ -33,6 +34,7 @@ const nodeTypes = {
   sample: SampleNode,
   "sample-question": SampleQuestionNode,
   "sample-step": SampleStepNode,
+  concept: ConceptNode,
 };
 
 const questionId = "Math_2023_17_a";
@@ -47,6 +49,7 @@ export default function Demo() {
     setQuestion,
     setQuestionExpanded,
     setCurrentStep,
+    setCurrentSample,
   } = useStore((s) => ({
     nodes: s.nodes,
     edges: s.edges,
@@ -58,6 +61,7 @@ export default function Demo() {
     setQuestion: s.setQuestion,
     setQuestionExpanded: s.setQuestionExpanded,
     setCurrentStep: s.setCurrentStep,
+    setCurrentSample: s.setCurrentSample,
   }));
 
   const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
@@ -67,10 +71,12 @@ export default function Demo() {
     (_, node) => {
       if (node.type === "step") {
         setCurrentStep(node.data.stepId);
+      } else if (node.type === "sample") {
+        setCurrentSample(node.data.sampleId);
       }
       fitView(fitViewToNode(node));
     },
-    [fitView],
+    [fitView, setCurrentStep, setCurrentSample],
   );
 
   useEffect(() => {

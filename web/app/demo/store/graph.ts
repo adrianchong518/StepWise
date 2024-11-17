@@ -15,12 +15,14 @@ import type {
   SampleStepNode,
 } from "@/app/demo/components/SampleNode";
 import type { StepNode } from "@/app/demo/components/StepNode";
+import { ConceptNode } from "../components/ConceptNode";
 
 export type DemoNode =
   | StepNode
   | SampleNode
   | SampleQuestionNode
-  | SampleStepNode;
+  | SampleStepNode
+  | ConceptNode;
 
 export type GraphStore = {
   nodes: DemoNode[];

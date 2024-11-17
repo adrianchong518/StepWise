@@ -6,17 +6,25 @@ import { useStore } from "zustand";
 import { useShallow } from "zustand/shallow";
 import { createStore, type StoreApi } from "zustand/vanilla";
 
+import { ConceptId } from "@/app/api/concept";
 import type { Question, StepId } from "@/app/api/question";
 import type { Sample, SampleId, SampleStepId } from "@/app/api/sample";
 import { nextTick } from "@/app/utils";
 import { layoutELK } from "@/app/utils/auto-layout";
+import { ConceptNode } from "../components/ConceptNode";
 import type {
   SampleNode,
   SampleQuestionNode,
   SampleStepNode,
 } from "../components/SampleNode";
 import type { StepNode } from "../components/StepNode";
-import { createEdge, createNode, getSampleNodeId, getStepNodeId } from "../lib";
+import {
+  createEdge,
+  createNode,
+  getConceptNodeId,
+  getSampleNodeId,
+  getStepNodeId,
+} from "../lib";
 import { createGraphStore, type GraphStore } from "./graph";
 
 export type DemoStore = GraphStore & {
@@ -37,6 +45,14 @@ export type DemoStore = GraphStore & {
     sampleId: SampleId,
   ) => { nodeId: string; edgeId: string; exists: boolean } | undefined;
   addSample: (baseNodeId: string, sample: Sample) => Promise<void>;
+  currentSample: SampleId;
+  setCurrentSample: (sampleId: SampleId) => void;
+
+  displayedConcepts: ConceptId[];
+  addConcept: (
+    sampleId: SampleId,
+    conceptId: ConceptId,
+  ) => { nodeId: string; edgeId: string; exists: boolean } | undefined;
 };
 
 const createDemoStore = () =>
@@ -201,7 +217,12 @@ const createDemoStore = () =>
                 {
                   id: stepNodeId(step.id),
                   type: "sample-step",
-                  data: { baseNodeId, step, numSteps: sample.steps.length },
+                  data: {
+                    baseNodeId,
+                    sampleId: sample.id,
+                    step,
+                    numSteps: sample.steps.length,
+                  },
                   parentId: baseNodeId,
                   position: { x: 0, y: 0 },
                   style: { visibility: "hidden" },
@@ -258,6 +279,54 @@ const createDemoStore = () =>
           }),
           edges: [...get().edges, ...newEdges],
         });
+      },
+
+      currentSample: 0,
+      setCurrentSample: (sampleId) => set({ currentSample: sampleId }),
+
+      displayedConcepts: [],
+      addConcept: (sampleId, conceptId) => {
+        const question = get().question;
+        if (question === undefined) return;
+        if (!get().displayedSamples.includes(sampleId)) return;
+
+        const sampleNodeId = getSampleNodeId(question.id, sampleId);
+        const sampleNode = get().nodes.find(
+          (n) => n.id === sampleNodeId,
+        ) as SampleNode;
+        const conceptNodeId = getConceptNodeId(question.id, conceptId);
+
+        let exists = true;
+        if (get().nodes.find((n) => n.id === conceptNodeId) === undefined) {
+          exists = false;
+          const conceptNode = createNode<ConceptNode>({
+            id: conceptNodeId,
+            type: "concept",
+            data: { conceptId },
+            position: {
+              x:
+                sampleNode.position.x + (sampleNode.measured?.width ?? 0) + 500,
+              y: sampleNode.position.y,
+            },
+            origin: [0, 0.5],
+          });
+          set({
+            nodes: [...get().nodes, conceptNode],
+            displayedConcepts: [...get().displayedConcepts, conceptId],
+          });
+        }
+
+        const conceptEdgeId = `${sampleNodeId}->${conceptNodeId}`;
+        if (get().edges.find((e) => e.id === conceptEdgeId) === undefined) {
+          const conceptEdge = createEdge({
+            id: conceptEdgeId,
+            source: sampleNodeId,
+            target: conceptNodeId,
+          });
+          set({ edges: [...get().edges, conceptEdge] });
+        }
+
+        return { nodeId: conceptNodeId, edgeId: conceptEdgeId, exists };
       },
     };
   });

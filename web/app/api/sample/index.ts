@@ -1,3 +1,4 @@
+import type { ConceptId } from "../concept";
 import type { Figure } from "../type";
 
 export type SampleId = number;
@@ -19,12 +20,4 @@ export type SampleStep = {
   text: string;
   figure?: Figure;
   links: SampleStepId[];
-};
-
-export type ConceptId = number;
-
-export type Concept = {
-  id: ConceptId;
-  text: string;
-  figure?: Figure;
 };

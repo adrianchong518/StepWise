@@ -5,6 +5,7 @@ import {
   MarkerType,
 } from "@xyflow/react";
 
+import { ConceptId } from "@/app/api/concept";
 import type { QuestionId, StepId } from "@/app/api/question";
 import type { SampleId } from "@/app/api/sample";
 
@@ -13,6 +14,11 @@ export const getStepNodeId = (questionId: QuestionId, stepId: StepId) =>
 
 export const getSampleNodeId = (questionId: QuestionId, sampleId: SampleId) =>
   `${questionId}_sample_${sampleId}`;
+
+export const getConceptNodeId = (
+  questionId: QuestionId,
+  conceptId: ConceptId,
+) => `${questionId}_concept_${conceptId}`;
 
 export const fitViewToNode = (node: Node | { id: string }): FitViewOptions => ({
   nodes: [node],

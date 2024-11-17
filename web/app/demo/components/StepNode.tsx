@@ -59,8 +59,9 @@ const useShowStep = () => {
 };
 
 const useShowSample = () => {
-  const { addSampleBase } = useStore((s) => ({
+  const { addSampleBase, setCurrentSample } = useStore((s) => ({
     addSampleBase: s.addSampleBase,
+    setCurrentSample: s.setCurrentSample,
   }));
   const { fitView } = useReactFlow();
 
@@ -72,6 +73,7 @@ const useShowSample = () => {
         await timeout(300);
         fitView(fitViewToNode({ id: ret.nodeId }));
       }
+      setCurrentSample(sampleId);
     })();
   }, []);
 };
@@ -84,7 +86,7 @@ const NewNodeButton = ({
 }: {
   children: ReactNode;
   stepId: StepId;
-  next: { stepId: StepId } | { sampleId: SampleId };
+  next: { stepId: StepId } | { sampleId?: SampleId };
   className?: string;
 }) => {
   const showSample = useShowSample();
@@ -133,7 +135,7 @@ const OptionResponseInput = ({
   optRes: OptionResponse;
   questionId: QuestionId;
   stepId: StepId;
-  sampleId: SampleId;
+  sampleId?: SampleId;
 }) =>
   optRes.options.length === 1 ? (
     <NewNodeButton
@@ -171,7 +173,7 @@ const MultiOptionResponseInput = ({
   multiOptRes: MultiOptionResponse;
   questionId: QuestionId;
   stepId: StepId;
-  sampleId: SampleId;
+  sampleId?: SampleId;
 }) => {
   const showSample = useShowSample();
   const showStep = useShowStep();
@@ -248,7 +250,7 @@ const NumberResponse = ({
   numberRes: NumberResponse;
   questionId: QuestionId;
   stepId: StepId;
-  sampleId: SampleId;
+  sampleId?: SampleId;
 }) => {
   const showSample = useShowSample();
   const showStep = useShowStep();
