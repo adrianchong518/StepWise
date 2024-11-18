@@ -1,23 +1,47 @@
 import pandas as pd
 import json
 
-Questions = pd.read_excel("Question Bank V17a.xlsx", sheet_name = "Questions")
-Variables = pd.read_excel("Question Bank V17a.xlsx", sheet_name = "Variables")
-Steps = pd.read_excel("Question Bank V17a.xlsx", sheet_name = "Steps")
-Sample = pd.read_excel("Question Bank V17a.xlsx", sheet_name = "Sample")
-Sample_Steps = pd.read_excel("Question Bank V17a.xlsx", sheet_name = "Sample_Steps")  
-Concept = pd.read_excel("Question Bank V17a.xlsx", sheet_name = "Concept")  
+filename = "data/Question Bank-1718.xlsx"
+Questions = pd.read_excel(filename, sheet_name = "Questions")
+Variables = pd.read_excel(filename, sheet_name = "Variables")
+Steps = pd.read_excel(filename, sheet_name = "Steps")
+Sample = pd.read_excel(filename, sheet_name = "Sample")
+Sample_Steps = pd.read_excel(filename, sheet_name = "Sample_Steps")  
+Concept = pd.read_excel(filename, sheet_name = "Concept")
 
 # ================================================================================
-# Questions
-data = {}
+# Questions 
+question = {}
 
-for _, row in Questions.iterrows():
+for index, row in Questions.iterrows():
     subject = f"{row['Subject']}_{row['Year']}_{row['Questions']}_{row['parts']}"
-    data[subject] = {
-        'Subject': row['Subject'],
-        'Content': row['Content'],
-        'Photo': None if row['Photo'] == 'NO_PHOTO' else row['Photo'],
+    nextId = f"{row['Subject']}_{row['Year']}_{row['Questions']}_{row['next part']}"
+
+    questionId = index
+
+    questionSubject = row['Subject']
+    questionSource = {
+        'kind': "HKDSE",
+        'year': row['Year'],
+    }
+    questionNumber = row['Questions']
+    questionPart = None if pd.isna(row['parts']) else row['parts']
+    questionContent = row['Content']
+    questionFigure = None if pd.isna(row['Photo']) else row['Photo'].replace('\\', '/')
+
+    questionDetails = {
+        'subject': "Mathematics",
+        'source': questionSource,
+        'number': questionNumber,
+        'part': questionPart,
+        'content': questionContent,
+        'figure': questionFigure,
+    }
+
+    question[subject] = {
+        'id': row['Subject'],
+        'nextId': nextId,
+        'details': questionDetails,
     }
 
 # print(data)
@@ -33,18 +57,19 @@ for _, row in Questions.iterrows():
 
 for _, row in Variables.iterrows():
     subject = f"{row['Subject']}_{row['Year']}_{row['Questions']}_{row['parts']}"
-    if (subject not in data):
-        data[subject] = {
-            'var': {}
+
+    if (subject not in question):
+        question[subject] = {
+            'variables': {}
         }
-    elif 'var' not in data[subject]:
-        data[subject]['var'] = {}
+    elif 'variables' not in question[subject]:
+        question[subject]['variables'] = {}
     
-    data[subject]['var'][row['Content']] = {
-        'Given': row['Given'],
-        'Value': row['Value'],
-        'Photo1': None if row['Photo1'] == 'NO_PHOTO' else row['Photo1'],
-        'Photo2': None if row['Photo2'] == 'NO_PHOTO' else row['Photo2'],
+    question[subject]['variables'][row['Content']] = {
+        'value': row['Value'],
+        'given': row['Given'],
+        'figure1': None if pd.isna(row['Photo1']) else row['Photo1'].replace('\\', '/'),
+        'figure2': None if pd.isna(row['Photo2']) else row['Photo2'].replace('\\', '/'),
     }
 
 # print(data)
@@ -60,24 +85,62 @@ for _, row in Variables.iterrows():
 
 for _, row in Steps.iterrows():
     subject = f"{row['Subject']}_{row['Year']}_{row['Questions']}_{row['parts']}"
-    if (subject not in data):
-        data[subject] = {
+
+    if (subject not in question):
+        question[subject] = {
             'steps': {}
         }
-    elif 'steps' not in data[subject]:
-        data[subject]['steps'] = {}
+    elif 'steps' not in question[subject]:
+        question[subject]['steps'] = {}
 
-    data[subject]['steps'][row['Step id']] = {
-        'Questions': row['Question'],
-        'Variables': json.loads(row['Variables'].replace("'", '"').replace("\\", "\\\\")),
-        'Choices': json.loads(row['Choices'].replace("'", '"').replace("\\", "\\\\")),
+    stepsResponse = json.loads(row['Choices'].replace("'", '"').replace("\\", "\\\\"))
+    response = None
+    if row['Q Type'] == 'init':
+        response = {
+            'type': "option",
+            'options': {
+                'value': [v for v, _ in stepsResponse],
+                'nextStep': [ns for _, ns in stepsResponse],
+            }
+        }
+    elif row['Q Type'] == 'Method':
+        response = {
+            'type': "option",
+            'options': {
+                'value': [v for v, _ in stepsResponse],
+                'nextStep': [ns for _, ns in stepsResponse],
+            }
+        }
+    elif row['Q Type'] == 'Match':
+        response = {
+            'type': "multioption",
+            'options': stepsResponse[0],
+            'correctOptions': stepsResponse[1],
+            'nextStep': stepsResponse[2],   
+        }
+    elif row['Q Type'] == 'Input':
+        response = {
+            'type': "number",
+            'value': stepsResponse[0][0],
+            'nextStep': stepsResponse[0][1],
+        }
+    elif row['Q Type'] == 'End':
+        response = {
+            'type': "end",
+        }
+
+    question[subject]['steps'][row['Step id']] = {
+        'id': row['Step id'],
+        'prompt': row['Questions'],
+        'variables': json.loads(row['Variables'].replace("'", '"').replace("\\", "\\\\")),
+        'response': response,
         'Sample Questions': row['Sample Questions'],
     }
 
 # print(data)
-filename = 'Questions.json'
+filename = 'data/Questions.json'
 with open(filename, 'w') as json_file:
-    json.dump(data, json_file, indent=4)
+    json.dump(question, json_file, indent=4)
 
 print(f"Data has been written to {filename}")
 
@@ -95,9 +158,11 @@ for _, row in Sample.iterrows():
         data[subject]['sample'] = {}
 
     data[subject]['sample'][row['ID']] = {
-        'Skill set': row['Skill set'],
-        'Questions': row['Questions'],
-        'Photo': None if row['Photo'] == 'NO_PHOTO' else row['Photo'],
+        'id': row['ID'],
+        'subject': "Mathematics",
+        'name': row['Skill set'],
+        'question': row['Questions'],
+        'figure': None if pd.isna(row['Photo']) else row['Photo'],
         'Concept': row['Concept'],
     }
 
@@ -123,13 +188,14 @@ for _, row in Sample_Steps.iterrows():
         data[subject]['steps'] = {}
 
     data[subject]['steps'][row['StepID']] = {
-        'step': row['Steps'],
-        'Photo': None if row['Photo'] == 'NO_PHOTO' else row['Photo'],
+        'id': row['StepID'],
+        'text': row['Steps'],
+        'Photo': None if pd.isna(row['Photo']) else row['Photo'].replace('\\', '/'),
         'Links': json.loads(row['Links'].replace("'", '"').replace("\\", "\\\\")),
     }
 
 # print(data)
-filename = 'Sample.json'
+filename = 'data/Sample.json'
 with open(filename, 'w') as json_file:
     json.dump(data, json_file, indent=4)
 
@@ -149,13 +215,15 @@ for _, row in Concept.iterrows():
         data[subject]['concept'] = {}
 
     data[subject]['concept'][row['ID']] = {
-        'Skill set': row['Skill set'],
-        'Desc': row['Desc'],
-        'Photo': None if row['Photo'] == 'NO_PHOTO' else row['Photo'],
+        'id': row['ID'],
+        'subject': "Mathematics",
+        'name': row['Skill set'],
+        'text': row['Desc'],
+        'figure': None if pd.isna(row['Photo']) else row['Photo'].replace('\\', '/'),
     }
 
 # print(data)
-filename = 'Concept.json'
+filename = 'data/Concept.json'
 with open(filename, 'w') as json_file:
     json.dump(data, json_file, indent=4)
 

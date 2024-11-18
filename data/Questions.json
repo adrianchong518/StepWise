@@ -1,134 +1,725 @@
 {
     "Math_2023_17_a": {
-        "Subject": "Math",
-        "Content": "It is given that \\( WXY \\) is a triangle, where \\( WX = 6 cm \\), \\( XY = 5 cm \\) and \\( \\angle WYX = 70^\\circ \\). Find \\( \\angle XWY \\).",
-        "Photo": null,
-        "var": {
-            "WXY": {
-                "Given": 1,
-                "Value": "Triangle",
-                "Photo1": "image\\Questions\\MATH_2023_17a\\aWXY1.svg",
-                "Photo2": null
+        "id": "Math",
+        "nextId": "Math_2023_17_b",
+        "details": {
+            "subject": "Mathematics",
+            "source": {
+                "kind": "HKDSE",
+                "year": 2023
+            },
+            "number": 17,
+            "part": "a",
+            "content": "It is given that \\( WXY \\) is a triangle, where \\( WX = 6 cm \\), \\( XY = 5 cm \\) and \\( \\angle WYX = 70^\\circ \\). Find \\( \\angle XWY \\).",
+            "figure": null
+        },
+        "variables": {
+            "triangle WXY": {
+                "value": "Triangle",
+                "given": 1,
+                "figure1": "image/Questions/MATH_2023_17a/WXY.svg",
+                "figure2": null
             },
             "WX": {
-                "Given": 1,
-                "Value": 6,
-                "Photo1": "image\\Questions\\MATH_2023_17a\\WX.svg",
-                "Photo2": null
+                "value": 6,
+                "given": 1,
+                "figure1": "image/Questions/MATH_2023_17a/WX.svg",
+                "figure2": null
             },
             "XY": {
-                "Given": 1,
-                "Value": 5,
-                "Photo1": "image\\Questions\\MATH_2023_17a\\XY.svg",
-                "Photo2": null
+                "value": 5,
+                "given": 1,
+                "figure1": "image/Questions/MATH_2023_17a/XY.svg",
+                "figure2": null
             },
             "\\angle WYX": {
-                "Given": 1,
-                "Value": "70^\\circ",
-                "Photo1": "image\\Questions\\MATH_2023_17a\\aWYX.svg",
-                "Photo2": null
+                "value": "70^\\circ",
+                "given": 1,
+                "figure1": "image/Questions/MATH_2023_17a/aWYX.svg",
+                "figure2": null
             },
             "\\angle WXY": {
-                "Given": 0,
-                "Value": "51.5^\\circ",
-                "Photo1": "image\\Questions\\MATH_2023_17a\\aWXY.svg",
-                "Photo2": "image\\Questions\\MATH_2023_17a\\aWXY2.svg"
+                "value": "51.5^\\circ",
+                "given": 0,
+                "figure1": "image/Questions/MATH_2023_17a/aWXY.svg",
+                "figure2": "image/Questions/MATH_2023_17a/aWXY2.svg"
             },
             "\\angle XWY": {
-                "Given": 0,
-                "Value": "Unknown",
-                "Photo1": "image\\Questions\\MATH_2023_17a\\aXWY.svg",
-                "Photo2": null
+                "value": "Unknown",
+                "given": 0,
+                "figure1": "image/Questions/MATH_2023_17a/aXWY.svg",
+                "figure2": null
             }
         },
         "steps": {
             "0": {
-                "Questions": "From the questions, we've obtain the following variables",
-                "Variables": [
-                    "WXY",
+                "id": 0,
+                "prompt": 17,
+                "variables": [
+                    "triangle WXY",
                     "WX",
                     "XY",
                     "\\angle WYX",
                     "\\angle XWY"
                 ],
-                "Choices": [
-                    [
-                        "OK",
-                        1
-                    ]
-                ],
-                "Sample Questions": -1
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "OK"
+                        ],
+                        "nextStep": [
+                            1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
             },
             "1": {
-                "Questions": "What method should we use to find \\( \\angle XWY \\)?",
-                "Variables": [
-                    "WXY",
+                "id": 1,
+                "prompt": 17,
+                "variables": [
+                    "triangle WXY",
                     "\\angle XWY"
                 ],
-                "Choices": [
-                    [
-                        "sine law",
-                        2
-                    ],
-                    [
-                        "cosine law",
-                        -1
-                    ],
-                    [
-                        "Herons Formula",
-                        -1
-                    ]
-                ],
-                "Sample Questions": 1
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "sine law",
+                            "cosine law",
+                            "Herons Formula"
+                        ],
+                        "nextStep": [
+                            2,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
             },
             "2": {
-                "Questions": "How can we apply sin law?",
-                "Variables": [
-                    "WXY",
+                "id": 2,
+                "prompt": 17,
+                "variables": [
+                    "triangle WXY",
                     "WX",
                     "XY",
                     "\\angle WYX",
                     "\\angle XWY",
                     "\\angleWYX"
                 ],
-                "Choices": [
-                    [
-                        "WX",
-                        "XY",
-                        "\\angleWYX",
-                        "\\angleWXY"
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "\\(WX\\)",
+                        "\\(XY\\)",
+                        "\\(\\angleWYX\\)",
+                        "\\(\\angleWXY\\)"
                     ],
-                    [
-                        "WX",
-                        "XY",
-                        "\\angleWYX"
+                    "correctOptions": [
+                        "\\(WX\\)",
+                        "\\(XY\\)",
+                        "\\(\\angleWYX\\)"
                     ],
-                    3
-                ],
-                "Sample Questions": 1
+                    "nextStep": 3
+                },
+                "Sample Questions": NaN
             },
             "3": {
-                "Questions": "Apply sin law, what is the answer? (correct to 3 sig fig)",
-                "Variables": [
-                    "WXY",
+                "id": 3,
+                "prompt": 17,
+                "variables": [
+                    "triangle WXY",
                     "WX",
                     "XY",
                     "\\angle WYX",
                     "\\angle XWY"
                 ],
-                "Choices": [
-                    [
-                        51.5,
-                        -1
-                    ]
-                ],
-                "Sample Questions": 1
+                "response": {
+                    "type": "number",
+                    "value": 51.5,
+                    "nextStep": 4
+                },
+                "Sample Questions": NaN
+            },
+            "4": {
+                "id": 4,
+                "prompt": 17,
+                "variables": [],
+                "response": {
+                    "type": "end"
+                },
+                "Sample Questions": NaN
             }
         }
     },
     "Math_2023_17_b": {
-        "Subject": "Math",
-        "Content": "Figure 3 shows the pyramid \\( WXYZ \\), where \\( WZ=XZ=YZ \\). The base of this pyramid is the triangle \\( WXY \\) described in (a). It is given that the angle between \\( WZ \\) and the triangle \\( WXY \\) is \\( 30^\\circ \\). Does the angle between the triangles \\( WXY \\) and \\( XYZ \\) exceed \\( 45^\\circ \\)? Explain your answer.",
-        "Photo": "image/MATH_2023_17b_Figure3.svg"
+        "id": "Math",
+        "nextId": "Math_2023_17_nan",
+        "details": {
+            "subject": "Mathematics",
+            "source": {
+                "kind": "HKDSE",
+                "year": 2023
+            },
+            "number": 17,
+            "part": "b",
+            "content": "Figure 3 shows the pyramid \\( WXYZ \\), where \\( WZ=XZ=YZ \\). The base of this pyramid is the triangle \\( WXY \\) described in (a). It is given that the angle between \\( WZ \\) and the triangle \\( WXY \\) is \\( 30^\\circ \\). Does the angle between the triangles \\( WXY \\) and \\( XYZ \\) exceed \\( 45^\\circ \\)? Explain your answer.",
+            "figure": "image/Questions/MATH_2023_17b/Figure3.svg"
+        }
+    },
+    "Math_2023_18_nan": {
+        "id": "Math",
+        "nextId": "Math_2023_18_a",
+        "details": {
+            "subject": "Mathematics",
+            "source": {
+                "kind": "HKDSE",
+                "year": 2023
+            },
+            "number": 18,
+            "part": null,
+            "content": "Suppose that \\( \\alpha, 7, \\beta \\) is a geometric sequence, where \\( 1 < \\alpha < \\beta \\).",
+            "figure": null
+        }
+    },
+    "Math_2023_18_a": {
+        "id": "Math",
+        "nextId": "Math_2023_18_b",
+        "details": {
+            "subject": "Mathematics",
+            "source": {
+                "kind": "HKDSE",
+                "year": 2023
+            },
+            "number": 18,
+            "part": "a",
+            "content": "Express \\( log_7\\alpha \\) in terms of \\( log_7\\beta \\).",
+            "figure": null
+        },
+        "variables": {
+            "\\alpha": {
+                "value": "Unknown",
+                "given": 1,
+                "figure1": null,
+                "figure2": null
+            }
+        },
+        "steps": {
+            "0": {
+                "id": 0,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "OK"
+                        ],
+                        "nextStep": [
+                            1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "1": {
+                "id": 1,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "Properties of Geometric Sequence",
+                            "Properties of Arithmetic Sequence",
+                            "Summation of Arithmetic Sequence"
+                        ],
+                        "nextStep": [
+                            2,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "2": {
+                "id": 2,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(\\frac{a_n}{a_{n-1}}\\)",
+                            "\\(a_n-a_{n-1}\\)",
+                            "\\(\\frac{a_n-a_{n-1}]{n}\\)"
+                        ],
+                        "nextStep": [
+                            3,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "3": {
+                "id": 3,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(7^2=\\alpha\\beta\\)",
+                            "\\(\\beta-\\alpha=7\\)",
+                            "\\(\\alpha=\\beta\\)"
+                        ],
+                        "nextStep": [
+                            4,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "4": {
+                "id": 4,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "Take log to the base 7",
+                            "Take log both side",
+                            "Take ln both side"
+                        ],
+                        "nextStep": [
+                            5,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "5": {
+                "id": 5,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "Quotient Rule of Logarithm",
+                            "Power Rule of Logarithm",
+                            "Equality Rule of Logarithm"
+                        ],
+                        "nextStep": [
+                            -1,
+                            6,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "6": {
+                "id": 6,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(2\\text{log}_{7}7=\\text{log}_7\\alpah\\beta\\)",
+                            "\\(\\text{log}49-\\text{log}7=\\log_{7}\\alpha\\beta\\)",
+                            "\\(\\text{log}42=\\text{log}\\alpha-\\text{log}\\beta\\)"
+                        ],
+                        "nextStep": [
+                            7,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "7": {
+                "id": 7,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "Logarithm of the same number as base",
+                            "Product Rule of Logarithm ",
+                            "Power Rule of Logarithm "
+                        ],
+                        "nextStep": [
+                            8,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "8": {
+                "id": 8,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "number",
+                    "value": 1,
+                    "nextStep": 9
+                },
+                "Sample Questions": NaN
+            },
+            "9": {
+                "id": 9,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "Logarithm of the same number as base",
+                            "Product Rule of Logarithm ",
+                            "Power Rule of Logarithm "
+                        ],
+                        "nextStep": [
+                            -1,
+                            10,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "10": {
+                "id": 10,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(\\text{log}_{7}\\alpha+\\text{log}_7\\beta\\)",
+                            "\\(\\text{log}\\alpha+\\text{log}\\beta\\)",
+                            "\\(\\text{log}_{7}\\alpha-\\text{log}_7\\beta\\)"
+                        ],
+                        "nextStep": [
+                            11,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "11": {
+                "id": 11,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(2=\\text{log}_{{7}\\alpha+\\text{log}_{{7}\\beta\\)",
+                            "\\(2=\\text{log}\\alpha+\\text{log}\\beta\\)",
+                            "\\(2=\\text{log}_{7}\\alpha+\\beta\\)"
+                        ],
+                        "nextStep": [
+                            12,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "12": {
+                "id": 12,
+                "prompt": 18,
+                "variables": [],
+                "response": null,
+                "Sample Questions": NaN
+            }
+        }
+    },
+    "Math_2023_18_b": {
+        "id": "Math",
+        "nextId": "Math_2023_18_nan",
+        "details": {
+            "subject": "Mathematics",
+            "source": {
+                "kind": "HKDSE",
+                "year": 2023
+            },
+            "number": 18,
+            "part": "b",
+            "content": "If \\( log_\\beta\\alpha, log_7\\beta, log_\\alpha\\beta \\) is an arithmetic sequence, find the common difference of the arithmetic sequence.",
+            "figure": null
+        }
+    },
+    "Math _2023_18_a": {
+        "variables": {
+            "\\beta": {
+                "value": "Unknown",
+                "given": 1,
+                "figure1": null,
+                "figure2": null
+            }
+        }
+    },
+    "Math _2023_18_b": {
+        "steps": {
+            "0": {
+                "id": 0,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "OK"
+                        ],
+                        "nextStep": [
+                            1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "1": {
+                "id": 1,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(\\frac{a_n}{a_{n-1}}\\)",
+                            "\\(a_n-a_{n-1}\\)",
+                            "\\(\\frac{a_n-a_{n-1}]{n}\\)"
+                        ],
+                        "nextStep": [
+                            -1,
+                            3,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "2": {
+                "id": 2,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(\\tex{log}_7\\beta-\\text{log}_\\beta\\alpha=\\text{log}_\\alpha\\beta-\\text{log}_7\\beta\\)",
+                            "\\(\\tex{log}_\\alpha\\beta-\\text{log}_7\\alpha=\\text{log}_\\alpha\\beta-\\text{log}_7\\beta\\)",
+                            "\\(\\tex{log}_\\alpha\\beta-\\text{log}_7\\alpha=\\text{log}_7\\beta-\\text{log}_\\alpha\\beta\\)"
+                        ],
+                        "nextStep": [
+                            4,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "3": {
+                "id": 3,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(\\frac{\\text{log}_{7}\\alpha}{\\text{log}_{7}\\beta}\\)",
+                            "\\(\\frac{\\text{log}\\alpha}{\\text{log}\\beta}\\)",
+                            "\\(\\text{log}\\alpha-\\text{log}\\beta\\)"
+                        ],
+                        "nextStep": [
+                            5,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "4": {
+                "id": 4,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(\\frac{\\text{log}_{7}\\beta}{\\text{log}_{7}\\alpha}\\)",
+                            "\\(\\frac{\\text{log}\\alpha}{\\text{log}\\beta}\\)",
+                            "\\(\\text{log}\\alpha-\\text{log}\\beta\\)"
+                        ],
+                        "nextStep": [
+                            6,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "5": {
+                "id": 5,
+                "prompt": 18,
+                "variables": [],
+                "response": null,
+                "Sample Questions": NaN
+            },
+            "6": {
+                "id": 6,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(2u^3-2u^2-4u+4=0\\)",
+                            "\\(2u^3-2u^2-2u+4=0\\)",
+                            "\\((2u-2)^2=0\\)"
+                        ],
+                        "nextStep": [
+                            8,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "7": {
+                "id": 7,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(2(u-1)(u^2-2)\\)",
+                            "\\(2(u+1)(u^2-2)\\)",
+                            "\\(2(u-1)(u^2+2)\\)"
+                        ],
+                        "nextStep": [
+                            9,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "8": {
+                "id": 8,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "\\(u=\\sqrt{2}\\)",
+                        "\\(u=-\\sqrt{2}\\)",
+                        "\\(u=1\\)",
+                        "\\(u=-1\\)",
+                        "\\(u=2\\)",
+                        "\\(u=-2\\)"
+                    ],
+                    "correctOptions": [
+                        "\\(u=1\\)",
+                        "\\(u=\\sqrt{2}\\)",
+                        "\\(u=-\\sqrt{2}\\)"
+                    ],
+                    "nextStep": 10
+                },
+                "Sample Questions": NaN
+            },
+            "9": {
+                "id": 9,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "\\(7^u>7^{2-u}>1\\)",
+                            "\\(u^7>(u-2)^7>1\\)",
+                            "u>u-2>1"
+                        ],
+                        "nextStep": [
+                            11,
+                            -1,
+                            -1
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "10": {
+                "id": 10,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "\\(u=1\\)",
+                        "\\(u=\\sqrt{2}\\)",
+                        "\\(u=-\\sqrt{2}\\)"
+                    ],
+                    "correctOptions": [
+                        "\\(u=\\sqrt{2}\\)"
+                    ],
+                    "nextStep": 12
+                },
+                "Sample Questions": NaN
+            },
+            "11": {
+                "id": 11,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            1
+                        ],
+                        "nextStep": [
+                            13
+                        ]
+                    }
+                },
+                "Sample Questions": NaN
+            },
+            "12": {
+                "id": 12,
+                "prompt": 18,
+                "variables": [],
+                "response": {
+                    "type": "end"
+                },
+                "Sample Questions": NaN
+            }
+        }
     }
 }

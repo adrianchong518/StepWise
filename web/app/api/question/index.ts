@@ -5,9 +5,11 @@ export type QuestionId = string;
 
 export type Question = {
   id: QuestionId;
+  nextId: string;
   details: QuestionDetails;
   variables: Record<string, Variable>;
   steps: Step[];
+  nextQuestion: QuestionId;
 };
 
 export type QuestionDetails = {

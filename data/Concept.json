@@ -2,9 +2,29 @@
     "MATH": {
         "concept": {
             "1": {
-                "Skill set": "Sine Formula",
-                "Desc": "\\[\n\\begin{align*}\n\\text{Sine Law:} \\\\\n\\frac{a}{sin{A}}&=\\frac{b}{sin{B}}=\\frac{c}{sin{C}} \\text{ or } \\\\\n\\frac{sin{A}}{a}&=\\frac{sin{B}}{b}=\\frac{sin{C}}{c} \\\\\n\\end{align*}\n\\]\n<p style=\"text-align: center;\">\nThis is commonly used when you have to find <b>specific lines/angles</b> in a triangle, when you find some\n<b>pairs</b>.\n</p>",
-                "Photo": null
+                "id": 1,
+                "subject": "Mathematics",
+                "name": "Sine Formula",
+                "text": "\\[\n\\begin{align*}\n\\text{Sine Law:} \\\\\n\\frac{a}{sin{A}}&=\\frac{b}{sin{B}}=\\frac{c}{sin{C}} \\text{ or } \\\\\n\\frac{sin{A}}{a}&=\\frac{sin{B}}{b}=\\frac{sin{C}}{c} \\\\\n\\end{align*}\n\\]\n<p style=\"text-align: center;\">\nThis is commonly used when you have to find <b>specific lines/angles</b> in a triangle, when you find some\n<b>pairs</b>.\n</p>",
+                "figure": "image/Concepts/MATH_Concept1/Photo1.svg"
+            },
+            "2": {
+                "id": 2,
+                "subject": "Mathematics",
+                "name": "Logarithm of the same number as base",
+                "text": "\\text{log}_{a}a=1",
+                "figure": null
+            }
+        }
+    },
+    "MATH ": {
+        "concept": {
+            "2": {
+                "id": 2,
+                "subject": "Mathematics",
+                "name": "Geometric sequence",
+                "text": "\\left[T\\left(n\\right)\\right]^2=T\\left(n-1\\right)\\timesT\\left(n+1\\right),\\text{ where }n>1",
+                "figure": null
             }
         }
     }
