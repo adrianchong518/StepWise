@@ -106,10 +106,7 @@ for _, row in Steps.iterrows():
     elif row['Q Type'] == 'Method':
         response = {
             'type': "option",
-            'options': {
-                'value': [v for v, _ in stepsResponse],
-                'nextStep': [ns for _, ns in stepsResponse],
-            }
+            'options': [{'value':v, 'nextStep':ns} for v, ns in stepsResponse]
         }
     elif row['Q Type'] == 'Match':
         response = {
@@ -134,7 +131,7 @@ for _, row in Steps.iterrows():
         'prompt': row['Questions'],
         'variables': json.loads(row['Variables'].replace("'", '"').replace("\\", "\\\\")),
         'response': response,
-        'Sample Questions': row['Sample Questions'],
+        'Sample Questions': None if pd.isna(row['Sample Questions']) else row['Sample Questions'],
     }
 
 # print(data)
