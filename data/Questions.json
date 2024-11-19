@@ -54,7 +54,7 @@
         "steps": {
             "0": {
                 "id": 0,
-                "prompt": 17,
+                "prompt": "From the questions, we've obtain the following variables",
                 "variables": [
                     "triangle WXY",
                     "WX",
@@ -77,7 +77,7 @@
             },
             "1": {
                 "id": 1,
-                "prompt": 17,
+                "prompt": "What method should we use to find \\( \\angle XWY \\)?",
                 "variables": [
                     "triangle WXY",
                     "\\angle XWY"
@@ -103,7 +103,7 @@
             },
             "2": {
                 "id": 2,
-                "prompt": 17,
+                "prompt": "How can we apply sin law?",
                 "variables": [
                     "triangle WXY",
                     "WX",
@@ -131,7 +131,7 @@
             },
             "3": {
                 "id": 3,
-                "prompt": 17,
+                "prompt": "Apply sin law, what is the answer? (correct to 3 sig fig)",
                 "variables": [
                     "triangle WXY",
                     "WX",
@@ -148,7 +148,7 @@
             },
             "4": {
                 "id": 4,
-                "prompt": 17,
+                "prompt": "Thank you",
                 "variables": [],
                 "response": {
                     "type": "end"
@@ -212,7 +212,7 @@
         "steps": {
             "0": {
                 "id": 0,
-                "prompt": 18,
+                "prompt": "From the questions, we've obtain the following variables \\(\\bf{\\alpha}\\), \\(\\bf{\\beta}\\).",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -229,7 +229,7 @@
             },
             "1": {
                 "id": 1,
-                "prompt": 18,
+                "prompt": "What method should we use to find the relationship between \\(\\alpha\\) and \\(\\beta\\)? ",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -252,7 +252,7 @@
             },
             "2": {
                 "id": 2,
-                "prompt": 18,
+                "prompt": "How can we apply common ratio of geometric sequence?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -275,7 +275,7 @@
             },
             "3": {
                 "id": 3,
-                "prompt": 18,
+                "prompt": "Apply common ratio, what is the correct operation?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -298,7 +298,7 @@
             },
             "4": {
                 "id": 4,
-                "prompt": 18,
+                "prompt": "Which operation should we do to \\(7^2=\\alpha\\beta\\)?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -321,7 +321,7 @@
             },
             "5": {
                 "id": 5,
-                "prompt": 18,
+                "prompt": "What method should we use the decompose \n\\(\n\\text{log}_{7}7^2=log_{7}\\alpha\\beta?\n\\)",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -344,7 +344,7 @@
             },
             "6": {
                 "id": 6,
-                "prompt": 18,
+                "prompt": "Apply power rule, what is the correct operation?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -367,7 +367,7 @@
             },
             "7": {
                 "id": 7,
-                "prompt": 18,
+                "prompt": "What method should we use the decompose \\(\\text{log}_{7}7\\)?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -390,7 +390,7 @@
             },
             "8": {
                 "id": 8,
-                "prompt": 18,
+                "prompt": "Apply logarithm of the same number as base, what is the value of \\(\\text{log}_{7}7\\)?",
                 "variables": [],
                 "response": {
                     "type": "number",
@@ -401,7 +401,7 @@
             },
             "9": {
                 "id": 9,
-                "prompt": 18,
+                "prompt": "What method should we use the decompose \\(\\text{log}_{7}\\alpha\\beta\\)?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -424,7 +424,7 @@
             },
             "10": {
                 "id": 10,
-                "prompt": 18,
+                "prompt": "Apply Product rule of Logarithm, what is the correct expression of \\(\\text{log}_{7}\\alpha\\beta\\)?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -447,7 +447,7 @@
             },
             "11": {
                 "id": 11,
-                "prompt": 18,
+                "prompt": "Apply Logarithm of the same number as base and Product Rule, what is the correct expression for \\(\\text{log}_{7}7^2=\\text{log)_{7}\\alpha\\beta \\) ?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -470,7 +470,7 @@
             },
             "12": {
                 "id": 12,
-                "prompt": 18,
+                "prompt": "Thank you",
                 "variables": [],
                 "response": null,
                 "Sample Questions": null
@@ -506,7 +506,7 @@
         "steps": {
             "0": {
                 "id": 0,
-                "prompt": 18,
+                "prompt": "From the questions, we've obtain the following variables \\(\\bf{\\alpha}\\), \\(\\bf{\\beta}\\).",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -523,7 +523,7 @@
             },
             "1": {
                 "id": 1,
-                "prompt": 18,
+                "prompt": "How can we apply common difference of arithmetic sequence?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -546,7 +546,7 @@
             },
             "2": {
                 "id": 2,
-                "prompt": 18,
+                "prompt": "Apply common difference, what is the correct operation?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -569,7 +569,7 @@
             },
             "3": {
                 "id": 3,
-                "prompt": 18,
+                "prompt": "Apply logarithm of the same number as base, what is the value of \\(\\text{log}_{\\beta}\\alpha\\)?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -592,7 +592,7 @@
             },
             "4": {
                 "id": 4,
-                "prompt": 18,
+                "prompt": "Apply logarithm of the same number as base, what is the value of \\(\\text{log}_{\\alpha}\\beta\\)?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -615,14 +615,14 @@
             },
             "5": {
                 "id": 5,
-                "prompt": 18,
+                "prompt": "Recall what u did in part (a), rewrite \\(\\text{log}_{7}\\beta-\\frac{\\text{log}_7\\alpha}{\\text{log}_7\\beta}=\\frac{\\text{log}_{7}\\beta}{\\text{log}_{7}\\alpha}-\\text{log}_{7}\\beta\\)? Hint: let \\(u = \\text{log}_{7}\\beta\\)",
                 "variables": [],
                 "response": null,
                 "Sample Questions": null
             },
             "6": {
                 "id": 6,
-                "prompt": 18,
+                "prompt": "Rearragne the equation \\(u-\\frac{2-u}{u}=\\frac{u}{2-u}-u\\), which of the followings is correct?  ",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -645,7 +645,7 @@
             },
             "7": {
                 "id": 7,
-                "prompt": 18,
+                "prompt": "Factorize \\(2u^3-2u^2-4u+4=0\\), what will you get?",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -668,7 +668,7 @@
             },
             "8": {
                 "id": 8,
-                "prompt": 18,
+                "prompt": "Solve the quations\\(2(u-1)(u^2-2)\\), what are the values of \\(u\\)? Hint: More than 1 answers.",
                 "variables": [],
                 "response": {
                     "type": "multioption",
@@ -691,7 +691,7 @@
             },
             "9": {
                 "id": 9,
-                "prompt": 18,
+                "prompt": "Recall \\(\\beta>\\alpha>1\\), plug in the unknown \\(u=\\text{log}_7\\beta\\), which of the following is the correct expression of the inequality \\(\\beta>\\alpha>1\\)? ",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -714,7 +714,7 @@
             },
             "10": {
                 "id": 10,
-                "prompt": 18,
+                "prompt": "Recall that you calculated \\(u=1\\) or \\(u=\\sqrt{2}\\) or \\(u=-\\sqrt{2}\\), which values of \\(u\\) statisfy the inequality \\(7^u>7^{2-u}>1\\)?",
                 "variables": [],
                 "response": {
                     "type": "multioption",
@@ -732,7 +732,7 @@
             },
             "11": {
                 "id": 11,
-                "prompt": 18,
+                "prompt": "The ultimate goal of this question is to find the common difference \\(\\text{log}_{7}\\beta-\\frac{\\text{log}_{7}\\alpha}{\\text{log}_{7}\\beta}\\), \nalso recall we denote \\(u=\\text{log}_{7}\\beta\\) and \\(2-u=\\text{log}_{7}\\alpha\\),\nand previously we find \\(u=\\sqrt{2}\\),\nWhat is the value of the common difference? ",
                 "variables": [],
                 "response": {
                     "type": "option",
@@ -747,7 +747,7 @@
             },
             "12": {
                 "id": 12,
-                "prompt": 18,
+                "prompt": "Thank you",
                 "variables": [],
                 "response": {
                     "type": "end"

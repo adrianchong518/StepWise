@@ -128,7 +128,7 @@ for _, row in Steps.iterrows():
 
     question[subject]['steps'][row['Step id']] = {
         'id': row['Step id'],
-        'prompt': row['Questions'],
+        'prompt': row['Prompt'],
         'variables': json.loads(row['Variables'].replace("'", '"').replace("\\", "\\\\")),
         'response': response,
         'Sample Questions': None if pd.isna(row['Sample Questions']) else row['Sample Questions'],
@@ -179,12 +179,26 @@ for _, row in Sample_Steps.iterrows():
     subject = f"{row['Subject']}"
     if (subject not in data):
         data[subject] = {
-            'steps': {}
+            'sample': {
+                row['ID']: {
+                    'steps': {}
+                }
+            }
         }
-    elif 'steps' not in data[subject]:
-        data[subject]['steps'] = {}
+    elif 'sample' not in data[subject]:
+        data[subject]['sample'] = {
+                row['ID']: {
+                    'steps': {}
+                }
+            }
+    elif row['ID'] not in data[subject]['sample']:
+        data[subject]['sample'][row['ID']] = {
+                    'steps': {}
+                }
+    elif 'steps' not in data[subject]['sample'][row['ID']]:
+        data[subject]['sample'][row['ID']]['steps'] = {}
 
-    data[subject]['steps'][row['StepID']] = {
+    data[subject]['sample'][row['ID']]['steps'][row['StepID']] = {
         'id': row['StepID'],
         'text': row['Steps'],
         'Photo': None if pd.isna(row['Photo']) else row['Photo'].replace('\\', '/'),
