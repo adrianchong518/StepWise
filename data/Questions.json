@@ -99,7 +99,7 @@
                         }
                     ]
                 },
-                "Sample Questions": null
+                "Sample Questions": 1.0
             },
             "2": {
                 "id": 2,
@@ -127,7 +127,7 @@
                     ],
                     "nextStep": 3
                 },
-                "Sample Questions": null
+                "Sample Questions": 1.0
             },
             "3": {
                 "id": 3,
@@ -144,7 +144,7 @@
                     "value": 51.5,
                     "nextStep": 4
                 },
-                "Sample Questions": null
+                "Sample Questions": 1.0
             },
             "4": {
                 "id": 4,
@@ -170,6 +170,223 @@
             "part": "b",
             "content": "Figure 3 shows the pyramid \\( WXYZ \\), where \\( WZ=XZ=YZ \\). The base of this pyramid is the triangle \\( WXY \\) described in (a). It is given that the angle between \\( WZ \\) and the triangle \\( WXY \\) is \\( 30^\\circ \\). Does the angle between the triangles \\( WXY \\) and \\( XYZ \\) exceed \\( 45^\\circ \\)? Explain your answer.",
             "figure": "image/Questions/MATH_2023_17b/Figure3.svg"
+        },
+        "steps": {
+            "0": {
+                "id": 0,
+                "prompt": "From the questions, we've known that we have \\(A\\), \\(B\\), \\(C\\) three variables.",
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": {
+                        "value": [
+                            "OK"
+                        ],
+                        "nextStep": [
+                            1
+                        ]
+                    }
+                },
+                "Sample Questions": null
+            },
+            "1": {
+                "id": 1,
+                "prompt": "Please Identify what method should we use for this questions",
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": [
+                        {
+                            "value": "Available method 1",
+                            "nextStep": 2
+                        },
+                        {
+                            "value": "Available method 2",
+                            "nextStep": 4
+                        },
+                        {
+                            "value": "Unavailable method 3",
+                            "nextStep": -1
+                        }
+                    ]
+                },
+                "Sample Questions": 5.0
+            },
+            "2": {
+                "id": 2,
+                "prompt": "What should we locate to obtain such method 1?",
+                "variables": [],
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 2",
+                        "Unrequired given Variable 3"
+                    ],
+                    "correctOptions": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 2"
+                    ],
+                    "nextStep": 3
+                },
+                "Sample Questions": 3.0
+            },
+            "3": {
+                "id": 3,
+                "prompt": "Notice that we don't have Variable 2, what should we do to find such variables?",
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": [
+                        {
+                            "value": "Available method 4",
+                            "nextStep": 6
+                        },
+                        {
+                            "value": "Unavailable method 5",
+                            "nextStep": -1
+                        },
+                        {
+                            "value": "Unavailable method 6",
+                            "nextStep": -1
+                        }
+                    ]
+                },
+                "Sample Questions": 5.0
+            },
+            "4": {
+                "id": 4,
+                "prompt": "What should we locate to obtain such method 2?",
+                "variables": [],
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 3",
+                        "Unrequired given Variable 4"
+                    ],
+                    "correctOptions": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 3"
+                    ],
+                    "nextStep": 5
+                },
+                "Sample Questions": 7.0
+            },
+            "5": {
+                "id": 5,
+                "prompt": "Notice that we don't have Variable 3, what should we do to find such variables?",
+                "variables": [],
+                "response": {
+                    "type": "option",
+                    "options": [
+                        {
+                            "value": "Available method 4",
+                            "nextStep": 9
+                        },
+                        {
+                            "value": "Unavailable method 5",
+                            "nextStep": -1
+                        },
+                        {
+                            "value": "Unavailable method 6",
+                            "nextStep": -1
+                        }
+                    ]
+                },
+                "Sample Questions": 7.0
+            },
+            "6": {
+                "id": 6,
+                "prompt": "What should we locate to obtain such method 4?",
+                "variables": [],
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 2",
+                        "Unrequired given Variable 3"
+                    ],
+                    "correctOptions": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 2"
+                    ],
+                    "nextStep": 7
+                },
+                "Sample Questions": 9.0
+            },
+            "7": {
+                "id": 7,
+                "prompt": "Great! Apply method 4, what should we get\n(hint: the answer comes from xxxx, answer is 1234)",
+                "variables": [],
+                "response": {
+                    "type": "number",
+                    "value": 1234,
+                    "nextStep": 8
+                },
+                "Sample Questions": 9.0
+            },
+            "8": {
+                "id": 8,
+                "prompt": "Apply method 1, what is the corresponding answer?\n(hint: the answer comes from xxx, answer is 1234)",
+                "variables": [],
+                "response": {
+                    "type": "number",
+                    "value": 1234,
+                    "nextStep": 12
+                },
+                "Sample Questions": 3.0
+            },
+            "9": {
+                "id": 9,
+                "prompt": "What should we locate to obtain such method 4?",
+                "variables": [],
+                "response": {
+                    "type": "multioption",
+                    "options": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 2",
+                        "Unrequired given Variable 3"
+                    ],
+                    "correctOptions": [
+                        "Required given Variable 1",
+                        "Required ungiven Variable 2"
+                    ],
+                    "nextStep": 10
+                },
+                "Sample Questions": 9.0
+            },
+            "10": {
+                "id": 10,
+                "prompt": "Great! Apply method 4, what should we get\n(hint: the answer comes from xxxx, answer is 1234)",
+                "variables": [],
+                "response": {
+                    "type": "number",
+                    "value": 1234,
+                    "nextStep": 11
+                },
+                "Sample Questions": 9.0
+            },
+            "11": {
+                "id": 11,
+                "prompt": "Apply method 2, what is the corresponding answer?\n(hint: the answer comes from xxx, answer is 1234)",
+                "variables": [],
+                "response": {
+                    "type": "number",
+                    "value": 1234,
+                    "nextStep": 12
+                },
+                "Sample Questions": 7.0
+            },
+            "12": {
+                "id": 12,
+                "prompt": "Thank you",
+                "variables": [],
+                "response": {
+                    "type": "end"
+                },
+                "Sample Questions": null
+            }
         }
     },
     "Math_2023_18_nan": {
