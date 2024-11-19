@@ -9,6 +9,7 @@ import {
   useReactFlow,
   type NodeMouseHandler,
 } from "@xyflow/react";
+import { useParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import useSWR from "swr";
 
@@ -24,8 +25,8 @@ import { StepNode } from "./components/StepNode";
 import useStore from "./store";
 import { DemoNode } from "./store/graph";
 
+import tailwind from "@/app/utils/tailwind";
 import "@xyflow/react/dist/style.css";
-import tailwind from "../utils/tailwind";
 import { ConceptNode } from "./components/ConceptNode";
 import { fitViewToNode, getStepNodeId } from "./lib";
 
@@ -37,9 +38,9 @@ const nodeTypes = {
   concept: ConceptNode,
 };
 
-const questionId = "Math_2023_17_a";
-
 export default function Demo() {
+  const { id: questionId } = useParams<{ id: string }>();
+
   const {
     nodes,
     edges,

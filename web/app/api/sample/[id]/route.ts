@@ -13,12 +13,12 @@ export async function GET(
     const res: Sample = {
       id: +id,
       subject: "Mathematics",
-      name: data["Skill set"],
-      question: data.Questions,
+      name: data.name,
+      question: data.question,
       concept: data.Concept,
       steps: Object.values(data.steps).map((s, id) => ({
         id,
-        text: s.step,
+        text: s.text,
         figure: s.Photo ?? undefined,
         links: s.Links,
       })),

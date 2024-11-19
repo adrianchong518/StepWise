@@ -1,10 +1,10 @@
 import { Edge } from "@xyflow/react";
 import ELK from "elkjs";
 
-import { DemoNode } from "../demo/store/graph";
+import { DemoNode } from "../demo/[id]/store/graph";
 
 const elk = new ELK({
-  workerFactory: function (url) {
+  workerFactory: function(url) {
     const { Worker } = require("elkjs/lib/elk-worker.js"); // non-minified
     return new Worker(url);
   },

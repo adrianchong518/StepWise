@@ -110,7 +110,7 @@ const NewNodeButton = ({
 
   return (
     <Button
-      className={`font-medium transition-colors ${status === "correct" && "text-gray-100"} ${className}`}
+      className={`font-medium transition-colors text-wrap h-fit p-2 ${className}`}
       color={
         status === "correct"
           ? "success"
@@ -121,7 +121,7 @@ const NewNodeButton = ({
       onPress={newNode}
       isDisabled={status === "inactive" || status === "wrong"}
     >
-      {children}
+      <KatexSpan>{children}</KatexSpan>
     </Button>
   );
 };
@@ -151,7 +151,7 @@ const OptionResponseInput = ({
       {optRes.options[0].value}
     </NewNodeButton>
   ) : (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+    <div className="grid grid-cols-2 gap-x-6 gap-y-4 items-center">
       {optRes.options.map(({ value, nextStep }) => (
         <NewNodeButton
           key={`${questionId}_${stepId}_${optRes.type}_${value}`}
@@ -524,14 +524,17 @@ export function StepNode({
             </div>
           </div>
           <div className="w-1/2 aspect-square relative">
-            {step.variables.map((v) => (
-              <img
-                key={`${nodeId}_${v} `}
-                src={`/${question.variables[v].figure1} `}
-                alt=""
-                className="w-full h-full absolute"
-              />
-            ))}
+            {step.variables.map(
+              (v) =>
+                v && (
+                  <img
+                    key={`${nodeId}_${v} `}
+                    src={`/${question.variables[v].figure1} `}
+                    alt=""
+                    className="w-full h-full absolute"
+                  />
+                ),
+            )}
           </div>
         </div>
       </CardBody>

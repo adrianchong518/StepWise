@@ -72,7 +72,7 @@ export function SampleStepNode({
   const { fitView } = useReactFlow();
 
   return (
-    <Card className="w-full max-w-[30em]">
+    <Card className="w-fit">
       <CardHeader className="bg-secondary-200">
         <div className="flex flex-row justify-between items-center w-full">
           <h4 className="text-xl">Step {step.id}</h4>
@@ -117,9 +117,20 @@ export function SampleStepNode({
         </div>
       </CardHeader>
       <CardBody>
-        <div className="text-md">
-          <KatexSpan>{step.text}</KatexSpan>
-        </div>
+        {step.figure ? (
+          <div className="w-full flex flex-col items-center">
+            <div className="text-md place-self-center">
+              <KatexSpan>{step.text}</KatexSpan>
+            </div>
+            <div className="w-1/2 aspect-square relative">
+              <img src={`/${step.figure}`} className="w-full h-full absolute" />
+            </div>
+          </div>
+        ) : (
+          <div className="text-md">
+            <KatexSpan>{step.text}</KatexSpan>
+          </div>
+        )}
       </CardBody>
       <Handle type="target" position={Position.Top} className="invisible" />
       <Handle type="source" position={Position.Bottom} className="invisible" />
@@ -153,8 +164,8 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
     (async () => {
       if (!sample) return;
       const nodeId = addConcept(sampleId, sample.concept)?.nodeId ?? "";
-      await nextTick(2);
-      await timeout(100);
+      await nextTick(4);
+      await timeout(300);
       fitView(fitViewToNode({ id: nodeId }));
     })();
   };

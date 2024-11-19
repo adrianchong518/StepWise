@@ -7,7 +7,6 @@ import {
   CardHeader,
   Divider,
 } from "@nextui-org/react";
-import { useState } from "react";
 
 import { type QuestionDetails } from "@/app/api/question/index";
 import KatexSpan from "@/app/components/KatexSpan";

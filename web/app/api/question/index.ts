@@ -9,7 +9,6 @@ export type Question = {
   details: QuestionDetails;
   variables: Record<string, Variable>;
   steps: Step[];
-  nextQuestion: QuestionId;
 };
 
 export type QuestionDetails = {

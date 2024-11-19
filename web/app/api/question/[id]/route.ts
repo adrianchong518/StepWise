@@ -8,38 +8,39 @@ export async function GET(
   const id = (await params).id;
 
   // HACK: generalize later
-  if (id === "Math_2023_17_a") {
+  const data = questionData[id as keyof typeof questionData];
+  if (data) {
     const res: Question = {
       id: id,
+      nextId: data.nextId,
 
       details: {
         subject: "Mathematics",
-        source: { kind: "HKDSE", year: questionData[id].year },
-        number: questionData[id].questionNumber,
-        part: questionData[id].part,
-        content: questionData[id].Content,
+        source: { kind: "HKDSE", year: data.details.source.year },
+        number: data.details.number,
+        part: data.details.part ?? undefined,
+        content: data.details.content,
       },
 
       variables: Object.fromEntries(
-        Object.entries(questionData[id].var).map(([k, v]) => [
+        Object.entries(data.variables).map(([k, v]) => [
           k,
           {
-            value: v.Value,
-            given: !!v.Given,
-            figure1: v.Photo1 ?? undefined,
-            figure2: v.Photo2 ?? undefined,
+            value: v.value,
+            given: !!v.given,
+            figure1: v.figure1 ?? undefined,
+            figure2: v.figure2 ?? undefined,
           },
         ]),
       ),
 
-      steps: Object.entries(questionData[id].steps).map(([k, v]) => {
+      steps: Object.entries(data.steps).map(([k, v]) => {
         return {
           id: +k,
-          prompt: v.Questions,
-          variables: v.Variables,
-          response: v.Choices as StepResponse,
-          sampleId:
-            v["Sample Questions"] === -1 ? undefined : v["Sample Questions"],
+          prompt: v.prompt,
+          variables: v.variables,
+          response: v.response as StepResponse,
+          sampleId: v["Sample Questions"],
         };
       }),
     };

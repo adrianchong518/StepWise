@@ -1,6 +1,5 @@
 "use client";
 
-import { MarkerType } from "@xyflow/react";
 import { createContext, useContext, useRef, type ReactNode } from "react";
 import { useStore } from "zustand";
 import { useShallow } from "zustand/shallow";
@@ -76,6 +75,10 @@ const createDemoStore = () =>
             }),
           ],
           displayedSteps: [question.steps[0].id],
+          edges: [],
+          currentStep: 0,
+          displayedSamples: [],
+          displayedConcepts: [],
         }),
 
       displayedSteps: [],

@@ -13,9 +13,9 @@ export async function GET(
     const res: Concept = {
       id: +id,
       subject: "Mathematics",
-      name: data["Skill set"],
-      text: data.Desc,
-      figure: data.Photo ?? undefined,
+      name: data.name,
+      text: data.text,
+      figure: data.figure ?? undefined,
     };
     return Response.json(res);
   }

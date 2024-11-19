@@ -26,9 +26,8 @@ export function ConceptNode({ data: { conceptId } }: NodeProps<ConceptNode>) {
 
   if (!concept) return;
 
-  // TODO:figure
   return (
-    <Card className="w-[30em]">
+    <Card className="w-fit">
       <CardHeader className="bg-gray-200">
         <div className="flex flex-row justify-between items-center w-full">
           <h4 className="text-2xl font-medium">{concept.name}</h4>
@@ -48,11 +47,33 @@ export function ConceptNode({ data: { conceptId } }: NodeProps<ConceptNode>) {
         </div>
       </CardHeader>
       <CardBody>
-        <div className="text-md">
-          <KatexSpan>
-            <div dangerouslySetInnerHTML={{ __html: concept.text }} />
-          </KatexSpan>
-        </div>
+        {concept.figure ? (
+          <div className="w-full flex flex-col items-center">
+            <div className="text-md">
+              <KatexSpan>
+                <div
+                  dangerouslySetInnerHTML={{ __html: concept.text }}
+                  className="place-self-center"
+                />
+              </KatexSpan>
+            </div>
+            <div className="w-1/2 aspect-square relative">
+              <img
+                src={`/${concept.figure}`}
+                className="w-full h-full absolute"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="text-md">
+            <KatexSpan>
+              <div
+                dangerouslySetInnerHTML={{ __html: concept.text }}
+                className="place-self-center"
+              />
+            </KatexSpan>
+          </div>
+        )}
       </CardBody>
 
       <Handle type="target" position={Position.Left} className="invisible" />

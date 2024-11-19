@@ -13,8 +13,8 @@ import type {
   SampleNode,
   SampleQuestionNode,
   SampleStepNode,
-} from "@/app/demo/components/SampleNode";
-import type { StepNode } from "@/app/demo/components/StepNode";
+} from "@/app/demo/[id]/components/SampleNode";
+import type { StepNode } from "@/app/demo/[id]/components/StepNode";
 import { ConceptNode } from "../components/ConceptNode";
 
 export type DemoNode =
