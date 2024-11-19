@@ -8,7 +8,7 @@ export async function GET(
   const id = (await params).id;
 
   // HACK: generalize later
-  const data = questionData[id as keyof typeof questionData];
+  const data: any = questionData[id as keyof typeof questionData];
   if (data) {
     const res: Question = {
       id: id,
@@ -23,7 +23,7 @@ export async function GET(
       },
 
       variables: Object.fromEntries(
-        Object.entries(data.variables).map(([k, v]) => [
+        Object.entries(data.variables).map(([k, v]: any) => [
           k,
           {
             value: v.value,
@@ -34,7 +34,7 @@ export async function GET(
         ]),
       ),
 
-      steps: Object.entries(data.steps).map(([k, v]) => {
+      steps: Object.entries(data.steps).map(([k, v]: any) => {
         return {
           id: +k,
           prompt: v.prompt,

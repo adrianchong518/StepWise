@@ -110,12 +110,12 @@ const NewNodeButton = ({
 
   return (
     <Button
-      className={`font-medium transition-colors text-wrap h-fit p-2 ${className}`}
+      className={`font-medium transition-colors text-wrap text-gray-50 h-fit p-2 ${className}`}
       color={
         status === "correct"
           ? "success"
           : status === "wrong"
-            ? "danger"
+            ? "secondary"
             : "primary"
       }
       onPress={newNode}
@@ -151,12 +151,13 @@ const OptionResponseInput = ({
       {optRes.options[0].value}
     </NewNodeButton>
   ) : (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-4 items-center">
+    <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
       {optRes.options.map(({ value, nextStep }) => (
         <NewNodeButton
           key={`${questionId}_${stepId}_${optRes.type}_${value}`}
           stepId={stepId}
           next={nextStep ? { stepId: nextStep } : { sampleId }}
+          className="w-full"
         >
           {value}
         </NewNodeButton>
@@ -213,11 +214,11 @@ const MultiOptionResponseInput = ({
   }, [checkbox, showStep, showSample]);
 
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-2 gap-6 w-full">
       {multiOptRes.options.map((value) => (
         <Checkbox
           key={`${questionId}_${stepId}_${value}`}
-          className={`${checkbox[value] ? "bg-primary-100" : "bg-default-100"} rounded-xl`}
+          className={`${checkbox[value] ? "bg-primary-100" : "bg-default-100"} rounded-xl w-full`}
           isSelected={checkbox[value]}
           onValueChange={(selected) => updateCheckbox(value, selected)}
         >
@@ -230,7 +231,7 @@ const MultiOptionResponseInput = ({
           status === "correct"
             ? "success"
             : status === "wrong"
-              ? "danger"
+              ? "secondary"
               : "primary"
         }
         isDisabled={status === "wrong"}
@@ -294,7 +295,7 @@ const NumberResponse = ({
           status === "correct"
             ? "success"
             : status === "wrong"
-              ? "danger"
+              ? "secondary"
               : "primary"
         }
         isDisabled={status === "wrong"}
@@ -331,11 +332,11 @@ const EndStepNode = ({
 
   return (
     <Card className="w-[30em]">
-      <CardHeader className="bg-primary-200">
+      <CardHeader className="bg-primary-100">
         <div className="grid grid-cols-2 items-center justify-center w-full h-full">
           <h3 className="text-3xl">The End</h3>
           <Button
-            className="justify-self-end"
+            className="justify-self-end bg-primary-100 text-gray-700"
             isIconOnly
             color="primary"
             onPress={() =>
@@ -368,7 +369,7 @@ const EndStepNode = ({
               size="lg"
               startContent={<HomeIcon className="w-5 md:w-6" />}
               color="primary"
-              className="bg-primary-700 text-gray-100"
+              className="bg-primary-500 text-gray-100"
               as={Link}
               href="/"
             >
@@ -393,7 +394,7 @@ const EndStepNode = ({
             <Button
               color="primary"
               startContent={<ArrowsPointingOutIcon className="w-5 md:w-6" />}
-              className="h-full"
+              className="h-full bg-primary-200 text-black"
               onPress={() => {
                 fitView({ nodes, duration: 750 });
               }}
@@ -451,6 +452,7 @@ export function StepNode({
               <Button
                 isIconOnly
                 color="primary"
+                className="bg-primary-100 text-gray-700"
                 onPress={(_) => {
                   setCurrentStep(displayedSteps[0]);
                   fitView(
@@ -466,35 +468,38 @@ export function StepNode({
                 <ChevronUpIcon />
               </Button>
             )}
-            <Button
-              isIconOnly
-              color="primary"
-              isDisabled={!hasNextStep}
-              onPress={(_) => {
-                setCurrentStep(displayedSteps[0]);
-                fitView(
-                  fitViewToNode({
-                    id: getStepNodeId(
-                      question.id,
-                      displayedSteps[stepNumber + 1],
-                    ),
-                  }),
-                );
-              }}
-            >
-              <ChevronDownIcon />
-            </Button>
+            {hasNextStep && (
+              <Button
+                isIconOnly
+                color="primary"
+                className="bg-primary-100 text-gray-700"
+                isDisabled={!hasNextStep}
+                onPress={(_) => {
+                  setCurrentStep(displayedSteps[0]);
+                  fitView(
+                    fitViewToNode({
+                      id: getStepNodeId(
+                        question.id,
+                        displayedSteps[stepNumber + 1],
+                      ),
+                    }),
+                  );
+                }}
+              >
+                <ChevronDownIcon />
+              </Button>
+            )}
           </ButtonGroup>
         </div>
       </CardHeader>
       <Divider />
       <CardBody>
         <div className="flex flex-row justify-between w-full text-md">
-          <div className="w-1/2 self-center flex flex-col justify-center gap-6">
-            <div className="w-fit place-self-center">
+          <div className="w-1/2 p-8 self-center flex flex-col justify-center gap-12">
+            <div className="w-full items-center">
               <KatexSpan>{step.prompt}</KatexSpan>
             </div>
-            <div className="w-fit place-self-center">
+            <div className="w-full place-self-center">
               {step.response.type === "option" ? (
                 <OptionResponseInput
                   optRes={step.response}
@@ -539,7 +544,7 @@ export function StepNode({
         </div>
       </CardBody>
 
-      {step.sampleId && (
+      {step.sampleId && false && (
         <CardFooter>
           <div className="flex flex-row justify-end w-full">
             <Button

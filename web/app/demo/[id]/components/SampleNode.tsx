@@ -75,7 +75,7 @@ export function SampleStepNode({
     <Card className="w-fit">
       <CardHeader className="bg-secondary-200">
         <div className="flex flex-row justify-between items-center w-full">
-          <h4 className="text-xl">Step {step.id}</h4>
+          <h4 className="text-xl"> Step {step.id} </h4>
           <ButtonGroup className="justify-self-end transition-colors" size="sm">
             {step.id != 0 && (
               <Button
