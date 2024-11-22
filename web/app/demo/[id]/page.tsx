@@ -15,27 +15,37 @@ import useSWR from "swr";
 
 import { type Question } from "@/app/api/question";
 import { nextTick } from "@/app/utils";
+import tailwind from "@/app/utils/tailwind";
+import { ConceptNode } from "./components/ConceptNode";
+import { ExplainerNode } from "./components/ExplainerNode";
 import QuestionCard from "./components/QuestionCard";
+import { QuestionNode } from "./components/QuestionNode";
 import {
   SampleNode,
   SampleQuestionNode,
   SampleStepNode,
 } from "./components/SampleNode";
 import { StepNode } from "./components/StepNode";
+import { fitViewToNode } from "./lib";
 import useStore from "./store";
 import { DemoNode } from "./store/graph";
 
-import tailwind from "@/app/utils/tailwind";
+import {
+  ArrowLeftStartOnRectangleIcon,
+  ArrowsPointingOutIcon,
+  ChevronDoubleDownIcon,
+} from "@heroicons/react/24/outline";
+import { Button, ButtonGroup, Tooltip } from "@nextui-org/react";
 import "@xyflow/react/dist/style.css";
-import { ConceptNode } from "./components/ConceptNode";
-import { fitViewToNode, getStepNodeId } from "./lib";
 
 const nodeTypes = {
   step: StepNode,
   sample: SampleNode,
+  question: QuestionNode,
   "sample-question": SampleQuestionNode,
   "sample-step": SampleStepNode,
   concept: ConceptNode,
+  explainer: ExplainerNode,
 };
 
 export default function Demo() {
@@ -85,7 +95,7 @@ export default function Demo() {
       if (question) {
         setQuestion(question);
         await nextTick(2);
-        fitView(fitViewToNode({ id: getStepNodeId(question.id, 0) }));
+        fitView(fitViewToNode({ id: question.id }));
       }
     })();
   }, [question, fitView]);
@@ -119,8 +129,28 @@ export default function Demo() {
           <QuestionCard question={question.details} />
         </Panel>
 
+        <Panel position="top-center">
+          <ButtonGroup>
+            <Tooltip content="Go to latest step">
+              <Button isIconOnly className="p-1 bg-primary-50" size="lg">
+                <ChevronDoubleDownIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip content="Expand all nodes">
+              <Button isIconOnly className="p-1 bg-primary-50" size="lg">
+                <ArrowsPointingOutIcon />
+              </Button>
+            </Tooltip>
+            <Tooltip content="Exit">
+              <Button isIconOnly className="p-1 bg-primary-50" size="lg">
+                <ArrowLeftStartOnRectangleIcon />
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
+        </Panel>
+
         <Background />
-        <Controls fitViewOptions={{ duration: 750 }} />
+        {false && <Controls fitViewOptions={{ duration: 750 }} />}
         <MiniMap
           pannable
           zoomable

@@ -8,6 +8,7 @@ import {
 import { ConceptId } from "@/app/api/concept";
 import type { QuestionId, StepId } from "@/app/api/question";
 import type { SampleId } from "@/app/api/sample";
+import tailwind from "@/app/utils/tailwind";
 
 export const getStepNodeId = (questionId: QuestionId, stepId: StepId) =>
   `${questionId}_step_${stepId}`;
@@ -47,6 +48,7 @@ export const createEdge = <E extends Edge>(edge: E): E => ({
     type: MarkerType.ArrowClosed,
     width: 20,
     height: 20,
+    color: tailwind.colors.gray[400],
   },
   animated: true,
   ...edge,

@@ -35,7 +35,7 @@ export type SampleQuestionNode = Node<{ sample: Sample }, "sample-question">;
 export function SampleQuestionNode({
   data: { sample },
 }: NodeProps<SampleQuestionNode>) {
-  // TODO: figure
+  console.log(sample);
   return (
     <Card className="w-full max-w-[30em]">
       <CardHeader className="bg-secondary-200">
@@ -45,9 +45,23 @@ export function SampleQuestionNode({
         </div>
       </CardHeader>
       <CardBody>
-        <div className="text-md">
-          <KatexSpan>{sample.question}</KatexSpan>
-        </div>
+        {sample.figure ? (
+          <div className="w-full flex flex-col items-center">
+            <div className="text-md place-self-center">
+              <KatexSpan>{sample.question}</KatexSpan>
+            </div>
+            <div className="w-1/2 aspect-square relative">
+              <img
+                src={`/${sample.figure}`}
+                className="w-full h-full absolute"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="text-md">
+            <KatexSpan>{sample.question}</KatexSpan>
+          </div>
+        )}
       </CardBody>
       <Handle type="source" position={Position.Bottom} className="invisible" />
     </Card>
@@ -75,45 +89,54 @@ export function SampleStepNode({
     <Card className="w-fit">
       <CardHeader className="bg-secondary-200">
         <div className="flex flex-row justify-between items-center w-full">
-          <h4 className="text-xl"> Step {step.id} </h4>
-          <ButtonGroup className="justify-self-end transition-colors" size="sm">
-            {step.id != 0 && (
-              <Button
-                isIconOnly
-                color="secondary"
-                onPress={() => {
-                  fitView(
-                    fitViewToNode({ id: `${baseNodeId}_step_${step.id - 1}` }),
-                  );
-                }}
-              >
-                <ChevronUpIcon />
-              </Button>
-            )}
-            {step.id < numSteps - 1 && (
+          <h4 className="text-xl"> Method {step.id + 1} </h4>
+          {false && (
+            <ButtonGroup
+              className="justify-self-end transition-colors"
+              size="sm"
+            >
+              {step.id != 0 && (
+                <Button
+                  isIconOnly
+                  color="secondary"
+                  onPress={() => {
+                    fitView(
+                      fitViewToNode({
+                        id: `${baseNodeId}_step_${step.id - 1}`,
+                      }),
+                    );
+                  }}
+                >
+                  <ChevronUpIcon />
+                </Button>
+              )}
+              {step.id < numSteps - 1 && (
+                <Button
+                  isIconOnly
+                  color="secondary"
+                  onPress={(_) => {
+                    fitView(
+                      fitViewToNode({
+                        id: `${baseNodeId}_step_${step.id + 1}`,
+                      }),
+                    );
+                  }}
+                >
+                  <ChevronDownIcon />
+                </Button>
+              )}
               <Button
                 isIconOnly
                 color="secondary"
                 onPress={(_) => {
-                  fitView(
-                    fitViewToNode({ id: `${baseNodeId}_step_${step.id + 1}` }),
-                  );
+                  setCurrentSample(sampleId);
+                  fitView(fitViewToNode({ id: `${baseNodeId}` }));
                 }}
               >
-                <ChevronDownIcon />
+                <ArrowsPointingOutIcon />
               </Button>
-            )}
-            <Button
-              isIconOnly
-              color="secondary"
-              onPress={(_) => {
-                setCurrentSample(sampleId);
-                fitView(fitViewToNode({ id: `${baseNodeId}` }));
-              }}
-            >
-              <ArrowsPointingOutIcon />
-            </Button>
-          </ButtonGroup>
+            </ButtonGroup>
+          )}
         </div>
       </CardHeader>
       <CardBody>
@@ -173,7 +196,7 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
   return (
     <>
       <NodeToolbar
-        isVisible={zoom >= 0.25}
+        isVisible={zoom >= 0.45}
         position={Position.Top}
         align="center"
       >
@@ -192,7 +215,7 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
             Return
           </Button>
           <Button
-            className="bg-secondary-100"
+            className="bg-secondary-100 font-bold"
             endContent={<SquaresPlusIcon className="size-5" />}
             onPress={showConcept}
           >

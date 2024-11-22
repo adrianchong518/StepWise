@@ -16,6 +16,7 @@ export async function GET(
       name: data.name,
       question: data.question,
       concept: data.Concept,
+      figure: data.figure ?? undefined,
       steps: Object.values(data.steps).map((s, id) => ({
         id,
         text: s.text,

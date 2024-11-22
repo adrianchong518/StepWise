@@ -17,6 +17,7 @@ import {
   Divider,
   Input,
   Link,
+  Tooltip,
 } from "@nextui-org/react";
 import {
   Handle,
@@ -89,8 +90,10 @@ const NewNodeButton = ({
   next: { stepId: StepId } | { sampleId?: SampleId };
   className?: string;
 }) => {
+  const { showExplain } = useStore((s) => ({ showExplain: s.showExplain }));
   const showSample = useShowSample();
   const showStep = useShowStep();
+  const { fitView } = useReactFlow();
 
   const [status, setStatus] = useState<
     "active" | "correct" | "wrong" | "inactive"
@@ -103,26 +106,92 @@ const NewNodeButton = ({
         showStep(next.stepId);
       } else if ("sampleId" in next) {
         setStatus("wrong");
-        showSample(stepId, next.sampleId);
+        // HACK:
+        if (stepId == 1) {
+          if (children == "Cosine law") {
+            showExplain(2);
+          } else {
+            showExplain(1);
+          }
+          await timeout(200);
+          fitView({
+            nodes: [
+              { id: "Math_2023_17_a_step_1" },
+              { id: "explain1" },
+              { id: "explain2" },
+            ],
+            padding: 0.3,
+            maxZoom: 1.5,
+            duration: 350,
+          });
+        }
+        // showSample(stepId, next.sampleId);
+      }
+    })();
+  }, [setStatus, showSample, showStep]);
+
+  const newExplain = useCallback(() => {
+    (async () => {
+      if ("stepId" in next) {
+        // HACK:
+        showSample(stepId, 1);
+      } else if ("sampleId" in next) {
+        // HACK:
+        if (stepId == 1) {
+          if (children == "Cosine law") {
+            showExplain(2);
+          } else {
+            showExplain(1);
+          }
+          await timeout(200);
+          fitView({
+            nodes: [
+              { id: "Math_2023_17_a_step_1" },
+              { id: "explain1" },
+              { id: "explain2" },
+            ],
+            padding: 0.3,
+            maxZoom: 1.5,
+            duration: 350,
+          });
+        }
       }
     })();
   }, [setStatus, showSample, showStep]);
 
   return (
-    <Button
-      className={`font-medium transition-colors text-wrap text-gray-50 h-fit p-2 ${className}`}
-      color={
-        status === "correct"
-          ? "success"
-          : status === "wrong"
-            ? "secondary"
-            : "primary"
-      }
-      onPress={newNode}
-      isDisabled={status === "inactive" || status === "wrong"}
-    >
-      <KatexSpan>{children}</KatexSpan>
-    </Button>
+    <ButtonGroup>
+      <Button
+        className={`font-medium transition-colors text-wrap text-gray-50 h-fit p-2 ${className}`}
+        color={
+          status === "correct"
+            ? "success"
+            : status === "wrong"
+              ? "secondary"
+              : "primary"
+        }
+        onPress={newNode}
+        // isDisabled={status === "inactive" || status === "wrong"}
+      >
+        <KatexSpan>{children}</KatexSpan>
+      </Button>
+      {children != "OK" && (
+        <Button
+          isIconOnly
+          className={`text-gray-50 h-fit p-2`}
+          color={
+            status === "correct"
+              ? "success"
+              : status === "wrong"
+                ? "secondary"
+                : "primary"
+          }
+          onPress={newExplain}
+        >
+          <QuestionMarkCircleIcon className="size-5" />
+        </Button>
+      )}
+    </ButtonGroup>
   );
 };
 
@@ -138,18 +207,20 @@ const OptionResponseInput = ({
   sampleId?: SampleId;
 }) =>
   optRes.options.length === 1 ? (
-    <NewNodeButton
-      key={`${questionId}_${stepId}_${optRes.type}`}
-      stepId={stepId}
-      next={
-        optRes.options[0].nextStep
-          ? { stepId: optRes.options[0].nextStep }
-          : { sampleId }
-      }
-      className="w-[10em]"
-    >
-      {optRes.options[0].value}
-    </NewNodeButton>
+    <div className="flex flex-row justify-center w-full">
+      <NewNodeButton
+        key={`${questionId}_${stepId}_${optRes.type}`}
+        stepId={stepId}
+        next={
+          optRes.options[0].nextStep
+            ? { stepId: optRes.options[0].nextStep }
+            : { sampleId }
+        }
+        className="w-[10em]"
+      >
+        {optRes.options[0].value}
+      </NewNodeButton>
+    </div>
   ) : (
     <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
       {optRes.options.map(({ value, nextStep }) => (
@@ -214,11 +285,11 @@ const MultiOptionResponseInput = ({
   }, [checkbox, showStep, showSample]);
 
   return (
-    <div className="grid grid-cols-2 gap-6 w-full">
+    <div className="grid grid-cols-2 gap-6 w-full justify-stretch place-items-stretch">
       {multiOptRes.options.map((value) => (
         <Checkbox
           key={`${questionId}_${stepId}_${value}`}
-          className={`${checkbox[value] ? "bg-primary-100" : "bg-default-100"} rounded-xl w-full`}
+          className={`${checkbox[value] ? "bg-primary-100" : "bg-default-100"} rounded-xl max-w-full`}
           isSelected={checkbox[value]}
           onValueChange={(selected) => updateCheckbox(value, selected)}
         >
@@ -328,6 +399,7 @@ const EndStepNode = ({
     nodes: s.nodes,
     setCurrentStep: s.setCurrentStep,
   }));
+  const showStep = useShowStep();
   const { fitView } = useReactFlow();
 
   return (
@@ -448,26 +520,27 @@ export function StepNode({
         <div className="flex w-full items-center justify-between">
           <h4 className="text-2xl font-medium">Step {stepNumber}</h4>
           <ButtonGroup className="justify-self-end transition-colors">
-            {stepNumber != 0 && (
-              <Button
-                isIconOnly
-                color="primary"
-                className="bg-primary-100 text-gray-700"
-                onPress={(_) => {
-                  setCurrentStep(displayedSteps[0]);
-                  fitView(
-                    fitViewToNode({
-                      id: getStepNodeId(
-                        question.id,
-                        displayedSteps[stepNumber - 1],
-                      ),
-                    }),
-                  );
-                }}
-              >
-                <ChevronUpIcon />
-              </Button>
-            )}
+            <Button
+              isIconOnly
+              color="primary"
+              className="bg-primary-100 text-gray-700"
+              onPress={(_) => {
+                setCurrentStep(displayedSteps[stepNumber - 1]);
+                fitView(
+                  fitViewToNode({
+                    id:
+                      stepNumber == 0
+                        ? question.id
+                        : getStepNodeId(
+                            question.id,
+                            displayedSteps[stepNumber - 1],
+                          ),
+                  }),
+                );
+              }}
+            >
+              <ChevronUpIcon />
+            </Button>
             {hasNextStep && (
               <Button
                 isIconOnly
@@ -475,7 +548,7 @@ export function StepNode({
                 className="bg-primary-100 text-gray-700"
                 isDisabled={!hasNextStep}
                 onPress={(_) => {
-                  setCurrentStep(displayedSteps[0]);
+                  setCurrentStep(displayedSteps[stepNumber + 1]);
                   fitView(
                     fitViewToNode({
                       id: getStepNodeId(
@@ -496,7 +569,7 @@ export function StepNode({
       <CardBody>
         <div className="flex flex-row justify-between w-full text-md">
           <div className="w-1/2 p-8 self-center flex flex-col justify-center gap-12">
-            <div className="w-full items-center">
+            <div className="w-full items-center text-lg">
               <KatexSpan>{step.prompt}</KatexSpan>
             </div>
             <div className="w-full place-self-center">
@@ -544,10 +617,14 @@ export function StepNode({
         </div>
       </CardBody>
 
-      {step.sampleId && false && (
+      {step.sampleId && (
         <CardFooter>
-          <div className="flex flex-row justify-end w-full">
+          <div className="flex flex-row justify-end w-full gap-2">
+            <div className="text-xs place-self-center">
+              See a sample question to help you along!
+            </div>
             <Button
+              className="bg-secondary-100"
               startContent={<QuestionMarkCircleIcon className="size-5" />}
               onPress={() => {
                 showSample(step.id, step.sampleId);
@@ -575,6 +652,12 @@ export function StepNode({
         type="source"
         position={Position.Right}
         id="explain"
+        className="invisible"
+      />
+      <Handle
+        type="source"
+        position={Position.Left}
+        id="explainer"
         className="invisible"
       />
     </Card>

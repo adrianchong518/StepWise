@@ -1,5 +1,6 @@
 "use client";
 
+import { MarkerType } from "@xyflow/react";
 import { createContext, useContext, useRef, type ReactNode } from "react";
 import { useStore } from "zustand";
 import { useShallow } from "zustand/shallow";
@@ -10,6 +11,7 @@ import type { Question, StepId } from "@/app/api/question";
 import type { Sample, SampleId, SampleStepId } from "@/app/api/sample";
 import { nextTick } from "@/app/utils";
 import { layoutELK } from "@/app/utils/auto-layout";
+import tailwindConfig from "@/app/utils/tailwind";
 import { ConceptNode } from "../components/ConceptNode";
 import type {
   SampleNode,
@@ -46,6 +48,7 @@ export type DemoStore = GraphStore & {
   addSample: (baseNodeId: string, sample: Sample) => Promise<void>;
   currentSample: SampleId;
   setCurrentSample: (sampleId: SampleId) => void;
+  showExplain: (id: number) => void;
 
   displayedConcepts: ConceptId[];
   addConcept: (
@@ -68,14 +71,53 @@ const createDemoStore = () =>
           question,
           nodes: [
             createNode({
+              id: question.id,
+              type: "question",
+              data: {
+                questionId: question.id,
+                questionDetail: question.details,
+              },
+              position: { x: 0, y: 0 },
+            }),
+            createNode({
               id: getStepNodeId(question.id, 0),
               type: "step",
               data: { questionId: question.id, stepNumber: 0, stepId: 0 },
-              position: { x: 0, y: 0 },
+              position: { x: 0, y: 700 },
+            }),
+            createNode({
+              id: "explain1",
+              type: "explainer",
+              data: {
+                title: "Herons Formula",
+                content: "blah blah",
+                stepNodeId: getStepNodeId(question.id, 1),
+              },
+              position: { x: -800, y: 1150 },
+              hidden: true,
+            }),
+            createNode({
+              id: "explain2",
+              type: "explainer",
+              data: {
+                title: "Cosine Formula",
+                content: "blah blah",
+                stepNodeId: getStepNodeId(question.id, 1),
+              },
+              position: { x: -800, y: 1500 },
+              hidden: true,
             }),
           ],
           displayedSteps: [question.steps[0].id],
-          edges: [],
+          edges: [
+            createEdge({
+              id: `${question.id}->${getStepNodeId(question.id, 0)}`,
+              source: question.id,
+              sourceHandle: "next-step",
+              target: getStepNodeId(question.id, 0),
+              targetHandle: "prev-step",
+            }),
+          ],
           currentStep: 0,
           displayedSamples: [],
           displayedConcepts: [],
@@ -104,7 +146,7 @@ const createDemoStore = () =>
             stepNumber: get().displayedSteps.length,
             stepId: step,
           },
-          position: { x: 0, y: 700 * get().displayedSteps.length },
+          position: { x: 0, y: 700 * get().displayedSteps.length + 700 },
         });
 
         const nextStepEdge = createEdge({
@@ -121,7 +163,45 @@ const createDemoStore = () =>
           edges: [...get().edges, nextStepEdge],
         });
 
+        if (step == 1) {
+          set({
+            edges: [
+              ...get().edges,
+              createEdge({
+                id: `explain1`,
+                source: target,
+                sourceHandle: "explainer",
+                target: "explain1",
+                hidden: true,
+              }),
+              createEdge({
+                id: `explain2`,
+                source: target,
+                sourceHandle: "explainer",
+                target: "explain2",
+                hidden: true,
+              }),
+            ],
+          });
+        }
+
         return { nodeId: newNode.id, edgeId: nextStepEdge.id };
+      },
+      showExplain: (id) => {
+        set({
+          nodes: get().nodes.map((n) => {
+            if (n.id == `explain${id}`) {
+              return { ...n, hidden: false };
+            }
+            return n;
+          }),
+          edges: get().edges.map((e) => {
+            if (e.id == `explain${id}`) {
+              return { ...e, hidden: false };
+            }
+            return e;
+          }),
+        });
       },
 
       currentStep: 0,
@@ -182,24 +262,24 @@ const createDemoStore = () =>
         const questionNodeId = `${baseNodeId}_question`;
         const stepNodeId = (id: SampleStepId) => `${baseNodeId}_step_${id}`;
 
-        const newEdges = [
+        const newEdges = sample.steps.flatMap((step) =>
           createEdge({
-            id: `${questionNodeId}->${stepNodeId(0)}`,
+            id: `${questionNodeId}->${stepNodeId(step.id)}`,
             source: questionNodeId,
-            target: stepNodeId(0),
+            target: stepNodeId(step.id),
             zIndex: 1,
+            style: {
+              strokeWidth: 4,
+              stroke: tailwindConfig.colors.purple[300],
+            },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20,
+              color: tailwindConfig.colors.purple[400],
+            },
           }),
-          ...sample.steps.flatMap((step) =>
-            step.links.map((next) =>
-              createEdge({
-                id: `${stepNodeId(step.id)}->${stepNodeId(next)}`,
-                source: stepNodeId(step.id),
-                target: stepNodeId(next),
-                zIndex: 1,
-              }),
-            ),
-          ),
-        ];
+        );
 
         set({
           displayedSamples: [...get().displayedSamples, sample.id],

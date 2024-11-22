@@ -1,5 +1,14 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+} from "@nextui-org/react";
 import {
   Handle,
   Position,
@@ -48,8 +57,8 @@ export function ConceptNode({ data: { conceptId } }: NodeProps<ConceptNode>) {
       </CardHeader>
       <CardBody>
         {concept.figure ? (
-          <div className="w-full flex flex-col items-center">
-            <div className="text-md">
+          <div className="w-full flex flex-row items-center">
+            <div className="w-1/2 p-8 text-md">
               <KatexSpan>
                 <div
                   dangerouslySetInnerHTML={{ __html: concept.text }}
@@ -75,6 +84,24 @@ export function ConceptNode({ data: { conceptId } }: NodeProps<ConceptNode>) {
           </div>
         )}
       </CardBody>
+
+      <Divider />
+
+      <CardFooter>
+        <Accordion>
+          <AccordionItem
+            key="1"
+            title="Similar Questions that you have done before"
+          >
+            <div className="grid grid-cols-2 w-full gap-y-3 gap-x-5">
+              <Button>HKDSE 2022 Mathematics Paper 1 Q18</Button>
+              <Button>HKDSE 2022 Mathematics Paper 2 Q12</Button>
+              <Button>HKDSE 2022 Mathematics Paper 2 Q35</Button>
+              <Button>HKDSE 2021 Mathematics Paper 1 Q5</Button>
+            </div>
+          </AccordionItem>
+        </Accordion>
+      </CardFooter>
 
       <Handle type="target" position={Position.Left} className="invisible" />
     </Card>

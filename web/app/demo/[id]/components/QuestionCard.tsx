@@ -26,7 +26,7 @@ export default function QuestionCard({
     <Card className="max-w-[40em]">
       <CardHeader className="bg-primary-500 text-gray-100">
         <Button
-          className="justify-self-end"
+          className="justify-self-end h-fit"
           color="primary"
           disableAnimation
           size="lg"
@@ -42,10 +42,10 @@ export default function QuestionCard({
           }}
         >
           <div className="flex flex-col justify-center items-start">
-            <div className="text-2xl">
+            <div className="text-3xl">
               {question.source.kind} {question.source.year} {question.subject}
             </div>
-            <div className="text-lg">
+            <div className="text-2xl">
               Question {question.number}({question.part})
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function QuestionCard({
       {expanded && (
         <>
           <Divider />
-          <CardBody className="text-md">
+          <CardBody className="text-xl">
             <KatexSpan>{question.content}</KatexSpan>
           </CardBody>
           <Divider />

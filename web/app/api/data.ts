@@ -55,14 +55,14 @@ export const questionData = {
     steps: {
       "0": {
         id: 0,
-        prompt: "From the questions, we've obtain the following variables",
+        prompt: "From the questions, we have obtained these known variables.",
         variables: ["triangle WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
         response: {
           type: "option",
           options: [
             {
               value: ["OK"],
-              nextStep: [1],
+              nextStep: 1,
             },
           ],
         },
@@ -76,11 +76,11 @@ export const questionData = {
           type: "option",
           options: [
             {
-              value: "sine law",
+              value: "Sine law",
               nextStep: 2,
             },
             {
-              value: "cosine law",
+              value: "Cosine law",
             },
             {
               value: "Herons Formula",
@@ -91,7 +91,8 @@ export const questionData = {
       },
       "2": {
         id: 2,
-        prompt: "How can we apply sin law?",
+        prompt:
+          "Which of these variables should be used in applying sine law? (You can choose multiple options.)",
         variables: [
           "triangle WXY",
           "WX",
@@ -115,14 +116,14 @@ export const questionData = {
       },
       "3": {
         id: 3,
-        prompt: "Apply sin law, what is the answer? (correct to 3 sig fig)",
+        prompt: "Applying sine law, what is the answer? (correct to 3 sig fig)",
         variables: ["triangle WXY", "WX", "XY", "\\angle WYX", "\\angle XWY"],
         response: {
           type: "number",
           value: 51.5,
           nextStep: 4,
         },
-        "Sample Questions": 10,
+        "Sample Questions": 1,
       },
       "4": {
         id: 4,
@@ -932,42 +933,12 @@ export const sampleData = {
         name: "Sine Law",
         question:
           "In \\( \\triangle ABC \\), \\( AB = 8 cm \\), \\( BC = 5 cm \\), and \\( \\angle CAB = 20^\\circ \\). Find \\( \\angle ACB \\) and \\( AC \\).",
-        figure: "image\\Sample\\MATH_Sample1\\Photo1.svg",
+        figure: "image/Sample/MATH_Sample1/Photo1.svg",
         Concept: 1,
         steps: {
           "0": {
             id: 0,
             text: "\\[\n\\begin{align*}\n\\text{By the sine law,}& \\\\\n\\frac{8 cm}{sin{\\angle ACB}} &= \\frac{5 cm}{sin{20^\\circ}} \\\\\n\\angle ACB &\\approx 33.177^\\circ \\text{ or } 146.823^\\circ \\\\\n&\\approx \\underline{\\underline{33.2^\\circ}} \\text { or } \\underline{\\underline{146.8^\\circ}}\n\\textit{(cor. to 1 d.p.)} \\\\\n\\end{align*}\n\\]",
-            Photo: null,
-            Links: [1, 3],
-          },
-          "1": {
-            id: 1,
-            text: "\\[\n\\begin{align*}\n\\text{For } \\angle ACB \\approx 33.177^\\circ \\text{,}& \\\\\n\\angle CBA &\\approx 180^\\circ - 20^\\circ - 33.177^\\circ \\textit{(} \\angle \\textit{ sum of } \\triangle\n\\textit{)} \\\\\n&=126.823^\\circ\n\\end{align*}\n\\]",
-            Photo: "image/Sample/MATH_Sample1/Photo2.svg",
-            Links: [2],
-          },
-          "2": {
-            id: 2,
-            text: "\\[\n\\begin{align*}\n\\text{By the sine law,}& \\\\\n\\frac{AC}{sin{126.823^\\circ}} &\\approx \\frac{5 cm}{sin{20^\\circ}} \\\\\nAC &\\approx \\underline{\\underline{11.7 cm}} \\textit{(cor. to 1 d.p.)} \\\\\n\\end{align*}\n\\]",
-            Photo: null,
-            Links: [5],
-          },
-          "3": {
-            id: 3,
-            text: "\\[\n\\begin{align*}\n\\text{For } \\angle ACB \\approx 146.823^\\circ \\text{,}& \\\\\n\\angle CBA &\\approx 180^\\circ - 20^\\circ - 146.823^\\circ \\textit{(} \\angle \\textit{ sum of } \\triangle\n\\textit{)} \\\\\n&=13.177^\\circ\n\\end{align*}\n\\]",
-            Photo: "image/Sample/MATH_Sample1/Photo3.svg",
-            Links: [4],
-          },
-          "4": {
-            id: 4,
-            text: "\\[\n\\begin{align*}\n\\text{By the sine law,}& \\\\\n\\frac{AC}{sin{13.177^\\circ}} &\\approx \\frac{5 cm}{sin{20^\\circ}} \\\\\nAC &\\approx \\underline{\\underline{3.3 cm}} \\textit{(cor. to 1 d.p.)} \\\\\n\\end{align*}\n\\]",
-            Photo: null,
-            Links: [5],
-          },
-          "5": {
-            id: 5,
-            text: "\\[\n\\left\\{\n\\begin{aligned}\n\\angle CBA &\\approx 33.177^\\circ \\\\\nAC &\\approx 11.7 cm \\\\\n\\end{aligned}\n\\right.\n\\text{ or }\n\\left\\{\n\\begin{aligned}\n\\angle CBA &\\approx 146.823^\\circ \\\\\nAC &\\approx 3.3 cm \\\\\n\\end{aligned}\n\\right.\n\\]",
             Photo: null,
             Links: [],
           },
@@ -2649,7 +2620,7 @@ export const conceptData = {
         id: 1,
         subject: "Mathematics",
         name: "Sine Formula",
-        text: '\\[\n\\begin{align*}\n\\text{Sine Law:} \\\\\n\\frac{a}{sin{A}}&=\\frac{b}{sin{B}}=\\frac{c}{sin{C}} \\text{ or } \\\\\n\\frac{sin{A}}{a}&=\\frac{sin{B}}{b}=\\frac{sin{C}}{c} \\\\\n\\end{align*}\n\\]\n<p style="text-align: center;">\nThis is commonly used when you have to find <b>specific lines/angles</b> in a triangle, when you find some\n<b>pairs</b>.\n</p>',
+        text: "\\[\n\\begin{align*}\n\\text{Sine Law:} \\\\\n\\frac{a}{sin{A}}&=\\frac{b}{sin{B}}=\\frac{c}{sin{C}} \\text{ or } \\\\\n\\frac{sin{A}}{a}&=\\frac{sin{B}}{b}=\\frac{sin{C}}{c} \\\\\n\\end{align*}\n\\]\n\nThis is commonly used when you have to find <b>specific lines/angles</b> in a triangle, when you find some\n<b>pairs</b>.",
         figure: "image/Concepts/MATH_Concept1/Photo1.svg",
       },
       "3": {
