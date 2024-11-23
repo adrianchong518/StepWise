@@ -90,7 +90,8 @@ const createDemoStore = () =>
               type: "explainer",
               data: {
                 title: "Herons Formula",
-                content: "blah blah",
+                content:
+                  "Herons Formula is usually used to find the area of a triangle using the lengths of the three sides.",
                 stepNodeId: getStepNodeId(question.id, 1),
               },
               position: { x: -800, y: 1150 },
@@ -101,7 +102,8 @@ const createDemoStore = () =>
               type: "explainer",
               data: {
                 title: "Cosine Formula",
-                content: "blah blah",
+                content:
+                  "To use the cosine formula for finding an angle, you need the all three side lengths of the triangle.",
                 stepNodeId: getStepNodeId(question.id, 1),
               },
               position: { x: -800, y: 1500 },
