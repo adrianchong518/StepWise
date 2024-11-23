@@ -443,7 +443,7 @@ const EndStepNode = ({
               color="primary"
               className="bg-primary-500 text-gray-100"
               as={Link}
-              href="/"
+              href="/catalog"
             >
               Return to home
             </Button>

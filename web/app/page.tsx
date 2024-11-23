@@ -16,7 +16,7 @@ export default function Page() {
             color="primary"
             endContent={<ArrowRightIcon className="w-5 md:w-6" />}
             as={Link}
-            href="/demo/Math_2023_17_a"
+            href="/catalog"
           >
             <span className="font-medium">Get Started</span>
           </Button>

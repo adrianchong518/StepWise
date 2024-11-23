@@ -26,7 +26,7 @@ import {
   SampleStepNode,
 } from "./components/SampleNode";
 import { StepNode } from "./components/StepNode";
-import { fitViewToNode } from "./lib";
+import { fitViewToNode, getStepNodeId } from "./lib";
 import useStore from "./store";
 import { DemoNode } from "./store/graph";
 
@@ -35,7 +35,7 @@ import {
   ArrowsPointingOutIcon,
   ChevronDoubleDownIcon,
 } from "@heroicons/react/24/outline";
-import { Button, ButtonGroup, Tooltip } from "@nextui-org/react";
+import { Button, ButtonGroup, Link, Tooltip } from "@nextui-org/react";
 import "@xyflow/react/dist/style.css";
 
 const nodeTypes = {
@@ -61,6 +61,7 @@ export default function Demo() {
     setQuestionExpanded,
     setCurrentStep,
     setCurrentSample,
+    displayedSteps,
   } = useStore((s) => ({
     nodes: s.nodes,
     edges: s.edges,
@@ -73,6 +74,7 @@ export default function Demo() {
     setQuestionExpanded: s.setQuestionExpanded,
     setCurrentStep: s.setCurrentStep,
     setCurrentSample: s.setCurrentSample,
+    displayedSteps: s.displayedSteps,
   }));
 
   const { data: question } = useSWR<Question>(`/api/question/${questionId}`);
@@ -132,7 +134,23 @@ export default function Demo() {
         <Panel position="top-center">
           <ButtonGroup>
             <Tooltip content="Go to latest step">
-              <Button isIconOnly className="p-1 bg-primary-50" size="lg">
+              <Button
+                isIconOnly
+                className="p-1 bg-primary-50"
+                size="lg"
+                onPress={() => {
+                  setCurrentStep(displayedSteps[displayedSteps.length - 1]);
+                  fitView({
+                    ...fitViewToNode({
+                      id: getStepNodeId(
+                        questionId,
+                        displayedSteps[displayedSteps.length - 1],
+                      ),
+                    }),
+                    duration: 750,
+                  });
+                }}
+              >
                 <ChevronDoubleDownIcon />
               </Button>
             </Tooltip>
@@ -142,7 +160,13 @@ export default function Demo() {
               </Button>
             </Tooltip>
             <Tooltip content="Exit">
-              <Button isIconOnly className="p-1 bg-primary-50" size="lg">
+              <Button
+                isIconOnly
+                className="p-1 bg-primary-50"
+                size="lg"
+                as={Link}
+                href="/catalog"
+              >
                 <ArrowLeftStartOnRectangleIcon />
               </Button>
             </Tooltip>
