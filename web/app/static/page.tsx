@@ -54,8 +54,8 @@ const nodeTypes = {
 };
 
 export default function Page() {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
 
   const { setQuestionExpanded, setCurrentStep, setCurrentSample } = useStore(
@@ -116,7 +116,29 @@ export default function Page() {
               </Button>
             </Tooltip>
             <Tooltip content="Expand all nodes">
-              <Button isIconOnly className="p-1 bg-primary-50" size="lg">
+              <Button
+                isIconOnly
+                className="p-1 bg-primary-50"
+                size="lg"
+                onPress={() => {
+                  setNodes(
+                    nodes.map((n) => {
+                      if (n.hidden) {
+                        return { ...n, hidden: false };
+                      }
+                      return n;
+                    }),
+                  );
+                  setEdges(
+                    edges.map((e) => {
+                      if (e.hidden) {
+                        return { ...e, hidden: false };
+                      }
+                      return e;
+                    }),
+                  );
+                }}
+              >
                 <ArrowsPointingOutIcon />
               </Button>
             </Tooltip>

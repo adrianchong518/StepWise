@@ -7,7 +7,7 @@ import {
   NodeProps,
   Position,
 } from "@xyflow/react";
-import React, { CSSProperties } from "react";
+import React from "react";
 import { QuestionDetails } from "../api/question";
 import { ConceptNode } from "./components/ConceptNode";
 import { ExplainerNode } from "./components/ExplainerNode";
@@ -20,7 +20,7 @@ import {
 import { StepNode } from "./components/StepNode";
 import { createEdge, createNode } from "./lib";
 
-const invisibleNodeStyle: CSSProperties = {
+const invisibleNodeStyle: any = {
   height: 1,
   width: 150,
   padding: 0,
@@ -322,6 +322,7 @@ Thus, consider using easier approach!`,
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step8",
     type: "step",
     position: { x: -2000, y: 5200 },
@@ -450,6 +451,7 @@ Thus, consider using easier approach!`,
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step12",
     type: "step",
     position: { x: -1000, y: 8000 },
@@ -500,6 +502,7 @@ Thus, consider using easier approach!`,
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step14",
     type: "step",
     position: { x: 1000, y: 6400 },
@@ -530,6 +533,7 @@ Thus, consider using easier approach!`,
     },
   }),
   createNode<ExplainerNode>({
+    hidden: true,
     id: "explain5",
     type: "explainer",
     position: { x: 2000, y: 6400 },
@@ -540,6 +544,7 @@ Thus, consider using easier approach!`,
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step15",
     type: "step",
     position: { x: 1000, y: 7200 },
@@ -651,30 +656,35 @@ Thus, consider using easier approach!`,
     },
   }),
   createNode<InvisibleHelperNode>({
+    hidden: true,
     id: "step8_top",
     type: "invisible",
     position: { x: -2000, y: 4600 },
     data: {},
   }),
   createNode<InvisibleHelperNode>({
+    hidden: true,
     id: "step8_bottom",
     type: "invisible",
     position: { x: -2000, y: 6000 },
     data: {},
   }),
   createNode<InvisibleHelperNode>({
+    hidden: true,
     id: "step8_bottom2",
     type: "invisible",
     position: { x: -2000, y: 9000 },
     data: {},
   }),
   createNode<InvisibleHelperNode>({
+    hidden: true,
     id: "step12_top",
     type: "invisible",
     position: { x: -1000, y: 6800 },
     data: {},
   }),
   createNode<InvisibleHelperNode>({
+    hidden: true,
     id: "step15_bottom",
     type: "invisible",
     position: { x: 1000, y: 10600 },
@@ -1188,6 +1198,7 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step28",
     type: "step",
     position: { x: -2000, y: 12800 },
@@ -1218,6 +1229,7 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step29",
     type: "step",
     position: { x: -2000, y: 13600 },
@@ -1248,6 +1260,7 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step30",
     type: "step",
     position: { x: -2000, y: 14400 },
@@ -1268,6 +1281,7 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "step31",
     type: "step",
     position: { x: -2000, y: 15200 },
@@ -1298,6 +1312,7 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     },
   }),
   createNode<StepNode>({
+    hidden: true,
     id: "input13",
     type: "step",
     position: { x: -2000, y: 16000 },
@@ -1312,6 +1327,7 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     },
   }),
   createNode<InvisibleHelperNode>({
+    hidden: true,
     id: "input13_bottom",
     type: "invisible",
     position: { x: -2000, y: 25200 },
@@ -1395,6 +1411,7 @@ export const initialEdges: Edge[] = [
   }),
   createEdge(
     {
+      hidden: true,
       id: "step5->step8_top",
       source: "step5",
       sourceHandle: "next-step",
@@ -1403,6 +1420,7 @@ export const initialEdges: Edge[] = [
     false,
   ),
   createEdge({
+    hidden: true,
     id: "step8_top->step8",
     source: "step8_top",
     target: "step8",
@@ -1421,6 +1439,7 @@ export const initialEdges: Edge[] = [
   }),
   createEdge(
     {
+      hidden: true,
       id: "step8->step8_bottom",
       source: "step8",
       sourceHandle: "next-step",
@@ -1430,6 +1449,7 @@ export const initialEdges: Edge[] = [
   ),
   createEdge(
     {
+      hidden: true,
       id: "step8->step8_bottom2",
       source: "step8",
       sourceHandle: "next-step",
@@ -1438,6 +1458,7 @@ export const initialEdges: Edge[] = [
     false,
   ),
   createEdge({
+    hidden: true,
     id: "step8_bottom->step9",
     source: "step8_bottom",
     target: "step9",
@@ -1462,6 +1483,7 @@ export const initialEdges: Edge[] = [
   }),
   createEdge(
     {
+      hidden: true,
       id: "step9->step12_top",
       source: "step9",
       sourceHandle: "next-step",
@@ -1470,23 +1492,27 @@ export const initialEdges: Edge[] = [
     false,
   ),
   createEdge({
+    hidden: true,
     id: "step12_top->step12",
     source: "step12_top",
     target: "step12",
   }),
   createEdge({
+    hidden: true,
     id: "step12->step13",
     source: "step12",
     sourceHandle: "next-step",
     target: "step13",
   }),
   createEdge({
+    hidden: true,
     id: "step7->step14",
     source: "step7",
     sourceHandle: "next-step",
     target: "step14",
   }),
   createEdge({
+    hidden: true,
     id: "step14->step15",
     source: "step14",
     sourceHandle: "next-step",
@@ -1499,6 +1525,7 @@ export const initialEdges: Edge[] = [
     target: "step16",
   }),
   createEdge({
+    hidden: true,
     id: "step8_bottom2->step16",
     source: "step8_bottom2",
     target: "step16",
@@ -1517,6 +1544,7 @@ export const initialEdges: Edge[] = [
   }),
   createEdge(
     {
+      hidden: true,
       id: "step15->step15_bottom",
       source: "step15",
       sourceHandle: "next-step",
@@ -1525,6 +1553,7 @@ export const initialEdges: Edge[] = [
     false,
   ),
   createEdge({
+    hidden: true,
     id: "step15_bottom->step18",
     source: "step15_bottom",
     target: "step18",
@@ -1615,6 +1644,7 @@ export const initialEdges: Edge[] = [
     target: "explain4",
   }),
   createEdge({
+    hidden: true,
     id: "step14->explain5",
     source: "step14",
     sourceHandle: "explain",
@@ -1741,30 +1771,35 @@ export const initialEdges: Edge[] = [
     target: "explain8",
   }),
   createEdge({
+    hidden: true,
     id: "step19->step28",
     source: "step19",
     sourceHandle: "next-step",
     target: "step28",
   }),
   createEdge({
+    hidden: true,
     id: "step28->step29",
     source: "step28",
     sourceHandle: "next-step",
     target: "step29",
   }),
   createEdge({
+    hidden: true,
     id: "step29->step30",
     source: "step29",
     sourceHandle: "next-step",
     target: "step30",
   }),
   createEdge({
+    hidden: true,
     id: "step30->step31",
     source: "step30",
     sourceHandle: "next-step",
     target: "step31",
   }),
   createEdge({
+    hidden: true,
     id: "step31->input13",
     source: "step31",
     sourceHandle: "next-step",
@@ -1772,6 +1807,7 @@ export const initialEdges: Edge[] = [
   }),
   createEdge(
     {
+      hidden: true,
       id: "input13->input13_bottom",
       source: "input13",
       sourceHandle: "next-step",
@@ -1780,6 +1816,7 @@ export const initialEdges: Edge[] = [
     false,
   ),
   createEdge({
+    hidden: true,
     id: "input13_bottom->input21",
     source: "input13_bottom",
     target: "input21",
