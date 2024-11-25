@@ -18,7 +18,6 @@ import {
   Divider,
   Input,
   Link,
-  Tooltip,
 } from "@nextui-org/react";
 import {
   Handle,
@@ -29,141 +28,62 @@ import {
 } from "@xyflow/react";
 import { ReactNode, useCallback, useState } from "react";
 
-import type {
-  MultiOptionResponse,
-  NumberResponse,
-  OptionResponse,
-  QuestionId,
-  StepId,
-} from "@/app/api/question";
-import type { SampleId } from "@/app/api/sample";
 import KatexSpan from "@/app/components/KatexSpan";
-import { nextTick, timeout } from "@/app/utils";
 import { fitViewToNode, getStepNodeId } from "../lib";
 import useStore from "../store";
 
 const useShowStep = () => {
-  const { addStep, setCurrentStep } = useStore((s) => ({
-    addStep: s.addStep,
+  const { setCurrentStep } = useStore((s) => ({
     setCurrentStep: s.setCurrentStep,
   }));
   const { fitView } = useReactFlow();
 
-  return useCallback((stepId: StepId) => {
+  return useCallback((step: string) => {
     (async () => {
-      const id = addStep(stepId)?.nodeId;
-      await nextTick(2);
-      await timeout(300);
-      setCurrentStep(stepId);
-      id && fitView(fitViewToNode({ id }));
+      setCurrentStep(step);
+      fitView(fitViewToNode({ id: step }));
     })();
   }, []);
 };
 
 const useShowSample = () => {
-  const { addSampleBase, setCurrentSample } = useStore((s) => ({
-    addSampleBase: s.addSampleBase,
+  const { setCurrentSample } = useStore((s) => ({
     setCurrentSample: s.setCurrentSample,
   }));
   const { fitView } = useReactFlow();
 
-  return useCallback((stepId: StepId, sampleId?: SampleId) => {
-    if (!sampleId) return;
-    (async () => {
-      const ret = addSampleBase(stepId, sampleId);
-      if (ret && ret.exists) {
-        await timeout(300);
-        fitView(fitViewToNode({ id: ret.nodeId }));
-      }
-      setCurrentSample(sampleId);
-    })();
+  return useCallback((sample: string) => {
+    setCurrentSample(sample);
+    fitView(fitViewToNode({ id: sample }));
   }, []);
 };
 
 const NewNodeButton = ({
   children,
-  stepId,
   next,
   className,
+  status,
 }: {
   children: ReactNode;
-  stepId: StepId;
-  next: { stepId: StepId } | { sampleId?: SampleId };
+  next: { step: string } | { explain: string };
   className?: string;
+  status: "active" | "correct" | "wrong" | "inactive";
 }) => {
-  const { showExplain } = useStore((s) => ({ showExplain: s.showExplain }));
-  const showSample = useShowSample();
   const showStep = useShowStep();
   const { fitView } = useReactFlow();
 
-  const [status, setStatus] = useState<
-    "active" | "correct" | "wrong" | "inactive"
-  >("active");
-
-  const newNode = useCallback(() => {
-    (async () => {
-      if ("stepId" in next) {
-        setStatus("correct");
-        showStep(next.stepId);
-      } else if ("sampleId" in next) {
-        setStatus("wrong");
-        // HACK:
-        if (stepId == 1) {
-          if (children == "Cosine law") {
-            showExplain(2);
-          } else {
-            showExplain(1);
-          }
-          await timeout(200);
-          fitView({
-            nodes: [
-              { id: "Math_2023_17_a_step_1" },
-              { id: "explain1" },
-              { id: "explain2" },
-            ],
-            padding: 0.3,
-            maxZoom: 1.5,
-            duration: 350,
-          });
-        }
-        // showSample(stepId, next.sampleId);
-      }
-    })();
-  }, [setStatus, showSample, showStep]);
-
-  const newExplain = useCallback(() => {
-    (async () => {
-      if ("stepId" in next) {
-        // HACK:
-        showSample(stepId, 1);
-      } else if ("sampleId" in next) {
-        // HACK:
-        if (stepId == 1) {
-          if (children == "Cosine law") {
-            showExplain(2);
-          } else {
-            showExplain(1);
-          }
-          await timeout(200);
-          fitView({
-            nodes: [
-              { id: "Math_2023_17_a_step_1" },
-              { id: "explain1" },
-              { id: "explain2" },
-            ],
-            padding: 0.3,
-            maxZoom: 1.5,
-            duration: 350,
-          });
-        }
-      }
-    })();
-  }, [setStatus, showSample, showStep]);
+  const show = useCallback(() => {
+    if ("step" in next) {
+      showStep(next.step);
+    } else if ("explain" in next) {
+      fitView(fitViewToNode({ id: next.explain }));
+    }
+  }, [showStep]);
 
   return (
     <ButtonGroup>
       <Button
-        className={`font-medium transition-colors text-wrap text-gray-50 h-fit p-2 ${className}`}
+        className={`font-medium transition-colors text-gray-50 h-full p-2 ${className}`}
         color={
           status === "correct"
             ? "success"
@@ -171,15 +91,16 @@ const NewNodeButton = ({
               ? "secondary"
               : "primary"
         }
-        onPress={newNode}
-        // isDisabled={status === "inactive" || status === "wrong"}
+        onPress={show}
       >
-        <KatexSpan>{children}</KatexSpan>
+        <div className="text-wrap">
+          <KatexSpan>{children}</KatexSpan>
+        </div>
       </Button>
       {children != "OK" && (
         <Button
           isIconOnly
-          className={`text-gray-50 h-fit p-2`}
+          className={`text-gray-50 h-full p-2`}
           color={
             status === "correct"
               ? "success"
@@ -187,7 +108,7 @@ const NewNodeButton = ({
                 ? "secondary"
                 : "primary"
           }
-          onPress={newExplain}
+          onPress={show}
         >
           <QuestionMarkCircleIcon className="size-5" />
         </Button>
@@ -196,39 +117,33 @@ const NewNodeButton = ({
   );
 };
 
-const OptionResponseInput = ({
-  optRes,
-  questionId,
-  stepId,
-  sampleId,
-}: {
-  optRes: OptionResponse;
-  questionId: QuestionId;
-  stepId: StepId;
-  sampleId?: SampleId;
-}) =>
-  optRes.options.length === 1 ? (
+export type Option = {
+  value: string;
+  next: { step: string } | { explain: string };
+  status: "correct" | "wrong" | "active";
+};
+export type OptRes = {
+  type: "opt";
+  opts: Option[];
+};
+const OptionResponseInput = ({ res: { opts } }: { res: OptRes }) =>
+  opts.length === 1 ? (
     <div className="flex flex-row justify-center w-full">
       <NewNodeButton
-        key={`${questionId}_${stepId}_${optRes.type}`}
-        stepId={stepId}
-        next={
-          optRes.options[0].nextStep
-            ? { stepId: optRes.options[0].nextStep }
-            : { sampleId }
-        }
+        next={opts[0].next}
+        status={opts[0].status}
         className="w-[10em]"
       >
-        {optRes.options[0].value}
+        {opts[0].value}
       </NewNodeButton>
     </div>
   ) : (
     <div className="grid grid-cols-2 gap-x-6 gap-y-4 w-full">
-      {optRes.options.map(({ value, nextStep }) => (
+      {opts.map(({ value, next, status }) => (
         <NewNodeButton
-          key={`${questionId}_${stepId}_${optRes.type}_${value}`}
-          stepId={stepId}
-          next={nextStep ? { stepId: nextStep } : { sampleId }}
+          key={Math.random()}
+          next={next}
+          status={status}
           className="w-full"
         >
           {value}
@@ -237,29 +152,28 @@ const OptionResponseInput = ({
     </div>
   );
 
+export type MultiOptRes = {
+  type: "multi";
+  options: { [value: string]: boolean };
+  nextStep: string;
+};
 const MultiOptionResponseInput = ({
-  multiOptRes,
-  questionId,
-  stepId,
-  sampleId,
+  multiOpts,
+  sample,
 }: {
-  multiOptRes: MultiOptionResponse;
-  questionId: QuestionId;
-  stepId: StepId;
-  sampleId?: SampleId;
+  multiOpts: MultiOptRes;
+  sample?: string;
 }) => {
   const showSample = useShowSample();
   const showStep = useShowStep();
 
-  const [checkbox, setCheckbox] = useState(
-    Object.fromEntries(multiOptRes.options.map((value) => [value, false])),
-  );
+  const [checkbox, setCheckbox] = useState(multiOpts.options);
   const [status, setStatus] = useState<"default" | "correct" | "wrong">(
-    "default",
+    "correct",
   );
 
   const updateCheckbox = useCallback(
-    (value: (typeof multiOptRes.options)[number], selected: boolean) => {
+    (value: keyof typeof multiOpts.options, selected: boolean) => {
       const newCheckbox = { ...checkbox };
       newCheckbox[value] = selected;
       setCheckbox(newCheckbox);
@@ -268,28 +182,11 @@ const MultiOptionResponseInput = ({
     [checkbox, setCheckbox, setStatus],
   );
 
-  const validateInput = useCallback(() => {
-    (async () => {
-      const correct = Object.entries(checkbox).reduce(
-        (correct: boolean, [value, checked]) =>
-          correct && checked === multiOptRes.correctOptions.includes(value),
-        true,
-      );
-      if (correct) {
-        setStatus("correct");
-        showStep(multiOptRes.nextStep);
-      } else {
-        setStatus("wrong");
-        showSample(stepId, sampleId);
-      }
-    })();
-  }, [checkbox, showStep, showSample]);
-
   return (
     <div className="grid grid-cols-2 gap-6 w-full justify-stretch place-items-stretch">
-      {multiOptRes.options.map((value) => (
+      {Object.entries(multiOpts.options).map(([value]) => (
         <Checkbox
-          key={`${questionId}_${stepId}_${value}`}
+          key={Math.random()}
           className={`${checkbox[value] ? "bg-primary-100" : "bg-default-100"} rounded-xl max-w-full`}
           isSelected={checkbox[value]}
           onValueChange={(selected) => updateCheckbox(value, selected)}
@@ -307,7 +204,20 @@ const MultiOptionResponseInput = ({
               : "primary"
         }
         isDisabled={status === "wrong"}
-        onPress={validateInput}
+        onPress={() => {
+          const correct = Object.entries(checkbox).reduce(
+            (correct: boolean, [value, checked]) =>
+              correct && checked === multiOpts.options[value],
+            true,
+          );
+          if (correct) {
+            setStatus("correct");
+            showStep(multiOpts.nextStep);
+          } else {
+            setStatus("wrong");
+            sample && showSample(sample);
+          }
+        }}
       >
         Done
       </Button>
@@ -315,15 +225,17 @@ const MultiOptionResponseInput = ({
   );
 };
 
+export type NumberRes = {
+  type: "num";
+  value: number;
+  nextStep: string;
+};
 const NumberResponse = ({
   numberRes,
-  stepId,
-  sampleId,
+  sample,
 }: {
-  numberRes: NumberResponse;
-  questionId: QuestionId;
-  stepId: StepId;
-  sampleId?: SampleId;
+  numberRes: NumberRes;
+  sample?: string;
 }) => {
   const showSample = useShowSample();
   const showStep = useShowStep();
@@ -343,7 +255,7 @@ const NumberResponse = ({
         showStep(numberRes.nextStep);
       } else {
         setStatus("wrong");
-        showSample(stepId, sampleId);
+        sample && showSample(sample);
       }
     })();
   }, [value, showSample, showStep]);
@@ -360,6 +272,7 @@ const NumberResponse = ({
           setValue(v);
           setStatus("default");
         }}
+        defaultValue={numberRes.value.toString()}
       />
       <Button
         className={`${status === "correct" && "text-gray-100"}`}
@@ -381,27 +294,20 @@ const NumberResponse = ({
 
 export type StepNode = Node<
   {
-    questionId: QuestionId;
-    stepNumber: number;
-    stepId: StepId;
+    step: string;
+    prompt: string;
+    res: OptRes | MultiOptRes | NumberRes | { type: "end" };
+    sample?: string;
+    figure?: string;
   },
   "step"
 >;
 
-const EndStepNode = ({
-  stepNumber,
-  questionId,
-}: {
-  stepNumber: number;
-  questionId: QuestionId;
-}) => {
-  const { displayedSteps, nodes, setCurrentStep } = useStore((s) => ({
-    displayedSteps: s.displayedSteps,
-    nodes: s.nodes,
+const EndStepNode = ({ step }: { step: string }) => {
+  const { setCurrentStep } = useStore((s) => ({
     setCurrentStep: s.setCurrentStep,
   }));
-  const showStep = useShowStep();
-  const { fitView } = useReactFlow();
+  const { fitView, getNodes } = useReactFlow();
 
   return (
     <Card className="w-[30em]">
@@ -412,13 +318,14 @@ const EndStepNode = ({
             className="justify-self-end bg-primary-100 text-gray-700"
             isIconOnly
             color="primary"
-            onPress={() =>
-              fitView(
-                fitViewToNode({
-                  id: getStepNodeId(questionId, displayedSteps[stepNumber - 1]),
-                }),
-              )
-            }
+            onPress={() => {
+              // TODO:
+              // fitView(
+              //   fitViewToNode({
+              //     id: getStepNodeId(questionId, displayedSteps[stepNumber - 1]),
+              //   }),
+              // )
+            }}
           >
             <ChevronUpIcon />
           </Button>
@@ -461,13 +368,14 @@ const EndStepNode = ({
             <Button
               startContent={<ChevronDoubleUpIcon className="w-5 md:w-6" />}
               onPress={() => {
-                setCurrentStep(displayedSteps[0]);
-                fitView({
-                  ...fitViewToNode({
-                    id: getStepNodeId(questionId, displayedSteps[0]),
-                  }),
-                  duration: 1000,
-                });
+                // TODO:
+                // setCurrentStep(displayedSteps[0]);
+                // fitView({
+                //   ...fitViewToNode({
+                //     id: getStepNodeId(questionId, displayedSteps[0]),
+                //   }),
+                //   duration: 1000,
+                // });
               }}
             >
               Go to start
@@ -479,7 +387,7 @@ const EndStepNode = ({
               startContent={<ArrowsPointingOutIcon className="w-5 md:w-6" />}
               className="h-full bg-primary-200 text-black"
               onPress={() => {
-                fitView({ nodes, duration: 750 });
+                fitView({ nodes: getNodes(), duration: 750 });
               }}
             >
               Show overview
@@ -500,54 +408,45 @@ const EndStepNode = ({
 
 export function StepNode({
   id: nodeId,
-  data: { stepNumber, stepId },
+  data: { step, prompt, res, sample, figure },
 }: NodeProps<StepNode>) {
-  const { question, displayedSteps, setCurrentStep } = useStore((s) => ({
-    question: s.question,
-    displayedSteps: s.displayedSteps,
+  const { setCurrentStep } = useStore((s) => ({
     setCurrentStep: s.setCurrentStep,
   }));
   const { fitView } = useReactFlow();
   const showSample = useShowSample();
 
-  if (question === undefined) {
-    return;
+  if (res.type === "end") {
+    return <EndStepNode step={step} />;
   }
 
-  const step = question.steps[stepId];
-  if (step === undefined) {
-    return;
-  }
-
-  const hasNextStep = stepNumber < displayedSteps.length - 1;
-
-  if (step.response.type === "end") {
-    return <EndStepNode stepNumber={stepNumber} questionId={question.id} />;
-  }
+  // TODO:
+  const hasNextStep = true;
 
   return (
     <Card className="w-[50em]">
       <CardHeader className="bg-primary-100">
         <div className="flex w-full items-center justify-between">
-          <h4 className="text-2xl font-medium">Step {stepNumber}</h4>
+          <h4 className="text-2xl font-medium">{step}</h4>
           <ButtonGroup className="justify-self-end transition-colors">
             <Button
               isIconOnly
               color="primary"
               className="bg-primary-100 text-gray-700"
               onPress={(_) => {
-                setCurrentStep(displayedSteps[stepNumber - 1]);
-                fitView(
-                  fitViewToNode({
-                    id:
-                      stepNumber == 0
-                        ? question.id
-                        : getStepNodeId(
-                            question.id,
-                            displayedSteps[stepNumber - 1],
-                          ),
-                  }),
-                );
+                // TODO:
+                // setCurrentStep(displayedSteps[stepNumber - 1]);
+                // fitView(
+                //   fitViewToNode({
+                //     id:
+                //       stepNumber == 0
+                //         ? question.id
+                //         : getStepNodeId(
+                //             question.id,
+                //             displayedSteps[stepNumber - 1],
+                //           ),
+                //   }),
+                // );
               }}
             >
               <ChevronUpIcon />
@@ -559,15 +458,16 @@ export function StepNode({
                 className="bg-primary-100 text-gray-700"
                 isDisabled={!hasNextStep}
                 onPress={(_) => {
-                  setCurrentStep(displayedSteps[stepNumber + 1]);
-                  fitView(
-                    fitViewToNode({
-                      id: getStepNodeId(
-                        question.id,
-                        displayedSteps[stepNumber + 1],
-                      ),
-                    }),
-                  );
+                  // TODO:
+                  // setCurrentStep(displayedSteps[stepNumber + 1]);
+                  // fitView(
+                  //   fitViewToNode({
+                  //     id: getStepNodeId(
+                  //       question.id,
+                  //       displayedSteps[stepNumber + 1],
+                  //     ),
+                  //   }),
+                  // );
                 }}
               >
                 <ChevronDownIcon />
@@ -581,54 +481,27 @@ export function StepNode({
         <div className="flex flex-row justify-between w-full text-md">
           <div className="w-1/2 p-8 self-center flex flex-col justify-center gap-12">
             <div className="w-full items-center text-lg">
-              <KatexSpan>{step.prompt}</KatexSpan>
+              <KatexSpan>{prompt}</KatexSpan>
             </div>
             <div className="w-full place-self-center">
-              {step.response.type === "option" ? (
-                <OptionResponseInput
-                  optRes={step.response}
-                  questionId={question.id}
-                  stepId={step.id}
-                  sampleId={step.sampleId}
-                />
-              ) : step.response.type === "multioption" ? (
-                <MultiOptionResponseInput
-                  multiOptRes={step.response}
-                  questionId={question.id}
-                  stepId={step.id}
-                  sampleId={step.sampleId}
-                />
-              ) : step.response.type === "number" ? (
-                <NumberResponse
-                  numberRes={step.response}
-                  questionId={question.id}
-                  stepId={step.id}
-                  sampleId={step.sampleId}
-                />
+              {res.type === "opt" ? (
+                <OptionResponseInput res={res} />
+              ) : res.type === "multi" ? (
+                <MultiOptionResponseInput multiOpts={res} sample={sample} />
+              ) : res.type === "num" ? (
+                <NumberResponse numberRes={res} sample={sample} />
               ) : (
-                <NewNodeButton stepId={step.id} next={{ stepId: step.id + 1 }}>
-                  Next Step
-                </NewNodeButton>
+                <></>
               )}
             </div>
           </div>
-          <div className="w-1/2 aspect-square relative">
-            {step.variables.map(
-              (v) =>
-                v && (
-                  <img
-                    key={`${nodeId}_${v} `}
-                    src={`/${question.variables[v].figure1} `}
-                    alt=""
-                    className="w-full h-full absolute"
-                  />
-                ),
-            )}
+          <div className="w-1/2 p-8 aspect-square relative">
+            <img src={`/${figure}`} alt="" className="w-full h-full" />
           </div>
         </div>
       </CardBody>
 
-      {step.sampleId && (
+      {sample && (
         <CardFooter>
           <div className="flex flex-row justify-end w-full gap-2">
             <div className="text-xs place-self-center">
@@ -637,9 +510,7 @@ export function StepNode({
             <Button
               className="bg-secondary-100"
               startContent={<QuestionMarkCircleIcon className="size-5" />}
-              onPress={() => {
-                showSample(step.id, step.sampleId);
-              }}
+              onPress={() => showSample(sample)}
             >
               Show Sample
             </Button>

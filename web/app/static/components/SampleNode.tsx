@@ -2,6 +2,7 @@ import {
   ArrowsPointingOutIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
+  ChevronRightIcon,
   ChevronUpIcon,
   SquaresPlusIcon,
 } from "@heroicons/react/24/outline";
@@ -16,49 +17,44 @@ import {
   Handle,
   NodeToolbar,
   Position,
-  useNodeId,
   useReactFlow,
   useViewport,
   type Node,
   type NodeProps,
 } from "@xyflow/react";
-import { useEffect } from "react";
-import useSWR from "swr";
 
-import type { Sample, SampleId, SampleStep } from "@/app/api/sample";
 import KatexSpan from "@/app/components/KatexSpan";
-import { nextTick, timeout } from "@/app/utils";
-import { fitViewToNode, getStepNodeId } from "../lib";
+import { fitViewToNode } from "../lib";
 import useStore from "../store";
 
-export type SampleQuestionNode = Node<{ sample: Sample }, "sample-question">;
+export type SampleQuestionNode = Node<
+  { name: string; question: string; figure?: string },
+  "sample-question"
+>;
 export function SampleQuestionNode({
-  data: { sample },
+  data: { name, question, figure },
 }: NodeProps<SampleQuestionNode>) {
   return (
     <Card className="w-full max-w-[30em]">
       <CardHeader className="bg-secondary-200">
         <div className="flex flex-row justify-between w-full">
           <h3 className="text-2xl font-medium">Sample Question</h3>
-          <h4 className="text-2xl">{sample.name}</h4>
+          <h4 className="text-2xl">{name}</h4>
         </div>
       </CardHeader>
       <CardBody>
-        {sample.figure ? (
+        {figure ? (
           <div className="w-full flex flex-col items-center">
             <div className="text-md place-self-center">
-              <KatexSpan>{sample.question}</KatexSpan>
+              <KatexSpan>{question}</KatexSpan>
             </div>
-            <div className="w-1/2 aspect-square relative">
-              <img
-                src={`/${sample.figure}`}
-                className="w-full h-full absolute"
-              />
+            <div className="w-1/2 p-8 aspect-square relative">
+              <img src={`/${figure}`} className="w-full h-full" />
             </div>
           </div>
         ) : (
           <div className="text-md">
-            <KatexSpan>{sample.question}</KatexSpan>
+            <KatexSpan>{question}</KatexSpan>
           </div>
         )}
       </CardBody>
@@ -69,15 +65,20 @@ export function SampleQuestionNode({
 
 export type SampleStepNode = Node<
   {
-    baseNodeId: string;
-    sampleId: SampleId;
-    step: SampleStep;
-    numSteps: number;
+    sample: string;
+    step: {
+      header: string;
+      text: string;
+      figure?: string;
+      prev?: string;
+      next?: string;
+    };
   },
   "sample-step"
 >;
 export function SampleStepNode({
-  data: { baseNodeId, sampleId, step, numSteps },
+  parentId,
+  data: { sample, step },
 }: NodeProps<SampleStepNode>) {
   const { setCurrentSample } = useStore((s) => ({
     setCurrentSample: s.setCurrentSample,
@@ -88,48 +89,40 @@ export function SampleStepNode({
     <Card className="w-fit">
       <CardHeader className="bg-secondary-200">
         <div className="flex flex-row justify-between items-center w-full">
-          <h4 className="text-xl"> Method {step.id + 1} </h4>
+          <h4 className="text-xl"> {step.header} </h4>
           {false && (
             <ButtonGroup
               className="justify-self-end transition-colors"
               size="sm"
             >
-              {step.id != 0 && (
+              {step.prev && (
                 <Button
                   isIconOnly
                   color="secondary"
-                  onPress={() => {
-                    fitView(
-                      fitViewToNode({
-                        id: `${baseNodeId}_step_${step.id - 1}`,
-                      }),
-                    );
-                  }}
+                  onPress={() =>
+                    fitView(fitViewToNode({ id: step.prev ?? "" }))
+                  }
                 >
-                  <ChevronUpIcon />
+                  <ChevronLeftIcon />
                 </Button>
               )}
-              {step.id < numSteps - 1 && (
+              {step.next && (
                 <Button
                   isIconOnly
                   color="secondary"
-                  onPress={(_) => {
-                    fitView(
-                      fitViewToNode({
-                        id: `${baseNodeId}_step_${step.id + 1}`,
-                      }),
-                    );
-                  }}
+                  onPress={() =>
+                    fitView(fitViewToNode({ id: step.next ?? "" }))
+                  }
                 >
-                  <ChevronDownIcon />
+                  <ChevronRightIcon />
                 </Button>
               )}
               <Button
                 isIconOnly
                 color="secondary"
                 onPress={(_) => {
-                  setCurrentSample(sampleId);
-                  fitView(fitViewToNode({ id: `${baseNodeId}` }));
+                  setCurrentSample(sample);
+                  fitView(fitViewToNode({ id: parentId ?? "" }));
                 }}
               >
                 <ArrowsPointingOutIcon />
@@ -141,15 +134,15 @@ export function SampleStepNode({
       <CardBody>
         {step.figure ? (
           <div className="w-full flex flex-col items-center">
-            <div className="text-md place-self-center">
+            <div className="text-md p-8 place-self-center">
               <KatexSpan>{step.text}</KatexSpan>
             </div>
-            <div className="w-1/2 aspect-square relative">
-              <img src={`/${step.figure}`} className="w-full h-full absolute" />
+            <div className="w-1/2 p-8 aspect-square relative">
+              <img src={`/${step.figure}`} className="w-full h-full" />
             </div>
           </div>
         ) : (
-          <div className="text-md">
+          <div className="text-md p-8">
             <KatexSpan>{step.text}</KatexSpan>
           </div>
         )}
@@ -160,36 +153,16 @@ export function SampleStepNode({
   );
 }
 
-export type SampleNode = Node<{ sampleId: SampleId }, "sample">;
-export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
-  const { addSample, question, currentStep, addConcept } = useStore((s) => ({
-    addSample: s.addSample,
-    question: s.question,
+export type SampleNode = Node<{ concept: string }, "sample">;
+export function SampleNode({ data: { concept } }: NodeProps<SampleNode>) {
+  const { currentStep } = useStore((s) => ({
     currentStep: s.currentStep,
-    addConcept: s.addConcept,
   }));
   const { fitView } = useReactFlow();
   const { zoom } = useViewport();
-  const { data: sample } = useSWR<Sample>(`/api/sample/${sampleId}`);
-  const baseNodeId = useNodeId() ?? "";
-
-  useEffect(() => {
-    (async () => {
-      if (!sample) return;
-      await addSample(baseNodeId, sample);
-      await nextTick(2);
-      fitView(fitViewToNode({ id: baseNodeId }));
-    })();
-  }, [sample, baseNodeId]);
 
   const showConcept = () => {
-    (async () => {
-      if (!sample) return;
-      const nodeId = addConcept(sampleId, sample.concept)?.nodeId ?? "";
-      await nextTick(4);
-      await timeout(300);
-      fitView(fitViewToNode({ id: nodeId }));
-    })();
+    fitView(fitViewToNode({ id: concept }));
   };
 
   return (
@@ -203,13 +176,7 @@ export function SampleNode({ data: { sampleId } }: NodeProps<SampleNode>) {
           <Button
             className="bg-secondary-100"
             startContent={<ChevronLeftIcon className="size-5" />}
-            onPress={() => {
-              fitView(
-                fitViewToNode({
-                  id: getStepNodeId(question?.id ?? "", currentStep),
-                }),
-              );
-            }}
+            onPress={() => fitView(fitViewToNode({ id: currentStep }))}
           >
             Return
           </Button>

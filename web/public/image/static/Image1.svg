@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   sodipodi:docname="Image1.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.9830139"
+     inkscape:cx="307.61257"
+     inkscape:cy="162.63123"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 50 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="100 : 50 : 1"
+       inkscape:persp3d-origin="50 : 33.333333 : 1"
+       id="perspective7" />
+  </defs>
+  <g
+     inkscape:label="圖層 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g21"
+       transform="matrix(1.2411696,0,0,1.1274876,-7.5551761,-2.9134047)">
+      <g
+         id="g18"
+         transform="matrix(0.98825186,0,0,1.149153,-2.2208705,-3.9313867)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
+           d="M 14.810158,64.844478 65.511601,77.252989 84.057654,49.634045 Z"
+           id="path15" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
+           d="M 14.676733,64.844477 51.635416,10.540563 65.778451,77.386412"
+           id="path17" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:0.264583;stroke-opacity:1"
+           d="M 83.924229,49.50062 51.76884,10.273713"
+           id="path18" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-size:7.76111px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+         x="66.852737"
+         y="85.728729"
+         id="text18"
+         transform="scale(0.94361443,1.0597549)"><tspan
+           sodipodi:role="line"
+           id="tspan18"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76111px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';fill:#000000;fill-opacity:1;stroke-width:0;stroke-dasharray:none"
+           x="66.852737"
+           y="85.728729">W</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76111px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+         x="79.511505"
+         y="55.831875"
+         id="text19"
+         transform="scale(1.0332145,0.96785324)"><tspan
+           sodipodi:role="line"
+           id="tspan19"
+           style="font-size:7.76111px;fill:#000000;fill-opacity:1;stroke-width:0;stroke-dasharray:none"
+           x="79.511505"
+           y="55.831875">X</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76111px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+         x="5.9717379"
+         y="80.128662"
+         id="text20"
+         transform="scale(1.0648099,0.93913476)"><tspan
+           sodipodi:role="line"
+           id="tspan20"
+           style="font-size:7.76111px;fill:#000000;fill-opacity:1;stroke-width:0;stroke-dasharray:none"
+           x="5.9717379"
+           y="80.128662">Y</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.82786px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;inline-size:2.84927;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
+         x="41.532543"
+         y="10.443786"
+         id="text21"
+         transform="matrix(2.2567841,0,0,1.8215667,-47.172796,-11.409117)"><tspan
+           x="41.532543"
+           y="10.443786"
+           id="tspan1">Z</tspan></text>
+    </g>
+  </g>
+</svg>
