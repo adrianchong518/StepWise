@@ -108,16 +108,8 @@ export default function Page() {
                 className="p-1 bg-primary-50"
                 size="lg"
                 onPress={() => {
-                  // setCurrentStep(displayedSteps[displayedSteps.length - 1]);
-                  // fitView({
-                  //   ...fitViewToNode({
-                  //     id: getStepNodeId(
-                  //       questionId,
-                  //       displayedSteps[displayedSteps.length - 1],
-                  //     ),
-                  //   }),
-                  //   duration: 750,
-                  // });
+                  setCurrentStep("end");
+                  fitView({ ...fitViewToNode({ id: "end" }), duration: 2000 });
                 }}
               >
                 <ChevronDoubleDownIcon />

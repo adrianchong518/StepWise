@@ -7,7 +7,7 @@ import {
   NodeProps,
   Position,
 } from "@xyflow/react";
-import { CSSProperties } from "react";
+import React, { CSSProperties } from "react";
 import { QuestionDetails } from "../api/question";
 import { ConceptNode } from "./components/ConceptNode";
 import { ExplainerNode } from "./components/ExplainerNode";
@@ -27,7 +27,7 @@ const invisibleNodeStyle: CSSProperties = {
   visibility: "hidden",
 };
 export type InvisibleHelperNode = Node<{}, "invisible">;
-export function InvisibleHelperNode({ }: NodeProps<InvisibleHelperNode>) {
+export function InvisibleHelperNode({}: NodeProps<InvisibleHelperNode>) {
   return (
     <div style={invisibleNodeStyle}>
       <Handle type="target" position={Position.Top} style={{ top: 0 }} />
@@ -771,13 +771,585 @@ Thus, consider using easier approach!`,
     parentId: "sample2",
     position: { x: 300, y: 750 },
     data: {
-      sample: "sample1",
+      sample: "sample2",
       step: {
         header: "Method",
         text: String.raw`\[
 sin{45^\circ} = \frac{4}{AC} \\
 AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
 \]`,
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "step19",
+    type: "step",
+    position: { x: 0, y: 12000 },
+    data: {
+      step: "Step 19",
+      prompt: String.raw`How can we find the circumcenter of \(\triangle XYW\)?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Using coordinates and equations`,
+            next: { step: "step20" },
+            status: "correct",
+          },
+          {
+            value: String.raw`Property of perpendicular bisector`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`Property of circles`,
+            next: { explain: "step28" },
+            status: "correct",
+          },
+        ],
+      },
+      figure: "image/static/Image20.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "step20",
+    type: "step",
+    position: { x: 0, y: 12800 },
+    data: {
+      step: "Step 20",
+      prompt: String.raw`First, we shall construct the coordination of three different vertexes, lets denote \(X(0, 0)\), \(Y(a, 0)\) for simplicity. How should we locate \(a\)?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`\(XY=5\)`,
+            next: { step: "input1" },
+            status: "correct",
+          },
+          {
+            value: String.raw`\(Y\) is the origin`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`\(a\) is the vertex of triangle`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+        ],
+      },
+      figure: "image/static/Image21.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "input1",
+    type: "step",
+    position: { x: 0, y: 13600 },
+    data: {
+      step: "Input 1",
+      prompt: String.raw`Therefore, what is the value of \(a\)?`,
+      res: {
+        type: "num",
+        value: 5,
+        nextStep: "step21",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "step21",
+    type: "step",
+    position: { x: 0, y: 14400 },
+    data: {
+      step: "Step 21",
+      prompt: String.raw`How can we find the coordinates of \(W\)?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Basic trigonmetry`,
+            next: { step: "step22" },
+            status: "correct",
+          },
+          {
+            value: String.raw`Intersection of straight lines`,
+            next: { explain: "" },
+            status: "active",
+          },
+          {
+            value: String.raw`Reflection`,
+            next: { explain: "" },
+            status: "active",
+          },
+        ],
+      },
+      figure: "image/static/Image22.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "step22",
+    type: "step",
+    position: { x: 0, y: 15200 },
+    data: {
+      step: "Step 22",
+      prompt: String.raw`Which properties should we use?`,
+      res: {
+        type: "multi",
+        options: {
+          [String.raw`\(WX=6\)`]: true,
+          [String.raw`\(\angle WXY = 51.5^\circ\) from part a`]: true,
+          [String.raw`\(XY=5\)`]: true,
+        },
+        nextStep: "input2",
+      },
+      figure: "image/static/Image23.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "input2",
+    type: "step",
+    position: { x: 0, y: 16000 },
+    data: {
+      step: "Input 2",
+      prompt: String.raw`Therefore, what is the x-coordinate of \(W\)?`,
+      res: {
+        type: "num",
+        value: 6 * Math.sin((51.5 / 180) * Math.PI),
+        nextStep: "step21",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "input3",
+    type: "step",
+    position: { x: 0, y: 16800 },
+    data: {
+      step: "Input 3",
+      prompt: String.raw`Therefore, what is the x-coordinate of \(W\)?`,
+      res: {
+        type: "num",
+        value: 6 * Math.cos((51.5 / 180) * Math.PI),
+        nextStep: "step21",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "step23",
+    type: "step",
+    position: { x: 0, y: 17600 },
+    data: {
+      step: "Step 23",
+      prompt: String.raw`How should we locate the circumcenter, given the three vertices?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Equation of circles`,
+            next: { explain: "explain7" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`Intersection of perpendicular bisectors`,
+            next: { step: "step24" },
+            status: "correct",
+          },
+          {
+            value: String.raw`Mid-point of three vertices`,
+            next: { explain: "" },
+            status: "active",
+          },
+        ],
+      },
+      figure: "image/static/Image24.svg",
+    },
+  }),
+  createNode<ExplainerNode>({
+    id: "explain7",
+    type: "explainer",
+    position: { x: -1000, y: 17600 },
+    data: {
+      title: "Hint",
+      content: String.raw`Using equation of circles is a feasible method, but again, it will be time-consuming and redundant, as you only need to find the radius.`,
+    },
+  }),
+  createNode<StepNode>({
+    id: "step24",
+    type: "step",
+    position: { x: 0, y: 18400 },
+    data: {
+      step: "Step 24",
+      prompt: String.raw`In order to find the intersection of perpendicular bisector, which two equations do we need?`,
+      res: {
+        type: "multi",
+        options: {
+          [String.raw`Equation of the perpendicular bisector of \(XY\)`]: true,
+          [String.raw`Equation of the perpendicular bisector of \(WX\)`]: true,
+          [String.raw`Equation of the perpendicular bisector of \(WY\)`]: false,
+        },
+        nextStep: "step25",
+      },
+      figure: "image/static/Image24.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "step25",
+    type: "step",
+    position: { x: 0, y: 19200 },
+    data: {
+      step: "Step 25",
+      prompt: String.raw`Which of these do we need to find the perpendicular bisector of \(XY\)?`,
+      res: {
+        type: "multi",
+        options: {
+          [String.raw`Finding the mid-point of \(XY\)`]: true,
+          [String.raw`Finding the slope of \(XY\)`]: false,
+          [String.raw`Using the fact that \(XY\) is horizontal`]: true,
+        },
+        nextStep: "input4",
+      },
+      figure: "image/static/Image25.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "input4",
+    type: "step",
+    position: { x: 0, y: 20000 },
+    data: {
+      step: "Input 4",
+      prompt: String.raw`What is the x-coordinate of the mid-point of \(XY\)?`,
+      res: {
+        type: "num",
+        value: 2.5,
+        nextStep: "input5",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "input5",
+    type: "step",
+    position: { x: 0, y: 20800 },
+    data: {
+      step: "Input 5",
+      prompt: String.raw`Therefore, what is the x-coordinate of \(Z\)?`,
+      res: {
+        type: "num",
+        value: 2.5,
+        nextStep: "step26",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "step26",
+    type: "step",
+    position: { x: 0, y: 21600 },
+    data: {
+      step: "Step 26",
+      prompt: String.raw`Which of these do we need to find the perpendicular bisector of \(XW\)?`,
+      res: {
+        type: "multi",
+        options: {
+          [String.raw`Finding the mid-point of \(XW\)`]: true,
+          [String.raw`Finding the slope of \(XW\)`]: true,
+          [String.raw`Using the fact that \(XW\) is vertical`]: false,
+        },
+        nextStep: "input4",
+      },
+      figure: "image/static/Image26.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "input6",
+    type: "step",
+    position: { x: 0, y: 22400 },
+    data: {
+      step: "Input 6",
+      prompt: String.raw`What is the x-coordinate of the mid-point of \(XW\)?`,
+      res: {
+        type: "num",
+        value: (6 * Math.cos((51.5 / 180) * Math.PI)) / 2,
+        nextStep: "input7",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "input7",
+    type: "step",
+    position: { x: 0, y: 23200 },
+    data: {
+      step: "Input 7",
+      prompt: String.raw`What is the y-coordinate of the mid-point of \(XW\)?`,
+      res: {
+        type: "num",
+        value: (6 * Math.sin((51.5 / 180) * Math.PI)) / 2,
+        nextStep: "input8",
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "input8",
+    type: "step",
+    position: { x: 0, y: 24000 },
+    data: {
+      step: "Input 8",
+      prompt: String.raw`What is the slope of \(XW\)?`,
+      res: {
+        type: "num",
+        value: Math.tan((51.5 / 180) * Math.PI),
+        nextStep: "step27",
+      },
+      sample: "sample3",
+    },
+  }),
+  createNode<SampleNode>({
+    id: "sample3",
+    type: "sample",
+    position: { x: 1000, y: 24000 },
+    origin: [0, 0.5],
+    style: { width: 700, height: 1000 },
+    data: { concept: "concept1" },
+  }),
+  createNode<SampleQuestionNode>({
+    id: "sample3_q",
+    type: "sample-question",
+    parentId: "sample3",
+    position: { x: 350, y: 250 },
+    data: {
+      name: "Slope of a line",
+      question: String.raw`Calculate the slope of the line shown on the figure.`,
+      figure: "image/static/Image27.svg",
+    },
+  }),
+  createNode<SampleStepNode>({
+    id: "sample3_1",
+    type: "sample-step",
+    parentId: "sample3",
+    position: { x: 200, y: 750 },
+    data: {
+      sample: "sample3",
+      step: {
+        header: "Slope formula",
+        text: String.raw`\[
+\text{slope} = \frac{3-0}{3-0} = 1
+\]`,
+      },
+    },
+  }),
+  createNode<SampleStepNode>({
+    id: "sample3_2",
+    type: "sample-step",
+    parentId: "sample3",
+    position: { x: 500, y: 750 },
+    data: {
+      sample: "sample3",
+      step: {
+        header: "Trigonmetry",
+        text: String.raw`\[
+\text{slope} = tan{45^\circ} = 1
+\]`,
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "step27",
+    type: "step",
+    position: { x: 0, y: 24800 },
+    data: {
+      step: "Step 27",
+      prompt: String.raw`Therefore, how should we find the slope of the perpendicular bisector for \(XW\)?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Product of perpendicular slope = -1`,
+            next: { step: "input21" },
+            status: "correct",
+          },
+          {
+            value: String.raw`They have equal slopes`,
+            next: { explain: "explain8" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`Calculate the slope from \(Y\) to the mid-point of \(WX\)`,
+            next: { explain: "" },
+            status: "active",
+          },
+        ],
+      },
+      figure: "image/static/Image26.svg",
+    },
+  }),
+  createNode<ExplainerNode>({
+    id: "explain8",
+    type: "explainer",
+    position: { x: -1000, y: 24800 },
+    data: {
+      title: "Equal slopes",
+      content: String.raw`This is the property of parallel lines, not perpendicular lines.`,
+    },
+  }),
+  createNode<StepNode>({
+    id: "step28",
+    type: "step",
+    position: { x: -2000, y: 12800 },
+    data: {
+      step: "Step 28",
+      prompt: String.raw`What is the property of \(WZ'\) in the circle \(WXY\)?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Radius`,
+            next: { step: "step29" },
+            status: "correct",
+          },
+          {
+            value: String.raw`Chord`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`Center`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+        ],
+      },
+      figure: "image/static/Image28.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "step29",
+    type: "step",
+    position: { x: -2000, y: 13600 },
+    data: {
+      step: "Step 29",
+      prompt: String.raw`To find the radius of the circumcircle, what method can we use?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Property of isosceles triangles`,
+            next: { step: "step30" },
+            status: "correct",
+          },
+          {
+            value: String.raw`Cosine law`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`Sine law`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+        ],
+      },
+      figure: "image/static/Image28.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "step30",
+    type: "step",
+    position: { x: -2000, y: 14400 },
+    data: {
+      step: "Step 30",
+      prompt: String.raw`Which of the following values should we use to apply the properties of isosceles triangles?`,
+      res: {
+        type: "multi",
+        options: {
+          [String.raw`\(\angle Z'MX\)`]: true,
+          [String.raw`\(\angle MZ'X\)`]: true,
+          [String.raw`\(XZ'\)`]: true,
+          [String.raw`\(XM\)`]: true,
+        },
+        nextStep: "step31",
+      },
+      figure: "image/static/Image29.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "step31",
+    type: "step",
+    position: { x: -2000, y: 15200 },
+    data: {
+      step: "Step 31",
+      prompt: String.raw`How can we find \(\angle MZ'X\)`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Angle at center, twice angle at circumference`,
+            next: { step: "input13" },
+            status: "correct",
+          },
+          {
+            value: String.raw`Angle in the same segment`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`Property of isosceles triangles`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+        ],
+      },
+      figure: "image/static/Image29.svg",
+    },
+  }),
+  createNode<StepNode>({
+    id: "input13",
+    type: "step",
+    position: { x: -2000, y: 16000 },
+    data: {
+      step: "Input 13",
+      prompt: String.raw`What is \(\angle MZ'X\)?`,
+      res: {
+        type: "num",
+        value: 140,
+        nextStep: "input21",
+      },
+    },
+  }),
+  createNode<InvisibleHelperNode>({
+    id: "input13_bottom",
+    type: "invisible",
+    position: { x: -2000, y: 25200 },
+    data: {},
+  }),
+  createNode<StepNode>({
+    id: "input21",
+    type: "step",
+    position: { x: 0, y: 25600 },
+    data: {
+      step: "Input 21",
+      prompt: String.raw`What is the final answer?`,
+      res: {
+        type: "opt",
+        opts: [
+          {
+            value: String.raw`Yes`,
+            next: { explain: "" },
+            status: "wrong",
+          },
+          {
+            value: String.raw`No`,
+            next: { step: "end" },
+            status: "correct",
+          },
+        ],
+      },
+    },
+  }),
+  createNode<StepNode>({
+    id: "end",
+    type: "step",
+    position: { x: 0, y: 26400 },
+    data: {
+      step: "",
+      prompt: "",
+      res: {
+        type: "end",
       },
     },
   }),
@@ -1053,5 +1625,175 @@ export const initialEdges: Edge[] = [
     source: "step18",
     sourceHandle: "explainer",
     target: "explain6",
+  }),
+  createEdge({
+    id: "step18->step19",
+    source: "step18",
+    sourceHandle: "next-step",
+    target: "step19",
+  }),
+  createEdge({
+    id: "step19->step20",
+    source: "step19",
+    sourceHandle: "next-step",
+    target: "step20",
+  }),
+  createEdge({
+    id: "step20->input1",
+    source: "step20",
+    sourceHandle: "next-step",
+    target: "input1",
+  }),
+  createEdge({
+    id: "input1->step21",
+    source: "input1",
+    sourceHandle: "next-step",
+    target: "step21",
+  }),
+  createEdge({
+    id: "step21->step22",
+    source: "step21",
+    sourceHandle: "next-step",
+    target: "step22",
+  }),
+  createEdge({
+    id: "step22->input2",
+    source: "step22",
+    sourceHandle: "next-step",
+    target: "input2",
+  }),
+  createEdge({
+    id: "input2->input3",
+    source: "input2",
+    sourceHandle: "next-step",
+    target: "input3",
+  }),
+  createEdge({
+    id: "input3->step23",
+    source: "input3",
+    sourceHandle: "next-step",
+    target: "step23",
+  }),
+  createEdge({
+    id: "step23->step24",
+    source: "step23",
+    sourceHandle: "next-step",
+    target: "step24",
+  }),
+  createEdge({
+    id: "step24->step25",
+    source: "step24",
+    sourceHandle: "next-step",
+    target: "step25",
+  }),
+  createEdge({
+    id: "step25->input4",
+    source: "step25",
+    sourceHandle: "next-step",
+    target: "input4",
+  }),
+  createEdge({
+    id: "input4->input5",
+    source: "input4",
+    sourceHandle: "next-step",
+    target: "input5",
+  }),
+  createEdge({
+    id: "input5->step26",
+    source: "input5",
+    sourceHandle: "next-step",
+    target: "step26",
+  }),
+  createEdge({
+    id: "step26->input6",
+    source: "step26",
+    sourceHandle: "next-step",
+    target: "input6",
+  }),
+  createEdge({
+    id: "input6->input7",
+    source: "input6",
+    sourceHandle: "next-step",
+    target: "input7",
+  }),
+  createEdge({
+    id: "input7->input8",
+    source: "input7",
+    sourceHandle: "next-step",
+    target: "input8",
+  }),
+  createEdge({
+    id: "input8->step27",
+    source: "input8",
+    sourceHandle: "next-step",
+    target: "step27",
+  }),
+  createEdge({
+    id: "input8->sample3",
+    source: "input8",
+    sourceHandle: "explain",
+    target: "sample3",
+  }),
+  createEdge({
+    id: "step27->explain8",
+    source: "step27",
+    sourceHandle: "explainer",
+    target: "explain8",
+  }),
+  createEdge({
+    id: "step19->step28",
+    source: "step19",
+    sourceHandle: "next-step",
+    target: "step28",
+  }),
+  createEdge({
+    id: "step28->step29",
+    source: "step28",
+    sourceHandle: "next-step",
+    target: "step29",
+  }),
+  createEdge({
+    id: "step29->step30",
+    source: "step29",
+    sourceHandle: "next-step",
+    target: "step30",
+  }),
+  createEdge({
+    id: "step30->step31",
+    source: "step30",
+    sourceHandle: "next-step",
+    target: "step31",
+  }),
+  createEdge({
+    id: "step31->input13",
+    source: "step31",
+    sourceHandle: "next-step",
+    target: "input13",
+  }),
+  createEdge(
+    {
+      id: "input13->input13_bottom",
+      source: "input13",
+      sourceHandle: "next-step",
+      target: "input13_bottom",
+    },
+    false,
+  ),
+  createEdge({
+    id: "input13_bottom->input21",
+    source: "input13_bottom",
+    target: "input21",
+  }),
+  createEdge({
+    id: "step27->input21",
+    source: "step27",
+    sourceHandle: "next-step",
+    target: "input21",
+  }),
+  createEdge({
+    id: "input21->end",
+    source: "input21",
+    sourceHandle: "next-step",
+    target: "end",
   }),
 ];

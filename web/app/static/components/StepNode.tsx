@@ -5,6 +5,7 @@ import {
   ChevronRightIcon,
   ChevronUpIcon,
   HomeIcon,
+  PlusCircleIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -29,7 +30,7 @@ import {
 import { ReactNode, useCallback, useState } from "react";
 
 import KatexSpan from "@/app/components/KatexSpan";
-import { fitViewToNode, getStepNodeId } from "../lib";
+import { fitViewToNode } from "../lib";
 import useStore from "../store";
 
 const useShowStep = () => {
@@ -241,7 +242,7 @@ const NumberResponse = ({
   const showStep = useShowStep();
 
   const [status, setStatus] = useState<"default" | "correct" | "wrong">(
-    "default",
+    "correct",
   );
   const [value, setValue] = useState("");
 
@@ -355,42 +356,50 @@ const EndStepNode = ({ step }: { step: string }) => {
             >
               Return to home
             </Button>
-            <Button
-              size="lg"
-              startContent={<ChevronRightIcon className="w-5 md:w-6" />}
-              color="primary"
-              className="bg-primary-300 text-black"
-              as={Link}
-              href="/static"
-            >
-              Go to next part
-            </Button>
+            {
+              // <Button
+              // size="lg"
+              // startContent={<ChevronRightIcon className="w-5 md:w-6" />}
+              // color="primary"
+              // className="bg-primary-300 text-black"
+              // as={Link}
+              // href="/static"
+              // >
+              // Go to next part
+              // </Button>
+            }
             <Button
               startContent={<ChevronDoubleUpIcon className="w-5 md:w-6" />}
               onPress={() => {
-                // TODO:
-                // setCurrentStep(displayedSteps[0]);
-                // fitView({
-                //   ...fitViewToNode({
-                //     id: getStepNodeId(questionId, displayedSteps[0]),
-                //   }),
-                //   duration: 1000,
-                // });
+                setCurrentStep("step0");
+                fitView({
+                  ...fitViewToNode({ id: "step0" }),
+                  duration: 2000,
+                });
               }}
             >
               Go to start
             </Button>
           </div>
-          <div className="place-self-stretch">
+          <div className="flex flex-col gap-2 items-stretch justify-evenly h-full w-[15em]">
             <Button
+              size="lg"
               color="primary"
               startContent={<ArrowsPointingOutIcon className="w-5 md:w-6" />}
-              className="h-full bg-primary-200 text-black"
+              className="bg-primary-200 text-black"
               onPress={() => {
                 fitView({ nodes: getNodes(), duration: 750 });
               }}
             >
               Show overview
+            </Button>
+            <Button
+              size="lg"
+              startContent={<PlusCircleIcon className="w-5 md:w-6" />}
+              color="primary"
+              className="bg-primary-300 text-black text-wrap"
+            >
+              Show alternative solutions
             </Button>
           </div>
         </div>
@@ -459,6 +468,7 @@ export function StepNode({
                 isDisabled={!hasNextStep}
                 onPress={(_) => {
                   // TODO:
+                  //
                   // setCurrentStep(displayedSteps[stepNumber + 1]);
                   // fitView(
                   //   fitViewToNode({
@@ -478,8 +488,30 @@ export function StepNode({
       </CardHeader>
       <Divider />
       <CardBody>
-        <div className="flex flex-row justify-between w-full text-md">
-          <div className="w-1/2 p-8 self-center flex flex-col justify-center gap-12">
+        {figure ? (
+          <div className="flex flex-row justify-between w-full text-md">
+            <div className="w-1/2 p-8 self-center flex flex-col justify-center gap-12">
+              <div className="w-full items-center text-lg">
+                <KatexSpan>{prompt}</KatexSpan>
+              </div>
+              <div className="w-full place-self-center">
+                {res.type === "opt" ? (
+                  <OptionResponseInput res={res} />
+                ) : res.type === "multi" ? (
+                  <MultiOptionResponseInput multiOpts={res} sample={sample} />
+                ) : res.type === "num" ? (
+                  <NumberResponse numberRes={res} sample={sample} />
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+            <div className="w-1/2 p-8 aspect-square relative">
+              <img src={`/${figure}`} alt="" className="w-full h-full" />
+            </div>
+          </div>
+        ) : (
+          <div className="w-full text-md p-8 self-center flex flex-col justify-center gap-12">
             <div className="w-full items-center text-lg">
               <KatexSpan>{prompt}</KatexSpan>
             </div>
@@ -495,10 +527,7 @@ export function StepNode({
               )}
             </div>
           </div>
-          <div className="w-1/2 p-8 aspect-square relative">
-            <img src={`/${figure}`} alt="" className="w-full h-full" />
-          </div>
-        </div>
+        )}
       </CardBody>
 
       {sample && (

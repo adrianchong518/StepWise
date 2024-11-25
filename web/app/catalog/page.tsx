@@ -147,10 +147,10 @@ export default function Page() {
                 },
               ].map(({ q, parts, year }) => (
                 <Card
+                  key={Math.random()}
                   className="py-4"
                   isPressable
-                  as={Link}
-                  href={parts && parts[0].url}
+                  as={parts ? undefined : Link}
                 >
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-default-700 text-lg">
