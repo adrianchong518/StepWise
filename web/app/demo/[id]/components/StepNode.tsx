@@ -448,6 +448,16 @@ const EndStepNode = ({
               Return to home
             </Button>
             <Button
+              size="lg"
+              startContent={<HomeIcon className="w-5 md:w-6" />}
+              color="primary"
+              className="bg-primary-300 text-black"
+              as={Link}
+              href="/static"
+            >
+              Go to next part
+            </Button>
+            <Button
               startContent={<ChevronDoubleUpIcon className="w-5 md:w-6" />}
               onPress={() => {
                 setCurrentStep(displayedSteps[0]);

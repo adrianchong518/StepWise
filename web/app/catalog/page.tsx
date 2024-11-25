@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   Divider,
   Input,
@@ -26,7 +27,7 @@ export default function Page() {
   return (
     <main className="flex justify-center p-16">
       <Card className="w-[75em]">
-        <CardHeader className="bg-primary-50">
+        <CardHeader className="bg-primary-200">
           <div className="flex flex-row justify-between w-full">
             <h2 className="text-4xl">Questions</h2>
             <Input
@@ -37,7 +38,7 @@ export default function Page() {
                 inputWrapper:
                   "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
               }}
-              placeholder="Type to search..."
+              placeholder="Type to search for questions / concepts..."
               size="sm"
               startContent={<MagnifyingGlassIcon className="w-6" />}
               type="search"
@@ -95,21 +96,83 @@ export default function Page() {
         </CardHeader>
         <Divider />
         <CardBody>
-          <div className="grid grid-cols-4">
-            {done &&
-              ["Paper 1 Q17"].map((v) => (
+          <div className="grid grid-cols-4 gap-8">
+            {true /* done */ &&
+              [
+                {
+                  q: "Paper 1 Q17",
+                  year: 2023,
+                  parts: [
+                    { p: "a", url: "/demo/Math_2023_17_a" },
+                    { p: "b", url: "/static" },
+                  ],
+                },
+                {
+                  q: "Paper 1 Q18",
+                  year: 2023,
+                  parts: [
+                    { p: "a", url: "" },
+                    { p: "b", url: "" },
+                  ],
+                },
+                {
+                  q: "Paper 2 Q15",
+                  year: 2023,
+                },
+                {
+                  q: "Paper 2 Q30",
+                  year: 2023,
+                },
+                {
+                  q: "Paper 1 Q15",
+                  year: 2022,
+                  parts: [
+                    { p: "a", url: "" },
+                    { p: "b(i)", url: "" },
+                    { p: "b(ii)", url: "" },
+                  ],
+                },
+                {
+                  q: "Paper 1 Q16",
+                  year: 2022,
+                  parts: [
+                    { p: "a", url: "" },
+                    { p: "b", url: "" },
+                    { p: "c", url: "" },
+                  ],
+                },
+                {
+                  q: "Paper 2 Q29",
+                  year: 2022,
+                },
+              ].map(({ q, parts, year }) => (
                 <Card
                   className="py-4"
                   isPressable
                   as={Link}
-                  href="/demo/Math_2023_17_a"
+                  href={parts && parts[0].url}
                 >
                   <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
                     <p className="text-default-700 text-lg">
-                      HKDSE Mathematics
+                      HKDSE Mathematics {year}
                     </p>
-                    <h4 className="font-bold text-2xl">{v}</h4>
+                    <h4 className="font-bold text-2xl">{q}</h4>
                   </CardHeader>
+                  {parts && (
+                    <CardFooter>
+                      <div className="grid grid-cols-3 justify-between gap-2">
+                        {parts.map(({ p, url }) => (
+                          <Button
+                            className="text-lg bg-primary-100"
+                            as={Link}
+                            href={url}
+                          >
+                            {p}
+                          </Button>
+                        ))}
+                      </div>
+                    </CardFooter>
+                  )}
                 </Card>
               ))}
           </div>
