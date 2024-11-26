@@ -1132,7 +1132,8 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     id: "sample3_1",
     type: "sample-step",
     parentId: "sample3",
-    position: { x: 200, y: 750 },
+    position: { x: 200, y: 650 },
+    origin: [0.5, 0],
     data: {
       sample: "sample3",
       step: {
@@ -1147,7 +1148,8 @@ AC = \frac{4}{sin{45^\circ}} = 4\sqrt{2}
     id: "sample3_2",
     type: "sample-step",
     parentId: "sample3",
-    position: { x: 500, y: 750 },
+    position: { x: 500, y: 650 },
+    origin: [0.5, 0],
     data: {
       sample: "sample3",
       step: {
@@ -1586,6 +1588,38 @@ export const initialEdges: Edge[] = [
     id: "sample1_q->sample1_1",
     source: "sample1_q",
     target: "sample1_1",
+    zIndex: 1,
+    style: {
+      strokeWidth: 4,
+      stroke: tailwindConfig.colors.purple[300],
+    },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: tailwindConfig.colors.purple[400],
+    },
+  }),
+  createEdge({
+    id: "sample3_q->sample3_1",
+    source: "sample3_q",
+    target: "sample3_1",
+    zIndex: 1,
+    style: {
+      strokeWidth: 4,
+      stroke: tailwindConfig.colors.purple[300],
+    },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: tailwindConfig.colors.purple[400],
+    },
+  }),
+  createEdge({
+    id: "sample3_q->sample3_2",
+    source: "sample3_q",
+    target: "sample3_2",
     zIndex: 1,
     style: {
       strokeWidth: 4,

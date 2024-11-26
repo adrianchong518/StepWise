@@ -1,13 +1,22 @@
 "use client";
 
-import { CameraIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  CameraIcon,
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import {
   Button,
+  ButtonGroup,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
   Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Input,
   Link,
   Modal,
@@ -23,6 +32,14 @@ import { useState } from "react";
 export default function Page() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [done, setDone] = useState(false);
+
+  const labelsMap = {
+    all: "All concepts",
+    trig: "Trignometry",
+    sequences: "Arithmetic / Geometric Sequences",
+    ["3d"]: "3D Shapes",
+  };
+  const [selectedOption] = useState<keyof typeof labelsMap>("all");
 
   return (
     <main className="flex justify-center p-16">
@@ -43,6 +60,31 @@ export default function Page() {
               startContent={<MagnifyingGlassIcon className="w-6" />}
               type="search"
             />
+            <ButtonGroup variant="flat">
+              <Button>{labelsMap[selectedOption]}</Button>
+              <Dropdown placement="bottom-end">
+                <DropdownTrigger>
+                  <Button isIconOnly>
+                    <ChevronDownIcon />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Merge options"
+                  selectedKeys={selectedOption}
+                  selectionMode="single"
+                  // onSelectionChange={(v) => setSelectedOption(v)}
+                  className="max-w-[300px]"
+                >
+                  <DropdownItem key="all">{labelsMap["all"]}</DropdownItem>
+                  <DropdownItem key="trig">{labelsMap["trig"]}</DropdownItem>
+                  <DropdownItem key="sequences">
+                    {labelsMap["sequences"]}
+                  </DropdownItem>
+                  <DropdownItem key="3d">{labelsMap["3d"]}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </ButtonGroup>
             <Button
               isIconOnly
               className="bg-primary-200"
@@ -147,7 +189,7 @@ export default function Page() {
                 },
               ].map(({ q, parts, year }) => (
                 <Card
-                  key={Math.random()}
+                  key={Math.random() * 200}
                   className="py-4"
                   isPressable
                   as={parts ? undefined : Link}
@@ -163,6 +205,7 @@ export default function Page() {
                       <div className="grid grid-cols-3 justify-between gap-2">
                         {parts.map(({ p, url }) => (
                           <Button
+                            key={Math.random() * 200}
                             className="text-lg bg-primary-100"
                             as={Link}
                             href={url}
