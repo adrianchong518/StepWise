@@ -1745,6 +1745,12 @@ export const initialEdges: Edge[] = [
     target: "step24",
   }),
   createEdge({
+    id: "step23->explain7",
+    source: "step23",
+    sourceHandle: "explainer",
+    target: "explain7",
+  }),
+  createEdge({
     id: "step24->step25",
     source: "step24",
     sourceHandle: "next-step",
